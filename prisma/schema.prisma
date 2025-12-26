@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ChabadHouse {
+  id          String   @id @default(cuid())
+  name        String
+  rabbiName   String?
+  rebbetzinName String?
+  phone       String?
+  email       String?
+  website     String?
+  address     String?
+  city        String?
+  state       String?
+  zip         String?
+  county      String?
+  country     String   @default("USA")
+  yearEstablished Int?
+  type        String?  // community, campus, etc.
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([state])
+  @@index([county])
+  @@index([city])
+}
+
+model College {
+  id          String   @id @default(cuid())
+  name        String
+  chabadId    String?  // optional link to a Chabad House
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  icon        String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model TeamMember {
+  id          String   @id @default(cuid())
+  name        String
+  role        String
+  order       Int      @default(0)
+  isBoard     Boolean  @default(false)
+  isDeceased  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteSettings {
+  id          String   @id @default("main")
+  adminHash   String   // bcrypt hash of admin password
+  taxRate     Float    @default(0)
+  updatedAt   DateTime @updatedAt
+}
