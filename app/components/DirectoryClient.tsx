@@ -20,16 +20,31 @@ export default function DirectoryClient({ houses, filters }: Props) {
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null)
 
   const filteredHouses = useMemo(() => {
+    // Trim and normalize search query
+    const query = search.trim().toLowerCase()
+
     return houses.filter(house => {
-      if (search) {
-        const q = search.toLowerCase()
-        const matches =
-          house.name?.toLowerCase().includes(q) ||
-          house.city?.toLowerCase().includes(q) ||
-          house.rabbiName?.toLowerCase().includes(q) ||
-          house.address?.toLowerCase().includes(q)
+      // Search filter
+      if (query) {
+        // Split into words for multi-word search
+        const searchWords = query.split(/\s+/).filter(word => word.length > 0)
+
+        // Build searchable text from house fields
+        const searchableText = [
+          house.name,
+          house.city,
+          house.rabbiName,
+          house.rebbetzinName,
+          house.address,
+          house.county
+        ].filter(Boolean).join(' ').toLowerCase()
+
+        // All search words must match somewhere
+        const matches = searchWords.every(word => searchableText.includes(word))
         if (!matches) return false
       }
+
+      // County filter
       if (selectedCounty) {
         if (selectedCounty === 'Other') {
           if (house.county !== null) return false
@@ -72,30 +87,38 @@ export default function DirectoryClient({ houses, filters }: Props) {
         </div>
 
         {/* County Filter Tabs */}
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={() => setSelectedCounty(null)}
-            className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-              !selectedCounty
-                ? 'bg-[#0f172a] text-white'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            All ({houses.length})
-          </button>
-          {filters.counties.map(county => (
+        <div>
+          <p className="text-sm font-medium text-gray-700 mb-3 flex items-center gap-2">
+            <svg className="w-4 h-4 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            Filter by Area <span className="text-gray-400 font-normal">(click to select)</span>
+          </p>
+          <div className="flex flex-wrap gap-2">
             <button
-              key={county.name}
-              onClick={() => setSelectedCounty(selectedCounty === county.name ? null : county.name)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedCounty === county.name
-                  ? 'bg-[#0f172a] text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+              onClick={() => setSelectedCounty(null)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border-2 ${
+                !selectedCounty
+                  ? 'bg-[#0f172a] text-white border-[#0f172a] shadow-md'
+                  : 'bg-white text-gray-700 border-gray-200 hover:border-[#d4a853] hover:bg-gray-50'
               }`}
             >
-              {county.name} ({county.count})
+              All <span className="ml-1 opacity-70">({houses.length})</span>
             </button>
-          ))}
+            {filters.counties.map(county => (
+              <button
+                key={county.name}
+                onClick={() => setSelectedCounty(selectedCounty === county.name ? null : county.name)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all border-2 ${
+                  selectedCounty === county.name
+                    ? 'bg-[#0f172a] text-white border-[#0f172a] shadow-md'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-[#d4a853] hover:bg-gray-50'
+                }`}
+              >
+                {county.name} <span className="ml-1 opacity-70">({county.count})</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

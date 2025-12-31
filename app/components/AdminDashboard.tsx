@@ -64,17 +64,35 @@ export default function AdminDashboard({ initialHouses, initialColleges, countie
   const router = useRouter()
 
   const filteredHouses = houses.filter(house => {
-    const searchLower = search.toLowerCase()
-    return (
-      house.name?.toLowerCase().includes(searchLower) ||
-      house.city?.toLowerCase().includes(searchLower) ||
-      house.rabbiName?.toLowerCase().includes(searchLower)
-    )
+    const query = search.trim().toLowerCase()
+    if (!query) return true
+
+    // Split into words for multi-word search
+    const searchWords = query.split(/\s+/).filter(word => word.length > 0)
+
+    // Build searchable text from house fields
+    const searchableText = [
+      house.name,
+      house.city,
+      house.rabbiName,
+      house.rebbetzinName,
+      house.address,
+      house.county,
+      house.email
+    ].filter(Boolean).join(' ').toLowerCase()
+
+    // All search words must match somewhere
+    return searchWords.every(word => searchableText.includes(word))
   })
 
   const filteredColleges = colleges.filter(college => {
-    const searchLower = search.toLowerCase()
-    return college.name?.toLowerCase().includes(searchLower)
+    const query = search.trim().toLowerCase()
+    if (!query) return true
+
+    const searchWords = query.split(/\s+/).filter(word => word.length > 0)
+    const searchableText = college.name?.toLowerCase() || ''
+
+    return searchWords.every(word => searchableText.includes(word))
   })
 
   // House handlers
