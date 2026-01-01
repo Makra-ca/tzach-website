@@ -10,8 +10,11 @@ export default function Preloader() {
   const [fadeOut, setFadeOut] = useState(false)
 
   useEffect(() => {
-    // Check if preloader should be skipped (class added by inline script)
-    const shouldSkip = document.documentElement.classList.contains('preloader-skip')
+    // Check if preloader should be skipped:
+    // - Class added by inline script on hard page load, OR
+    // - SessionStorage set from previous navigation (client-side nav doesn't re-run inline script)
+    const shouldSkip = document.documentElement.classList.contains('preloader-skip') ||
+      sessionStorage.getItem(PRELOADER_SESSION_KEY) === 'true'
 
     if (shouldSkip) {
       setShow(false)
