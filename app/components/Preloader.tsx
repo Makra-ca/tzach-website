@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useLayoutEffect } from 'react'
 import Image from 'next/image'
 
 const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
@@ -8,18 +8,20 @@ const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
 export default function Preloader() {
   const [show, setShow] = useState(true)
   const [fadeOut, setFadeOut] = useState(false)
-  const [mounted, setMounted] = useState(false)
+  const [isClient, setIsClient] = useState(false)
 
-  useEffect(() => {
-    // Check if preloader was already shown this session
+  // Use layoutEffect to check session before paint
+  useLayoutEffect(() => {
     const alreadyShown = sessionStorage.getItem(PRELOADER_SESSION_KEY)
     if (alreadyShown) {
       setShow(false)
-      setMounted(true)
-      return
     }
+    setIsClient(true)
+  }, [])
 
-    setMounted(true)
+  useEffect(() => {
+    // If already shown this session, don't run timers
+    if (!show) return
 
     // Mark as shown for this session
     sessionStorage.setItem(PRELOADER_SESSION_KEY, 'true')
@@ -38,10 +40,10 @@ export default function Preloader() {
       clearTimeout(fadeTimer)
       clearTimeout(hideTimer)
     }
-  }, [])
+  }, [show])
 
-  // Don't render anything on server or if already shown
-  if (!mounted || !show) return null
+  // Always render on server (prevents flash), hide on client if not needed
+  if (isClient && !show) return null
 
   return (
     <div
