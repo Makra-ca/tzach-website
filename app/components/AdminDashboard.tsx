@@ -874,10 +874,70 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
         </div>
       )}
 
-      {/* Houses Table */}
+      {/* Houses List */}
       {activeTab === 'houses' && (
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile Card Layout */}
+          <div className="md:hidden divide-y divide-gray-200">
+            {filteredHouses.map((house) => (
+              <div key={house.id} className="p-4 space-y-3">
+                <div>
+                  <div className="font-medium text-gray-900">{house.name}</div>
+                  {house.rabbiName && (
+                    <div className="text-sm text-gray-500">{house.rabbiName}</div>
+                  )}
+                </div>
+                <div className="text-sm text-gray-500 space-y-1">
+                  <div className="flex items-start gap-2">
+                    <span className="text-gray-400 min-w-[60px]">Location:</span>
+                    <span>{house.city}{house.state ? `, ${house.state}` : ''}{house.county ? ` (${house.county})` : ''}</span>
+                  </div>
+                  {house.phone && (
+                    <div className="flex items-start gap-2">
+                      <span className="text-gray-400 min-w-[60px]">Phone:</span>
+                      <span>{house.phone}</span>
+                    </div>
+                  )}
+                  {house.email && (
+                    <div className="flex items-start gap-2">
+                      <span className="text-gray-400 min-w-[60px]">Email:</span>
+                      <span className="truncate">{house.email}</span>
+                    </div>
+                  )}
+                  {house.website && (
+                    <div className="flex items-start gap-2">
+                      <span className="text-gray-400 min-w-[60px]">Website:</span>
+                      <a
+                        href={house.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#1e3a5f] hover:underline truncate"
+                      >
+                        {house.website.replace(/^https?:\/\//, '')}
+                      </a>
+                    </div>
+                  )}
+                </div>
+                <div className="flex gap-4 pt-2">
+                  <button
+                    onClick={() => handleEditHouse(house)}
+                    className="text-[#1e3a5f] hover:text-[#2c5282] text-sm font-medium"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => handleDeleteHouse(house.id, house.name)}
+                    className="text-red-600 hover:text-red-800 text-sm font-medium"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table Layout */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
@@ -961,10 +1021,47 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
         </div>
       )}
 
-      {/* Colleges Table */}
+      {/* Colleges List */}
       {activeTab === 'colleges' && (
         <div className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="overflow-x-auto">
+          {/* Mobile Card Layout */}
+          <div className="md:hidden divide-y divide-gray-200">
+            {filteredColleges.map((college) => {
+              const linkedHouse = getLinkedChabadHouse(college.chabadId)
+              return (
+                <div key={college.id} className="p-4 space-y-3">
+                  <div className="font-medium text-gray-900">{college.name.trim()}</div>
+                  <div className="text-sm text-gray-500">
+                    <div className="flex items-start gap-2">
+                      <span className="text-gray-400 min-w-[90px]">Linked Chabad:</span>
+                      {linkedHouse ? (
+                        <span>{linkedHouse.name}{linkedHouse.city ? ` (${linkedHouse.city})` : ''}</span>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex gap-4 pt-2">
+                    <button
+                      onClick={() => handleEditCollege(college)}
+                      className="text-[#1e3a5f] hover:text-[#2c5282] text-sm font-medium"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteCollege(college.id, college.name)}
+                      className="text-red-600 hover:text-red-800 text-sm font-medium"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Desktop Table Layout */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50">
                 <tr>
