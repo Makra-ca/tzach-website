@@ -70,3 +70,125 @@ body {
 .animate-in {
   animation: fadeIn 0.4s ease forwards;
 }
+
+/* Preloader animations - Cinematic style (4 sec total) */
+@keyframes preloaderImageReveal {
+  0% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes preloaderLineReveal {
+  0% {
+    width: 0;
+    opacity: 0;
+  }
+  100% {
+    width: 5rem;
+    opacity: 1;
+  }
+}
+
+@keyframes preloaderTextUp {
+  0% {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes preloaderFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes preloaderBar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+/* Preloader timing - spread over 4 seconds */
+.preloader-image {
+  opacity: 0;
+  animation: preloaderImageReveal 1.4s ease-out 0.2s forwards;
+}
+
+.preloader-line-1 {
+  width: 0;
+  opacity: 0;
+  animation: preloaderLineReveal 0.7s ease-out 0.6s forwards;
+}
+
+.preloader-line-2 {
+  width: 0;
+  opacity: 0;
+  animation: preloaderLineReveal 0.7s ease-out 1.8s forwards;
+}
+
+.preloader-quote {
+  opacity: 0;
+  animation: preloaderTextUp 0.8s ease-out 0.9s forwards;
+}
+
+.preloader-quote-hebrew {
+  opacity: 0;
+  animation: preloaderTextUp 0.7s ease-out 1.2s forwards;
+}
+
+.preloader-cite {
+  opacity: 0;
+  animation: preloaderFadeIn 0.6s ease-out 1.5s forwards;
+}
+
+.preloader-title {
+  opacity: 0;
+  animation: preloaderTextUp 0.7s ease-out 2.1s forwards;
+}
+
+.preloader-subtitle {
+  opacity: 0;
+  animation: preloaderFadeIn 0.6s ease-out 2.4s forwards;
+}
+
+.preloader-bar {
+  animation: preloaderBar 2.7s ease-in-out 0.5s forwards;
+}
+
+/* Pop-in animation for stats */
+@keyframes popIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Typewriter cursor blink */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+.typewriter-cursor {
+  animation: blink 0.8s infinite;
+}
+

@@ -1,11 +1,82 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import type { College, ChabadHouse } from '@prisma/client'
 
 interface Props {
   colleges: College[]
   houses: ChabadHouse[]
+}
+
+// Wait for preloader to finish (4s) + small buffer
+const PRELOADER_DELAY = 4200
+
+// Animated card wrapper with slide direction
+function AnimatedCard({ children, delay, direction = 'up' }: { children: React.ReactNode; delay: number; direction?: 'up' | 'slideLeft' | 'slideRight' }) {
+  const [isVisible, setIsVisible] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+  const cleanupRef = useRef<{ fallbackTimer?: ReturnType<typeof setTimeout>; observer?: IntersectionObserver }>({})
+
+  useEffect(() => {
+    const element = ref.current
+    if (!element) return
+
+    // Wait for preloader to finish before starting animations
+    const startDelayTimer = setTimeout(() => {
+      // Fallback: show after max 1.5 seconds
+      const fallbackTimer = setTimeout(() => {
+        setIsVisible(true)
+      }, 1500 + delay)
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              clearTimeout(fallbackTimer)
+              setTimeout(() => setIsVisible(true), delay)
+              observer.unobserve(entry.target)
+            }
+          })
+        },
+        { threshold: 0.05, rootMargin: '50px' }
+      )
+
+      observer.observe(element)
+      cleanupRef.current = { fallbackTimer, observer }
+    }, PRELOADER_DELAY)
+
+    return () => {
+      clearTimeout(startDelayTimer)
+      if (cleanupRef.current.fallbackTimer) {
+        clearTimeout(cleanupRef.current.fallbackTimer)
+      }
+      if (cleanupRef.current.observer) {
+        cleanupRef.current.observer.disconnect()
+      }
+    }
+  }, [delay])
+
+  const getTransform = () => {
+    if (isVisible) return 'translate(0, 0)'
+    switch (direction) {
+      case 'slideLeft': return 'translateX(-60px)'
+      case 'slideRight': return 'translateX(60px)'
+      default: return 'translateY(20px)'
+    }
+  }
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: isVisible ? 1 : 0,
+        transform: getTransform(),
+        transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
+      }}
+    >
+      {children}
+    </div>
+  )
 }
 
 // Graduation cap icon component
@@ -101,10 +172,11 @@ export default function CollegesClient({ colleges, houses }: Props) {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredColleges.map(college => {
+          {filteredColleges.map((college, index) => {
             const linkedHouse = getLinkedHouse(college.chabadId)
             return (
-              <div key={college.id} className="group card-hover bg-white border border-gray-200 rounded-xl p-5 relative overflow-hidden">
+              <AnimatedCard key={college.id} delay={index * 50} direction={index % 2 === 0 ? 'slideLeft' : 'slideRight'}>
+              <div className="group card-hover bg-white border border-gray-200 rounded-xl p-5 relative overflow-hidden h-full">
                 {/* Decorative gradient accent */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0f172a] to-[#d4a853] opacity-0 group-hover:opacity-100 transition-opacity" />
 
@@ -170,6 +242,7 @@ export default function CollegesClient({ colleges, houses }: Props) {
                   </div>
                 )}
               </div>
+              </AnimatedCard>
             )
           })}
         </div>

@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import ImageLightbox from './ImageLightbox'
+import AnimatedSection from './AnimatedSection'
 
 interface GalleryImage {
   src: string
@@ -36,45 +37,53 @@ export default function GallerySection({ images }: Props) {
     <>
       <section className="py-24">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-16">
+          <AnimatedSection className="text-center max-w-2xl mx-auto mb-16" skipPreloaderDelay>
             <p className="text-[#d4a853] font-semibold tracking-[0.15em] text-sm mb-4 uppercase">
               Our Community
             </p>
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-[#0f172a]">
               Moments That Matter
             </h2>
-          </div>
+          </AnimatedSection>
 
           <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-2 gap-4 auto-rows-fr">
             {/* Featured large image */}
-            <button
-              onClick={() => openLightbox(0)}
-              className="col-span-2 row-span-2 overflow-hidden rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:ring-offset-2"
-            >
-              <Image
-                src={galleryImages[0].src}
-                alt={galleryImages[0].alt}
-                width={600}
-                height={600}
-                className="w-full h-full object-cover object-[center_30%] hover:scale-105 transition-transform duration-500"
-              />
-            </button>
+            <AnimatedSection direction="slideLeft" className="col-span-2 row-span-2" skipPreloaderDelay>
+              <button
+                onClick={() => openLightbox(0)}
+                className="w-full h-full overflow-hidden rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:ring-offset-2"
+              >
+                <Image
+                  src={galleryImages[0].src}
+                  alt={galleryImages[0].alt}
+                  width={600}
+                  height={600}
+                  className="w-full h-full object-cover object-[center_30%] hover:scale-105 transition-transform duration-500"
+                />
+              </button>
+            </AnimatedSection>
 
             {/* Smaller images */}
             {galleryImages.slice(1).map((image, idx) => (
-              <button
+              <AnimatedSection
                 key={image.src}
-                onClick={() => openLightbox(idx + 1)}
-                className="overflow-hidden rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:ring-offset-2"
+                delay={(idx + 1) * 100}
+                direction={idx % 2 === 0 ? 'slideRight' : 'slideLeft'}
+                skipPreloaderDelay
               >
-                <Image
-                  src={image.src}
-                  alt={image.alt}
-                  width={300}
-                  height={300}
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                />
-              </button>
+                <button
+                  onClick={() => openLightbox(idx + 1)}
+                  className="w-full h-full overflow-hidden rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:ring-offset-2"
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.alt}
+                    width={300}
+                    height={300}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                  />
+                </button>
+              </AnimatedSection>
             ))}
           </div>
         </div>
