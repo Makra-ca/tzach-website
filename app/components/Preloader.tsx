@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
 const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
@@ -8,20 +8,15 @@ const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
 export default function Preloader() {
   const [show, setShow] = useState(true)
   const [fadeOut, setFadeOut] = useState(false)
-  const [isClient, setIsClient] = useState(false)
-
-  // Use layoutEffect to check session before paint
-  useLayoutEffect(() => {
-    const alreadyShown = sessionStorage.getItem(PRELOADER_SESSION_KEY)
-    if (alreadyShown) {
-      setShow(false)
-    }
-    setIsClient(true)
-  }, [])
 
   useEffect(() => {
-    // If already shown this session, don't run timers
-    if (!show) return
+    // Check if preloader should be skipped (class added by inline script)
+    const shouldSkip = document.documentElement.classList.contains('preloader-skip')
+
+    if (shouldSkip) {
+      setShow(false)
+      return
+    }
 
     // Mark as shown for this session
     sessionStorage.setItem(PRELOADER_SESSION_KEY, 'true')
@@ -40,14 +35,13 @@ export default function Preloader() {
       clearTimeout(fadeTimer)
       clearTimeout(hideTimer)
     }
-  }, [show])
+  }, [])
 
-  // Always render on server (prevents flash), hide on client if not needed
-  if (isClient && !show) return null
+  if (!show) return null
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] bg-[#0f172a] transition-all duration-500 ease-out ${
+      className={`preloader-container fixed inset-0 z-[9999] bg-[#0f172a] transition-all duration-500 ease-out ${
         fadeOut ? 'opacity-0' : 'opacity-100'
       }`}
     >

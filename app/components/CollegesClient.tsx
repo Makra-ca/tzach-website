@@ -11,67 +11,49 @@ interface Props {
 // Wait for preloader to finish (4s) + small buffer
 const PRELOADER_DELAY = 4200
 
-// Animated card wrapper with slide direction
-function AnimatedCard({ children, delay, direction = 'up' }: { children: React.ReactNode; delay: number; direction?: 'up' | 'slideLeft' | 'slideRight' }) {
+// Animated card wrapper - simple fade up
+function AnimatedCard({ children, delay }: { children: React.ReactNode; delay: number }) {
   const [isVisible, setIsVisible] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
-  const cleanupRef = useRef<{ fallbackTimer?: ReturnType<typeof setTimeout>; observer?: IntersectionObserver }>({})
+  const hasAnimated = useRef(false)
 
   useEffect(() => {
     const element = ref.current
-    if (!element) return
+    if (!element || hasAnimated.current) return
 
-    // Wait for preloader to finish before starting animations
+    // Check if preloader was skipped
+    const preloaderSkipped = document.documentElement.classList.contains('preloader-skip')
+    const waitTime = preloaderSkipped ? 100 : PRELOADER_DELAY
+
     const startDelayTimer = setTimeout(() => {
-      // Fallback: show after max 1.5 seconds
-      const fallbackTimer = setTimeout(() => {
-        setIsVisible(true)
-      }, 1500 + delay)
-
       const observer = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              clearTimeout(fallbackTimer)
-              setTimeout(() => setIsVisible(true), delay)
-              observer.unobserve(entry.target)
+            if (entry.isIntersecting && !hasAnimated.current) {
+              hasAnimated.current = true
+              setTimeout(() => setIsVisible(true), Math.min(delay, 300))
+              observer.disconnect()
             }
           })
         },
-        { threshold: 0.05, rootMargin: '50px' }
+        { threshold: 0.1, rootMargin: '20px' }
       )
 
       observer.observe(element)
-      cleanupRef.current = { fallbackTimer, observer }
-    }, PRELOADER_DELAY)
 
-    return () => {
-      clearTimeout(startDelayTimer)
-      if (cleanupRef.current.fallbackTimer) {
-        clearTimeout(cleanupRef.current.fallbackTimer)
-      }
-      if (cleanupRef.current.observer) {
-        cleanupRef.current.observer.disconnect()
-      }
-    }
+      return () => observer.disconnect()
+    }, waitTime)
+
+    return () => clearTimeout(startDelayTimer)
   }, [delay])
-
-  const getTransform = () => {
-    if (isVisible) return 'translate(0, 0)'
-    switch (direction) {
-      case 'slideLeft': return 'translateX(-60px)'
-      case 'slideRight': return 'translateX(60px)'
-      default: return 'translateY(20px)'
-    }
-  }
 
   return (
     <div
       ref={ref}
       style={{
         opacity: isVisible ? 1 : 0,
-        transform: getTransform(),
-        transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
+        transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
+        transition: 'opacity 0.4s ease-out, transform 0.4s ease-out'
       }}
     >
       {children}
@@ -175,7 +157,7 @@ export default function CollegesClient({ colleges, houses }: Props) {
           {filteredColleges.map((college, index) => {
             const linkedHouse = getLinkedHouse(college.chabadId)
             return (
-              <AnimatedCard key={college.id} delay={index * 50} direction={index % 2 === 0 ? 'slideLeft' : 'slideRight'}>
+              <AnimatedCard key={college.id} delay={index * 30}>
               <div className="group card-hover bg-white border border-gray-200 rounded-xl p-5 relative overflow-hidden h-full">
                 {/* Decorative gradient accent */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0f172a] to-[#d4a853] opacity-0 group-hover:opacity-100 transition-opacity" />

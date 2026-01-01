@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import HeroCarousel from './HeroCarousel'
@@ -8,7 +7,6 @@ import GallerySection from './GallerySection'
 import Preloader from './Preloader'
 import AnimatedCounter from './AnimatedCounter'
 import AnimatedSection from './AnimatedSection'
-import TypewriterText from './TypewriterText'
 
 interface TeamMember {
   id: string
@@ -31,7 +29,6 @@ interface HomePageClientProps {
 export default function HomePageClient({ stats, teamMembers, galleryImages }: HomePageClientProps) {
   const staff = teamMembers.filter(m => !m.isBoard && !m.isDeceased)
   const boardMembers = teamMembers.filter(m => m.isBoard && !m.isDeceased)
-  const [typewriterDone, setTypewriterDone] = useState(false)
 
   return (
     <>
@@ -43,40 +40,29 @@ export default function HomePageClient({ stats, teamMembers, galleryImages }: Ho
           <HeroCarousel />
 
           <div className="relative z-10 h-full max-w-6xl mx-auto px-4 flex items-center">
-            <AnimatedSection direction="slideLeft" className="max-w-2xl text-white">
-              <AnimatedSection delay={100} direction="none">
-                <p className="text-[#d4a853] font-medium mb-4 tracking-[0.15em] text-sm">
-                  LUBAVITCH YOUTH ORGANIZATION
-                </p>
-              </AnimatedSection>
+            <div className="max-w-2xl text-white hero-animate">
+              <p className="text-[#d4a853] font-medium mb-4 tracking-[0.15em] text-sm">
+                LUBAVITCH YOUTH ORGANIZATION
+              </p>
               <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold mb-6 leading-[1.1]">
-                <TypewriterText
-                  text="Bringing Jewish Life to Every Corner"
-                  speed={45}
-                  delay={300}
-                  onComplete={() => setTypewriterDone(true)}
-                />
+                Bringing Jewish Life to Every Corner
               </h1>
-              <AnimatedSection delay={0} direction="up" className={typewriterDone ? '' : 'opacity-0'}>
-                <p className="text-xl text-gray-300 mb-10 leading-relaxed">
-                  For 70 years, LYO has connected thousands of families across the NYC Metro area
-                  with vibrant Jewish community, education, and celebration.
-                </p>
-              </AnimatedSection>
-              <AnimatedSection delay={200} direction="up" className={typewriterDone ? '' : 'opacity-0'}>
-                <div className="flex flex-wrap gap-4">
-                  <Link
-                    href="/directory"
-                    className="inline-flex items-center gap-2 px-8 py-4 bg-[#d4a853] text-[#0f172a] rounded-lg font-medium hover:bg-[#b8943f] transition-colors"
-                  >
-                    Find Your Chabad House
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                    </svg>
-                  </Link>
-                </div>
-              </AnimatedSection>
-            </AnimatedSection>
+              <p className="text-xl text-gray-300 mb-10 leading-relaxed">
+                For 70 years, LYO has connected thousands of families across the NYC Metro area
+                with vibrant Jewish community, education, and celebration.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <Link
+                  href="/directory"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#d4a853] text-[#0f172a] rounded-lg font-medium hover:bg-[#b8943f] transition-colors"
+                >
+                  Find Your Chabad House
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 

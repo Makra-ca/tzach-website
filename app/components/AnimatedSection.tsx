@@ -4,7 +4,6 @@ import { useEffect, useRef, useState, ReactNode, useCallback } from 'react'
 
 // Preloader duration + buffer
 const PRELOADER_DURATION = 4200
-const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
 
 interface AnimatedSectionProps {
   children: ReactNode
@@ -14,6 +13,7 @@ interface AnimatedSectionProps {
   threshold?: number
   skipPreloaderDelay?: boolean
   triggerOnLoad?: boolean // Animate immediately when ready, don't wait for scroll
+  cssAnimated?: boolean // When true, CSS handles animation (no inline styles)
 }
 
 export default function AnimatedSection({
@@ -23,17 +23,29 @@ export default function AnimatedSection({
   className = '',
   threshold = 0.2,
   skipPreloaderDelay = false,
-  triggerOnLoad = false
+  triggerOnLoad = false,
+  cssAnimated = false
 }: AnimatedSectionProps) {
   const ref = useRef<HTMLDivElement>(null)
-  const [isReady, setIsReady] = useState(false) // After preloader, ready to animate
+  const [isReady, setIsReady] = useState(false) // Same initial value on server and client
   const [isVisible, setIsVisible] = useState(false) // Triggered by scroll
   const hasAnimated = useRef(false)
+  const preloaderSkipped = useRef(false)
 
-  // Wait for preloader to finish (or skip if already shown this session)
+  // Check if preloader was skipped (class added by inline script before React)
   useEffect(() => {
-    const preloaderAlreadyShown = sessionStorage.getItem(PRELOADER_SESSION_KEY)
-    const waitTime = preloaderAlreadyShown ? 100 : (skipPreloaderDelay ? 500 : PRELOADER_DURATION)
+    if (document.documentElement.classList.contains('preloader-skip')) {
+      preloaderSkipped.current = true
+      setIsReady(true) // Preloader was already shown, ready immediately
+    }
+  }, [])
+
+  // Wait for preloader to finish (only if preloader is showing)
+  useEffect(() => {
+    // If preloader was skipped, we're already ready
+    if (preloaderSkipped.current) return
+
+    const waitTime = skipPreloaderDelay ? 500 : PRELOADER_DURATION
     const timer = setTimeout(() => {
       setIsReady(true)
     }, waitTime)
@@ -98,7 +110,14 @@ export default function AnimatedSection({
 
   // Styles based on state
   const getStyles = (): React.CSSProperties => {
+    // When cssAnimated is true, CSS handles everything - no inline styles
+    // This prevents hydration mismatch and lets CSS control animation
+    if (cssAnimated) {
+      return {}
+    }
+
     // Before ready (during preloader): show content
+    // Note: If preloader-skip class is present, CSS will hide this with opacity:0
     if (!isReady) {
       return { opacity: 1, transform: 'none' }
     }
