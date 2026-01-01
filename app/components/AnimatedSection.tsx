@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, ReactNode, useCallback } from 'react'
 
 // Preloader duration + buffer
 const PRELOADER_DURATION = 4200
+const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
 
 interface AnimatedSectionProps {
   children: ReactNode
@@ -29,9 +30,10 @@ export default function AnimatedSection({
   const [isVisible, setIsVisible] = useState(false) // Triggered by scroll
   const hasAnimated = useRef(false)
 
-  // Wait for preloader to finish
+  // Wait for preloader to finish (or skip if already shown this session)
   useEffect(() => {
-    const waitTime = skipPreloaderDelay ? 500 : PRELOADER_DURATION
+    const preloaderAlreadyShown = sessionStorage.getItem(PRELOADER_SESSION_KEY)
+    const waitTime = preloaderAlreadyShown ? 100 : (skipPreloaderDelay ? 500 : PRELOADER_DURATION)
     const timer = setTimeout(() => {
       setIsReady(true)
     }, waitTime)

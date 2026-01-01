@@ -3,13 +3,26 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
+const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
+
 export default function Preloader() {
   const [show, setShow] = useState(true)
   const [fadeOut, setFadeOut] = useState(false)
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    // Check if preloader was already shown this session
+    const alreadyShown = sessionStorage.getItem(PRELOADER_SESSION_KEY)
+    if (alreadyShown) {
+      setShow(false)
+      setMounted(true)
+      return
+    }
+
     setMounted(true)
+
+    // Mark as shown for this session
+    sessionStorage.setItem(PRELOADER_SESSION_KEY, 'true')
 
     // Start fade out after 3.5 seconds
     const fadeTimer = setTimeout(() => {

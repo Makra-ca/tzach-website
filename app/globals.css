@@ -9,6 +9,11 @@
   --stone: #78716c;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 @theme inline {
   --color-navy: var(--navy);
   --color-navy-light: var(--navy-light);
