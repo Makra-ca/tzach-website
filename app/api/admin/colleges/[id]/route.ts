@@ -16,11 +16,14 @@ export async function PUT(
     const { id } = await params
     const data = await request.json()
 
+    // Ensure empty string becomes null
+    const chabadId = data.chabadId && data.chabadId.trim() !== '' ? data.chabadId : null
+
     const college = await prisma.college.update({
       where: { id },
       data: {
         name: data.name,
-        chabadId: data.chabadId || null
+        chabadId
       }
     })
 

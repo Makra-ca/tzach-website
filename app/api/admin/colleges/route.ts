@@ -26,10 +26,13 @@ export async function POST(request: NextRequest) {
   try {
     const data = await request.json()
 
+    // Ensure empty string becomes null
+    const chabadId = data.chabadId && data.chabadId.trim() !== '' ? data.chabadId : null
+
     const college = await prisma.college.create({
       data: {
         name: data.name,
-        chabadId: data.chabadId || null
+        chabadId
       }
     })
 

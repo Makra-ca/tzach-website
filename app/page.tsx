@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db'
 import Image from 'next/image'
 import Link from 'next/link'
 import HeroCarousel from './components/HeroCarousel'
+import GallerySection from './components/GallerySection'
 
 export const dynamic = 'force-dynamic'
 
@@ -26,9 +27,20 @@ async function getTeamMembers() {
   })
 }
 
+async function getGalleryImages() {
+  const images = await prisma.galleryImage.findMany({
+    orderBy: { order: 'asc' }
+  })
+  return images.map(img => ({
+    src: img.url,
+    alt: img.alt || 'Gallery image'
+  }))
+}
+
 export default async function Home() {
   const stats = await getStats()
   const teamMembers = await getTeamMembers()
+  const galleryImages = await getGalleryImages()
   const staff = teamMembers.filter(m => !m.isBoard && !m.isDeceased)
   const boardMembers = teamMembers.filter(m => m.isBoard && !m.isDeceased)
 
@@ -211,66 +223,7 @@ export default async function Home() {
       </section>
 
       {/* Gallery Section */}
-      <section className="py-24">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto mb-16">
-            <p className="text-[#d4a853] font-semibold tracking-[0.15em] text-sm mb-4 uppercase">
-              Our Community
-            </p>
-            <h2 className="font-display text-4xl md:text-5xl font-semibold text-[#0f172a]">
-              Moments That Matter
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 grid-rows-2 gap-4 auto-rows-fr">
-            <div className="col-span-2 row-span-2 overflow-hidden rounded-xl">
-              <Image
-                src="/chabad-images/Chanukah1.jpeg"
-                alt="Chanukah celebration"
-                width={600}
-                height={600}
-                className="w-full h-full object-cover object-[center_30%] hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div className="overflow-hidden rounded-xl">
-              <Image
-                src="/chabad-images/IMG_5685.jpg"
-                alt="Youth reading"
-                width={300}
-                height={300}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div className="overflow-hidden rounded-xl">
-              <Image
-                src="/chabad-images/IMG_4640.JPG"
-                alt="Sukkah gathering"
-                width={300}
-                height={300}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div className="overflow-hidden rounded-xl">
-              <Image
-                src="/chabad-images/DSC09685.jpg"
-                alt="Group photo"
-                width={300}
-                height={300}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-            <div className="overflow-hidden rounded-xl">
-              <Image
-                src="/chabad-images/IMG_8357.jpeg"
-                alt="Community lecture"
-                width={300}
-                height={300}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+      <GallerySection images={galleryImages} />
 
       {/* Mission Highlight */}
       <section className="py-16 bg-[#0f172a]">

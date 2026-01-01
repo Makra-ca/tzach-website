@@ -14,18 +14,17 @@
   --color-navy-light: var(--navy-light);
   --color-gold: var(--gold);
   --color-cream: var(--cream);
-  --font-sans: var(--font-geist-sans);
-  --font-display: var(--font-display);
+  --font-sans: "Urbanist", system-ui, sans-serif;
 }
 
 body {
   background: white;
   color: #1a1a1a;
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: "Urbanist", system-ui, sans-serif;
 }
 
 .font-display {
-  font-family: var(--font-display), Georgia, serif;
+  font-family: "Montserrat", system-ui, sans-serif;
 }
 
 /* Elegant scrollbar */

@@ -200,6 +200,7 @@ function HouseCard({ house }: { house: ChabadHouse }) {
 
       {/* Actions */}
       <div className="flex gap-2 pt-4 border-t border-gray-100">
+        {/* Phone temporarily hidden per client request
         {house.phone && (
           <a
             href={`tel:${house.phone}`}
@@ -211,6 +212,7 @@ function HouseCard({ house }: { house: ChabadHouse }) {
             Call
           </a>
         )}
+        */}
         {house.email && (
           <a
             href={`mailto:${house.email}`}

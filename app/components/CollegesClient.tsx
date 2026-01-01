@@ -37,7 +37,8 @@ export default function CollegesClient({ colleges, houses }: Props) {
   }, [colleges, search])
 
   const getLinkedHouse = (chabadId: string | null) => {
-    if (!chabadId) return null
+    // Ensure empty string is treated as null
+    if (!chabadId || chabadId.trim() === '') return null
     return houses.find(h => h.id === chabadId)
   }
 
@@ -47,8 +48,8 @@ export default function CollegesClient({ colleges, houses }: Props) {
   return (
     <div>
       {/* Stats Bar */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
-        <div className="bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] rounded-xl p-5 text-white">
+      <div className="mb-8">
+        <div className="bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] rounded-xl p-5 text-white inline-flex">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
               <GraduationCapIcon className="w-5 h-5" />
@@ -56,33 +57,6 @@ export default function CollegesClient({ colleges, houses }: Props) {
             <div>
               <p className="text-2xl font-bold">{colleges.length}</p>
               <p className="text-sm text-gray-300">Total Campuses</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gradient-to-br from-[#d4a853] to-[#b8923f] rounded-xl p-5 text-white">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-2xl font-bold">{linkedCount}</p>
-              <p className="text-sm text-white/80">With Chabad</p>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gray-100 rounded-xl p-5 col-span-2 md:col-span-1">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center shadow-sm">
-              <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-gray-900">3</p>
-              <p className="text-sm text-gray-500">Regions Covered</p>
             </div>
           </div>
         </div>

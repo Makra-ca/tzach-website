@@ -66,3 +66,11 @@ model SiteSettings {
   taxRate     Float    @default(0)
   updatedAt   DateTime @updatedAt
 }
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  url       String   // Vercel Blob URL
+  alt       String   @default("")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
