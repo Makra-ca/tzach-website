@@ -3,22 +3,30 @@
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
 
-const slides = [
+// Default fallback slides when no images are in the database
+const defaultSlides = [
   { src: '/chabad-images/Chanukah1.jpeg', alt: 'Chanukah celebration in NYC', position: 'center' },
   { src: '/chabad-images/IMG_4640.JPG', alt: 'Community gathering in sukkah', position: 'center' },
   { src: '/chabad-images/DSC09685.jpg', alt: 'Group photo', position: 'center 20%' },
   { src: '/chabad-images/IMG_8357.jpeg', alt: 'Community lecture event', position: 'center' },
 ]
 
-export default function HeroCarousel() {
+interface HeroCarouselProps {
+  images?: { src: string; alt: string; position: string }[]
+}
+
+export default function HeroCarousel({ images }: HeroCarouselProps) {
   const [currentSlide, setCurrentSlide] = useState(0)
+
+  // Use provided images or fall back to defaults
+  const slides = images && images.length > 0 ? images : defaultSlides
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
     }, 5000)
     return () => clearInterval(interval)
-  }, [])
+  }, [slides.length])
 
   return (
     <>

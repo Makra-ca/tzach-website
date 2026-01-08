@@ -5,7 +5,14 @@ import Footer from "./components/Footer";
 
 export const metadata: Metadata = {
   title: "Lubavitch Youth Organization | Chabad Directory NYC Metro",
-  description: "Find your local Chabad House in the NYC Metro area. Over 200 shluchim couples and 170 centers serving Long Island, Westchester, and the five boroughs.",
+  description: "Find your local Chabad House in the NYC Metro area. Over 212 shluchim couples and 140 centers serving Long Island, Westchester, and the five boroughs.",
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
 };
 
 export default function RootLayout({
@@ -46,6 +53,14 @@ export default function RootLayout({
       <body
         className="antialiased flex flex-col min-h-screen"
       >
+        {/* Celebration Banner */}
+        <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] text-center py-2.5 px-4">
+          <p className="font-display text-base md:text-lg tracking-wide">
+            <span className="font-semibold">Celebrating 70 Years</span>
+            <span className="mx-2 opacity-60">|</span>
+            <span className="italic">Serving the Jewish Community Since 1955</span>
+          </p>
+        </div>
         <Header />
         <main className="flex-1">
           {children}

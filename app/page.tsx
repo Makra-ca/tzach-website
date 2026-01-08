@@ -34,16 +34,29 @@ async function getGalleryImages() {
   }))
 }
 
+async function getHeroImages() {
+  const images = await prisma.heroImage.findMany({
+    orderBy: { order: 'asc' }
+  })
+  return images.map(img => ({
+    src: img.url,
+    alt: img.alt || 'Hero image',
+    position: img.position || 'center'
+  }))
+}
+
 export default async function Home() {
   const stats = await getStats()
   const teamMembers = await getTeamMembers()
   const galleryImages = await getGalleryImages()
+  const heroImages = await getHeroImages()
 
   return (
     <HomePageClient
       stats={stats}
       teamMembers={teamMembers}
       galleryImages={galleryImages}
+      heroImages={heroImages}
     />
   )
 }

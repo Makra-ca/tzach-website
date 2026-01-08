@@ -170,7 +170,90 @@ export default function CollegesClient({ colleges, houses }: Props) {
                   <h3 className="font-semibold text-gray-900 leading-tight pt-1">{college.name.trim()}</h3>
                 </div>
 
-                {linkedHouse ? (
+                {/* Contact Info */}
+                {(college.phone || college.email) && (
+                  <div className="mt-3 pt-3 border-t border-gray-100">
+                    <div className="flex flex-wrap gap-2">
+                      {college.phone && (
+                        <a
+                          href={`tel:${college.phone}`}
+                          className="inline-flex items-center gap-1 text-xs text-gray-600 hover:text-[#0f172a]"
+                        >
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                          </svg>
+                          {college.phone}
+                        </a>
+                      )}
+                      {college.email && (
+                        <a
+                          href={`mailto:${college.email}`}
+                          className="inline-flex items-center gap-1 text-xs text-gray-600 hover:text-[#0f172a]"
+                        >
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          {college.email}
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Shaliach Info */}
+                {college.hasShaliach && (
+                  <div className="mt-3 pt-3 border-t border-gray-100">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#d4a853]/10 text-[#b8943f] text-xs font-medium rounded-full">
+                        <span className="w-1.5 h-1.5 bg-[#d4a853] rounded-full"></span>
+                        Shaliach on Campus
+                      </span>
+                    </div>
+                    {college.shaliachName && (
+                      <p className="text-sm text-gray-700 font-medium">{college.shaliachName}</p>
+                    )}
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      {college.shaliachPhone && (
+                        <a
+                          href={`tel:${college.shaliachPhone}`}
+                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                          </svg>
+                          Call
+                        </a>
+                      )}
+                      {college.shaliachEmail && (
+                        <a
+                          href={`mailto:${college.shaliachEmail}`}
+                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                        >
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                          </svg>
+                          Email
+                        </a>
+                      )}
+                      {college.shaliachWebsite && (
+                        <a
+                          href={college.shaliachWebsite}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-white bg-[#0f172a] rounded-lg hover:bg-[#1e293b] transition-colors"
+                        >
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                          </svg>
+                          Visit
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Linked Chabad House (if no shaliach but has linked house) */}
+                {!college.hasShaliach && linkedHouse ? (
                   <div className="mt-3 pt-3 border-t border-gray-100">
                     <div className="flex items-center gap-2 mb-2">
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded-full">
@@ -210,7 +293,7 @@ export default function CollegesClient({ colleges, houses }: Props) {
                       )}
                     </div>
                   </div>
-                ) : (
+                ) : !college.hasShaliach && !linkedHouse && !college.phone && !college.email ? (
                   <div className="mt-3 pt-3 border-t border-gray-100">
                     <div className="flex items-center gap-2">
                       <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-500 text-xs font-medium rounded-full">
@@ -222,7 +305,7 @@ export default function CollegesClient({ colleges, houses }: Props) {
                     </div>
                     <p className="text-xs text-gray-400 mt-2">Looking for Jewish resources at this campus? Reach out to us.</p>
                   </div>
-                )}
+                ) : null}
               </div>
               </AnimatedCard>
             )

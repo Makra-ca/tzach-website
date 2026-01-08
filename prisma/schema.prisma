@@ -32,11 +32,18 @@ model ChabadHouse {
 }
 
 model College {
-  id          String   @id @default(cuid())
-  name        String
-  chabadId    String?  // optional link to a Chabad House
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String   @id @default(cuid())
+  name            String
+  chabadId        String?  // optional link to a Chabad House
+  phone           String?  // college contact phone
+  email           String?  // college contact email
+  hasShaliach     Boolean  @default(false) // whether there's a shaliach on campus
+  shaliachName    String?  // shaliach name
+  shaliachPhone   String?  // shaliach phone
+  shaliachEmail   String?  // shaliach email
+  shaliachWebsite String?  // shaliach website
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }
 
 model Service {
@@ -71,6 +78,15 @@ model GalleryImage {
   id        String   @id @default(cuid())
   url       String   // Vercel Blob URL
   alt       String   @default("")
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model HeroImage {
+  id        String   @id @default(cuid())
+  url       String   // Vercel Blob URL
+  alt       String   @default("")
+  position  String   @default("center") // CSS object-position value
   order     Int      @default(0)
   createdAt DateTime @default(now())
 }

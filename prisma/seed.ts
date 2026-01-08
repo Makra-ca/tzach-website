@@ -135,7 +135,7 @@ async function main() {
     },
     {
       name: 'Campus Outreach',
-      description: 'Chabad Houses on over 60 college campuses around the NYC Metro area, providing a "home away from home" for Jewish students with social events, educational classes, and holiday programming.',
+      description: 'Chabad Houses on over 50 college campuses around the NYC Metro area, providing a "home away from home" for Jewish students with social events, educational classes, and holiday programming.',
       icon: 'graduation-cap',
       order: 3
     },
@@ -156,6 +156,12 @@ async function main() {
       description: 'Support and guidance for Bar/Bat Mitzvahs, weddings, and other lifecycle celebrations.',
       icon: 'heart',
       order: 6
+    },
+    {
+      name: 'Social Services',
+      description: 'Friendship Circle provides programming for families with special needs children as well as high school volunteers. Hospital and prison chaplaincies touch the lives of all the Jews whom they visit throughout the year.',
+      icon: 'users',
+      order: 7
     }
   ]
 

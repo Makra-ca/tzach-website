@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import type { ChabadHouse, College, GalleryImage } from '@prisma/client'
+import type { ChabadHouse, College, GalleryImage, HeroImage } from '@prisma/client'
 
 // Confirmation Modal Component
 function ConfirmModal({
@@ -114,6 +114,7 @@ interface Props {
   initialHouses: ChabadHouse[]
   initialColleges: College[]
   initialGalleryImages: GalleryImage[]
+  initialHeroImages: HeroImage[]
   counties: string[]
 }
 
@@ -148,6 +149,13 @@ type HouseFormData = {
 type CollegeFormData = {
   name: string
   chabadId: string
+  phone: string
+  email: string
+  hasShaliach: boolean
+  shaliachName: string
+  shaliachPhone: string
+  shaliachEmail: string
+  shaliachWebsite: string
 }
 
 const emptyHouseForm: HouseFormData = {
@@ -167,14 +175,22 @@ const emptyHouseForm: HouseFormData = {
 
 const emptyCollegeForm: CollegeFormData = {
   name: '',
-  chabadId: ''
+  chabadId: '',
+  phone: '',
+  email: '',
+  hasShaliach: false,
+  shaliachName: '',
+  shaliachPhone: '',
+  shaliachEmail: '',
+  shaliachWebsite: ''
 }
 
-export default function AdminDashboard({ initialHouses, initialColleges, initialGalleryImages, counties }: Props) {
-  const [activeTab, setActiveTab] = useState<'houses' | 'colleges' | 'gallery'>('houses')
+export default function AdminDashboard({ initialHouses, initialColleges, initialGalleryImages, initialHeroImages, counties }: Props) {
+  const [activeTab, setActiveTab] = useState<'houses' | 'colleges' | 'gallery' | 'hero'>('houses')
   const [houses, setHouses] = useState(initialHouses)
   const [colleges, setColleges] = useState(initialColleges)
   const [galleryImages, setGalleryImages] = useState(initialGalleryImages)
+  const [heroImages, setHeroImages] = useState(initialHeroImages)
   const [search, setSearch] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -338,7 +354,14 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
     setEditingId(college.id)
     setCollegeForm({
       name: college.name || '',
-      chabadId: college.chabadId || ''
+      chabadId: college.chabadId || '',
+      phone: college.phone || '',
+      email: college.email || '',
+      hasShaliach: college.hasShaliach || false,
+      shaliachName: college.shaliachName || '',
+      shaliachPhone: college.shaliachPhone || '',
+      shaliachEmail: college.shaliachEmail || '',
+      shaliachWebsite: college.shaliachWebsite || ''
     })
     setShowForm(true)
     setError('')
@@ -529,6 +552,119 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
     }
   }
 
+  // Hero image handlers
+  const handleHeroDrop = useCallback(async (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/'))
+    if (files.length === 0) return
+
+    await uploadHeroImages(files)
+  }, [])
+
+  const handleHeroFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || [])
+    if (files.length === 0) return
+    await uploadHeroImages(files)
+    e.target.value = '' // Reset input
+  }
+
+  const uploadHeroImages = async (files: File[]) => {
+    setUploadProgress(true)
+    setError('')
+
+    try {
+      for (const file of files) {
+        const formData = new FormData()
+        formData.append('file', file)
+        formData.append('alt', file.name.replace(/\.[^/.]+$/, ''))
+        formData.append('position', 'center')
+
+        const res = await fetch('/api/admin/hero', {
+          method: 'POST',
+          body: formData
+        })
+
+        if (!res.ok) {
+          throw new Error('Failed to upload hero image')
+        }
+
+        const newImage = await res.json()
+        setHeroImages(prev => [...prev, newImage])
+      }
+      router.refresh()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to upload')
+    } finally {
+      setUploadProgress(false)
+    }
+  }
+
+  const handleDeleteHeroImage = (id: string, alt: string) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'Delete Hero Image',
+      message: `Are you sure you want to delete "${alt || 'this image'}"? This will remove it from the hero carousel.`,
+      onConfirm: async () => {
+        setConfirmLoading(true)
+        try {
+          const res = await fetch(`/api/admin/hero/${id}`, {
+            method: 'DELETE'
+          })
+
+          if (!res.ok) throw new Error('Failed to delete')
+
+          setHeroImages(prev => prev.filter(img => img.id !== id))
+          router.refresh()
+          closeConfirmModal()
+          showToast('Hero image deleted successfully', 'success')
+        } catch {
+          closeConfirmModal()
+          showToast('Failed to delete hero image', 'error')
+        }
+      }
+    })
+  }
+
+  const moveHeroImage = async (fromIndex: number, toIndex: number) => {
+    const newImages = [...heroImages]
+    const [movedImage] = newImages.splice(fromIndex, 1)
+    newImages.splice(toIndex, 0, movedImage)
+    setHeroImages(newImages)
+
+    // Save new order
+    try {
+      await fetch('/api/admin/hero/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ imageIds: newImages.map(img => img.id) })
+      })
+    } catch {
+      // Revert on error
+      setHeroImages(heroImages)
+    }
+  }
+
+  const updateHeroPosition = async (id: string, position: string) => {
+    try {
+      const res = await fetch(`/api/admin/hero/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ position })
+      })
+
+      if (!res.ok) throw new Error('Failed to update')
+
+      setHeroImages(prev => prev.map(img =>
+        img.id === id ? { ...img, position } : img
+      ))
+      showToast('Position updated', 'success')
+    } catch {
+      showToast('Failed to update position', 'error')
+    }
+  }
+
   return (
     <div>
       {/* Stats */}
@@ -585,10 +721,20 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
         >
           Gallery ({galleryImages.length})
         </button>
+        <button
+          onClick={() => { setActiveTab('hero'); setSearch(''); setShowForm(false); }}
+          className={`px-6 py-3 font-medium text-sm transition-colors ${
+            activeTab === 'hero'
+              ? 'text-[#1e3a5f] border-b-2 border-[#1e3a5f]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Hero Carousel ({heroImages.length})
+        </button>
       </div>
 
-      {/* Actions (not for gallery) */}
-      {activeTab !== 'gallery' && (
+      {/* Actions (not for gallery or hero) */}
+      {activeTab !== 'gallery' && activeTab !== 'hero' && (
         <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <div className="flex-1">
             <input
@@ -806,7 +952,7 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
       {/* College Form Modal */}
       {showForm && activeTab === 'colleges' && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+          <div className="bg-white rounded-xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
             <div className="p-6 border-b">
               <h2 className="text-xl font-bold text-[#1e3a5f]">
                 {editingId ? 'Edit College' : 'Add New College'}
@@ -820,36 +966,138 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                 </div>
               )}
 
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    College Name *
-                  </label>
-                  <input
-                    type="text"
-                    value={collegeForm.name}
-                    onChange={(e) => setCollegeForm({ ...collegeForm, name: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
-                    required
-                  />
+              <div className="space-y-6">
+                {/* Basic Info */}
+                <div className="space-y-4">
+                  <h3 className="font-medium text-gray-900 border-b pb-2">Basic Information</h3>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      College Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={collegeForm.name}
+                      onChange={(e) => setCollegeForm({ ...collegeForm, name: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Phone
+                      </label>
+                      <input
+                        type="tel"
+                        value={collegeForm.phone}
+                        onChange={(e) => setCollegeForm({ ...collegeForm, phone: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                        placeholder="(555) 123-4567"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Email
+                      </label>
+                      <input
+                        type="email"
+                        value={collegeForm.email}
+                        onChange={(e) => setCollegeForm({ ...collegeForm, email: e.target.value })}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                        placeholder="contact@college.edu"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Linked Chabad House (optional)
+                    </label>
+                    <select
+                      value={collegeForm.chabadId}
+                      onChange={(e) => setCollegeForm({ ...collegeForm, chabadId: e.target.value })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                    >
+                      <option value="">None</option>
+                      {houses.map(h => (
+                        <option key={h.id} value={h.id}>
+                          {h.name} {h.city ? `(${h.city})` : ''}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Linked Chabad House (optional)
-                  </label>
-                  <select
-                    value={collegeForm.chabadId}
-                    onChange={(e) => setCollegeForm({ ...collegeForm, chabadId: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
-                  >
-                    <option value="">None</option>
-                    {houses.map(h => (
-                      <option key={h.id} value={h.id}>
-                        {h.name} {h.city ? `(${h.city})` : ''}
-                      </option>
-                    ))}
-                  </select>
+                {/* Shaliach Info */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 border-b pb-2">
+                    <h3 className="font-medium text-gray-900">Shaliach on Campus</h3>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={collegeForm.hasShaliach}
+                        onChange={(e) => setCollegeForm({ ...collegeForm, hasShaliach: e.target.checked })}
+                        className="sr-only peer"
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#1e3a5f]/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#1e3a5f]"></div>
+                    </label>
+                  </div>
+
+                  {collegeForm.hasShaliach && (
+                    <div className="space-y-4 pl-4 border-l-2 border-[#1e3a5f]/20">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Shaliach Name
+                        </label>
+                        <input
+                          type="text"
+                          value={collegeForm.shaliachName}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, shaliachName: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                          placeholder="Rabbi First Last"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Shaliach Phone
+                          </label>
+                          <input
+                            type="tel"
+                            value={collegeForm.shaliachPhone}
+                            onChange={(e) => setCollegeForm({ ...collegeForm, shaliachPhone: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Shaliach Email
+                          </label>
+                          <input
+                            type="email"
+                            value={collegeForm.shaliachEmail}
+                            onChange={(e) => setCollegeForm({ ...collegeForm, shaliachEmail: e.target.value })}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">
+                          Shaliach Website
+                        </label>
+                        <input
+                          type="url"
+                          value={collegeForm.shaliachWebsite}
+                          onChange={(e) => setCollegeForm({ ...collegeForm, shaliachWebsite: e.target.value })}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                          placeholder="https://"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -1244,6 +1492,163 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                     {/* Position badge */}
                     <div className="absolute top-2 left-2 px-2 py-1 bg-black/70 text-white text-xs rounded">
                       {index + 1}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Hero Carousel Management */}
+      {activeTab === 'hero' && (
+        <div className="space-y-6">
+          {/* Upload Zone */}
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleHeroDrop}
+            className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors ${
+              isDragging
+                ? 'border-[#1e3a5f] bg-[#1e3a5f]/5'
+                : 'border-gray-300 hover:border-gray-400'
+            }`}
+          >
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <p className="text-lg font-medium text-gray-700">
+                  {uploadProgress ? 'Uploading...' : 'Drag & drop hero images here'}
+                </p>
+                <p className="text-sm text-gray-500 mt-1">or click to browse (recommended: 1920x1080 or wider)</p>
+              </div>
+              <label className="cursor-pointer">
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleHeroFileSelect}
+                  className="hidden"
+                  disabled={uploadProgress}
+                />
+                <span className="inline-block px-6 py-2 bg-[#1e3a5f] text-white rounded-lg hover:bg-[#2c5282] transition-colors font-medium">
+                  Select Files
+                </span>
+              </label>
+            </div>
+          </div>
+
+          {error && (
+            <div className="p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Image Grid */}
+          <div className="bg-white rounded-lg shadow-md p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">
+              Hero Carousel Images ({heroImages.length})
+            </h3>
+            <p className="text-sm text-gray-500 mb-6">
+              These images rotate in the hero section on the homepage. Use the arrows to reorder. If no images are uploaded, default images will be shown.
+            </p>
+
+            {heroImages.length === 0 ? (
+              <div className="text-center py-12 text-gray-500">
+                No hero images yet. Upload some to customize the homepage carousel.
+                <br />
+                <span className="text-sm">Default images will be displayed until you add your own.</span>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {heroImages.map((image, index) => (
+                  <div
+                    key={image.id}
+                    className="relative group rounded-lg overflow-hidden bg-gray-100 border border-gray-200"
+                  >
+                    <div className="aspect-video relative">
+                      <Image
+                        src={image.url}
+                        alt={image.alt || 'Hero image'}
+                        fill
+                        className="object-cover"
+                        style={{ objectPosition: image.position }}
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    </div>
+
+                    {/* Overlay with controls */}
+                    <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                      {/* Move left */}
+                      {index > 0 && (
+                        <button
+                          onClick={() => moveHeroImage(index, index - 1)}
+                          className="p-2 bg-white rounded-full hover:bg-gray-100 transition-colors"
+                          title="Move left"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                      )}
+
+                      {/* Delete */}
+                      <button
+                        onClick={() => handleDeleteHeroImage(image.id, image.alt)}
+                        className="p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                        title="Delete"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+
+                      {/* Move right */}
+                      {index < heroImages.length - 1 && (
+                        <button
+                          onClick={() => moveHeroImage(index, index + 1)}
+                          className="p-2 bg-white rounded-full hover:bg-gray-100 transition-colors"
+                          title="Move right"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+
+                    {/* Position badge */}
+                    <div className="absolute top-2 left-2 px-2 py-1 bg-black/70 text-white text-xs rounded">
+                      {index + 1}
+                    </div>
+
+                    {/* Position selector */}
+                    <div className="p-3 bg-gray-50 border-t">
+                      <label className="block text-xs font-medium text-gray-600 mb-1">
+                        Image Focus Position
+                      </label>
+                      <select
+                        value={image.position}
+                        onChange={(e) => updateHeroPosition(image.id, e.target.value)}
+                        className="w-full px-2 py-1 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-[#1e3a5f] focus:border-transparent"
+                      >
+                        <option value="center">Center</option>
+                        <option value="top">Top</option>
+                        <option value="bottom">Bottom</option>
+                        <option value="left">Left</option>
+                        <option value="right">Right</option>
+                        <option value="center 20%">Center Top (20%)</option>
+                        <option value="center 30%">Center Top (30%)</option>
+                        <option value="center 40%">Center Top (40%)</option>
+                        <option value="center 60%">Center Bottom (60%)</option>
+                        <option value="center 70%">Center Bottom (70%)</option>
+                        <option value="center 80%">Center Bottom (80%)</option>
+                      </select>
                     </div>
                   </div>
                 ))}

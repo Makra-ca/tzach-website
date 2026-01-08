@@ -16,6 +16,12 @@ interface TeamMember {
   isDeceased: boolean
 }
 
+interface HeroImage {
+  src: string
+  alt: string
+  position: string
+}
+
 interface HomePageClientProps {
   stats: {
     houses: number
@@ -24,9 +30,10 @@ interface HomePageClientProps {
   }
   teamMembers: TeamMember[]
   galleryImages: { src: string; alt: string }[]
+  heroImages: HeroImage[]
 }
 
-export default function HomePageClient({ stats, teamMembers, galleryImages }: HomePageClientProps) {
+export default function HomePageClient({ stats, teamMembers, galleryImages, heroImages }: HomePageClientProps) {
   const staff = teamMembers.filter(m => !m.isBoard && !m.isDeceased)
   const boardMembers = teamMembers.filter(m => m.isBoard && !m.isDeceased)
 
@@ -37,11 +44,11 @@ export default function HomePageClient({ stats, teamMembers, galleryImages }: Ho
       <div className="min-h-screen bg-white">
         {/* Hero with Carousel */}
         <section className="relative h-[85vh] min-h-[600px] overflow-hidden">
-          <HeroCarousel />
+          <HeroCarousel images={heroImages} />
 
           <div className="relative z-10 h-full max-w-6xl mx-auto px-4 flex items-center">
             <div className="max-w-2xl text-white hero-animate">
-              <p className="text-[#d4a853] font-medium mb-4 tracking-[0.15em] text-sm">
+              <p className="text-[#d4a853] font-semibold mb-4 tracking-[0.2em] text-lg md:text-xl">
                 LUBAVITCH YOUTH ORGANIZATION
               </p>
               <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold mb-6 leading-[1.1]">
@@ -74,7 +81,7 @@ export default function HomePageClient({ stats, teamMembers, galleryImages }: Ho
                 <div className="font-display text-5xl font-bold text-[#d4a853] mb-2">
                   <AnimatedCounter target={stats.houses} suffix="+" delay={300} />
                 </div>
-                <div className="text-gray-400 uppercase tracking-wider text-sm">Chabad Houses</div>
+                <div className="text-gray-400 uppercase tracking-wider text-sm">Shluchim Couples</div>
               </AnimatedSection>
               <AnimatedSection delay={100} direction="popIn">
                 <div className="font-display text-5xl font-bold text-[#d4a853] mb-2">
@@ -108,12 +115,12 @@ export default function HomePageClient({ stats, teamMembers, galleryImages }: Ho
                 </h2>
                 <p className="text-lg text-gray-600 leading-relaxed mb-6">
                   The Lubavitch Youth Organization (LYO) was established by the seventh Chabad-Lubavitch Rebbe,
-                  Rabbi Menachem Mendel Schneerson zy&quot;a, to provide a wide range of services and educational
+                  Rabbi Menachem Mendel Schneerson, to provide a wide range of services and educational
                   programs for Jewish youth and adults of all ages and backgrounds.
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed mb-8">
                   The core philosophy of Chabad is to reach every single Jew with unconditional love and acceptance,
-                  regardless of their background or affiliation. Today, with over 200 shluchim couples and 170 centers,
+                  regardless of their background or affiliation. Today, with over {stats.houses}+ shluchim couples and 140 centers,
                   LYO serves the largest Jewish population center outside of Israel.
                 </p>
                 <blockquote className="border-l-4 border-[#d4a853] pl-6 py-2 mb-8">
@@ -215,7 +222,7 @@ export default function HomePageClient({ stats, teamMembers, galleryImages }: Ho
                   </div>
                   <h3 className="text-xl font-semibold text-[#0f172a] mb-3">Campus Outreach</h3>
                   <p className="text-gray-600">
-                    Chabad Houses on over 60 college campuses provide a &ldquo;home away from home&rdquo; for Jewish students.
+                    Chabad Houses on over 50 college campuses provide a &ldquo;home away from home&rdquo; for Jewish students.
                   </p>
                 </div>
               </AnimatedSection>
@@ -241,25 +248,43 @@ export default function HomePageClient({ stats, teamMembers, galleryImages }: Ho
         {/* Gallery Section */}
         <GallerySection images={galleryImages} />
 
-        {/* Mission Highlight */}
+        {/* Mission Highlight with Rebbe */}
         <AnimatedSection skipPreloaderDelay>
           <section className="py-16 bg-[#0f172a]">
-            <div className="max-w-4xl mx-auto px-4">
-              <p className="text-xl text-gray-300 leading-relaxed mb-6">
-                Today&apos;s LYO, with over 200 shluchim couples and 170 centers, is responsible for the largest
-                Jewish population center outside of Israel. We represent an important part of the vast network
-                of over 3,500 Chabad institutions directed by thousands of full-time emissary families across
-                the globe, dedicated to the welfare and spiritual needs of the Jewish people.
-              </p>
-              <p className="text-xl text-gray-300 leading-relaxed mb-6">
-                As we celebrate over seven decades of reaching out to the Jewish community in the NYC Metro area,
-                we know only too well we still have much work to do in order to fulfill the Rebbe&apos;s goal of
-                bringing about the Messianic Era, may it be quickly in our days.
-              </p>
-              <p className="text-xl text-[#d4a853] font-medium">
-                Our hope is that you will use this site to find your local Chabad House and your local Chabad
-                Rabbi and Rebbetzin and get in touch with them.
-              </p>
+            <div className="max-w-6xl mx-auto px-4">
+              <div className="grid md:grid-cols-[300px_1fr] gap-10 items-start">
+                {/* Rebbe Image */}
+                <div className="flex justify-center md:justify-start">
+                  <div className="relative">
+                    <div className="absolute -bottom-3 -right-3 w-full h-full bg-[#d4a853]/20 rounded-lg" />
+                    <Image
+                      src="/The rebbe.png"
+                      alt="The Rebbe, Rabbi Menachem Mendel Schneerson"
+                      width={280}
+                      height={350}
+                      className="relative z-10 rounded-lg shadow-xl grayscale"
+                    />
+                  </div>
+                </div>
+                {/* Text Content */}
+                <div>
+                  <p className="text-xl text-gray-300 leading-relaxed mb-6">
+                    Today&apos;s LYO, with over {stats.houses}+ shluchim couples and 140 centers, is responsible for the largest
+                    Jewish population center outside of Israel. We represent an important part of the vast network
+                    of over 3,500 Chabad institutions directed by thousands of full-time emissary families across
+                    the globe, dedicated to the welfare and spiritual needs of the Jewish people.
+                  </p>
+                  <p className="text-xl text-gray-300 leading-relaxed mb-6">
+                    As we celebrate over seven decades of reaching out to the Jewish community in the NYC Metro area,
+                    we know only too well we still have much work to do in order to fulfill the Rebbe&apos;s goal of
+                    bringing about the Messianic Era, may it be quickly in our days.
+                  </p>
+                  <p className="text-xl text-[#d4a853] font-medium">
+                    Our hope is that you will use this site to find your local Chabad House and your local Chabad
+                    Rabbi and Rebbetzin and get in touch with them.
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
         </AnimatedSection>
