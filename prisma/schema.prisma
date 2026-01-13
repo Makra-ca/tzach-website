@@ -37,6 +37,7 @@ model College {
   chabadId        String?  // optional link to a Chabad House
   phone           String?  // college contact phone
   email           String?  // college contact email
+  imageUrl        String?  // image of campus or shaliach
   hasShaliach     Boolean  @default(false) // whether there's a shaliach on campus
   shaliachName    String?  // shaliach name
   shaliachPhone   String?  // shaliach phone
@@ -89,4 +90,15 @@ model HeroImage {
   position  String   @default("center") // CSS object-position value
   order     Int      @default(0)
   createdAt DateTime @default(now())
+}
+
+model HeadquartersProgram {
+  id            String   @id @default(cuid())
+  name          String
+  contactPerson String?
+  phone         String?
+  image         String?  // Vercel Blob URL
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }

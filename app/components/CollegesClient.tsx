@@ -1,17 +1,16 @@
 'use client'
 
 import { useState, useMemo, useEffect, useRef } from 'react'
+import Image from 'next/image'
 import type { College, ChabadHouse } from '@prisma/client'
+import { formatPhone } from '@/lib/formatPhone'
 
 interface Props {
   colleges: College[]
   houses: ChabadHouse[]
 }
 
-// Wait for preloader to finish (4s) + small buffer
-const PRELOADER_DELAY = 4200
-
-// Animated card wrapper - simple fade up
+// Animated card wrapper - simple fade up on scroll
 function AnimatedCard({ children, delay }: { children: React.ReactNode; delay: number }) {
   const [isVisible, setIsVisible] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -21,30 +20,22 @@ function AnimatedCard({ children, delay }: { children: React.ReactNode; delay: n
     const element = ref.current
     if (!element || hasAnimated.current) return
 
-    // Check if preloader was skipped
-    const preloaderSkipped = document.documentElement.classList.contains('preloader-skip')
-    const waitTime = preloaderSkipped ? 100 : PRELOADER_DELAY
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated.current) {
+            hasAnimated.current = true
+            setTimeout(() => setIsVisible(true), Math.min(delay, 300))
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.1, rootMargin: '20px' }
+    )
 
-    const startDelayTimer = setTimeout(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !hasAnimated.current) {
-              hasAnimated.current = true
-              setTimeout(() => setIsVisible(true), Math.min(delay, 300))
-              observer.disconnect()
-            }
-          })
-        },
-        { threshold: 0.1, rootMargin: '20px' }
-      )
+    observer.observe(element)
 
-      observer.observe(element)
-
-      return () => observer.disconnect()
-    }, waitTime)
-
-    return () => clearTimeout(startDelayTimer)
+    return () => observer.disconnect()
   }, [delay])
 
   return (
@@ -153,159 +144,181 @@ export default function CollegesClient({ colleges, houses }: Props) {
           <p className="text-gray-400 text-sm mt-1">Try adjusting your search</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredColleges.map((college, index) => {
             const linkedHouse = getLinkedHouse(college.chabadId)
+            const hasImage = !!college.imageUrl
+
             return (
               <AnimatedCard key={college.id} delay={index * 30}>
-              <div className="group card-hover bg-white border border-gray-200 rounded-xl p-5 relative overflow-hidden h-full">
-                {/* Decorative gradient accent */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#0f172a] to-[#d4a853] opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                {/* Header with icon */}
-                <div className="flex items-start gap-3 mb-3">
-                  <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center shrink-0 group-hover:bg-[#0f172a] group-hover:text-white transition-colors">
-                    <GraduationCapIcon className="w-5 h-5" />
+              <div className="group card-hover bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all h-full">
+                {/* Image Section */}
+                {hasImage ? (
+                  <div className="relative h-48 bg-gradient-to-br from-[#0f172a] to-[#1e3a5f]">
+                    <Image
+                      src={college.imageUrl!}
+                      alt={college.name}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <h3 className="font-bold text-white text-xl leading-tight drop-shadow-lg">{college.name.trim()}</h3>
+                    </div>
                   </div>
-                  <h3 className="font-semibold text-gray-900 leading-tight pt-1">{college.name.trim()}</h3>
-                </div>
+                ) : (
+                  <div className="relative h-32 bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] flex items-center">
+                    <div className="absolute inset-0 opacity-10">
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                        <GraduationCapIcon className="w-24 h-24 text-white" />
+                      </div>
+                    </div>
+                    <div className="relative px-6">
+                      <h3 className="font-bold text-white text-xl leading-tight">{college.name.trim()}</h3>
+                    </div>
+                  </div>
+                )}
 
-                {/* Contact Info */}
-                {(college.phone || college.email) && (
-                  <div className="mt-3 pt-3 border-t border-gray-100">
-                    <div className="flex flex-wrap gap-2">
+                <div className="p-6 space-y-4">
+                  {/* Contact Info */}
+                  {(college.phone || college.email) && (
+                    <div className="flex flex-wrap gap-3">
                       {college.phone && (
                         <a
                           href={`tel:${college.phone}`}
-                          className="inline-flex items-center gap-1 text-xs text-gray-600 hover:text-[#0f172a]"
+                          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-[#0f172a] transition-colors"
                         >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                           </svg>
-                          {college.phone}
+                          {formatPhone(college.phone)}
                         </a>
                       )}
                       {college.email && (
                         <a
                           href={`mailto:${college.email}`}
-                          className="inline-flex items-center gap-1 text-xs text-gray-600 hover:text-[#0f172a]"
+                          className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-[#0f172a] transition-colors"
                         >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                           </svg>
                           {college.email}
                         </a>
                       )}
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Shaliach Info */}
-                {college.hasShaliach && (
-                  <div className="mt-3 pt-3 border-t border-gray-100">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#d4a853]/10 text-[#b8943f] text-xs font-medium rounded-full">
-                        <span className="w-1.5 h-1.5 bg-[#d4a853] rounded-full"></span>
-                        Shaliach on Campus
-                      </span>
+                  {/* Shaliach Info */}
+                  {college.hasShaliach && (
+                    <div className="bg-gradient-to-br from-[#d4a853]/10 to-[#d4a853]/5 rounded-xl p-4 border border-[#d4a853]/20">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#d4a853] text-[#0f172a] text-xs font-bold rounded-full uppercase tracking-wide">
+                          <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                          Shaliach on Campus
+                        </span>
+                      </div>
+                      {college.shaliachName && (
+                        <p className="text-lg font-semibold text-gray-900 mb-3">{college.shaliachName}</p>
+                      )}
+                      <div className="flex flex-wrap gap-2">
+                        {college.shaliachPhone && (
+                          <a
+                            href={`tel:${college.shaliachPhone}`}
+                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            {formatPhone(college.shaliachPhone)}
+                          </a>
+                        )}
+                        {college.shaliachEmail && (
+                          <a
+                            href={`mailto:${college.shaliachEmail}`}
+                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                            </svg>
+                            Email
+                          </a>
+                        )}
+                        {college.shaliachWebsite && (
+                          <a
+                            href={college.shaliachWebsite}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-white bg-[#0f172a] rounded-lg hover:bg-[#1e293b] transition-colors shadow-sm"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                            Visit Website
+                          </a>
+                        )}
+                      </div>
                     </div>
-                    {college.shaliachName && (
-                      <p className="text-sm text-gray-700 font-medium">{college.shaliachName}</p>
-                    )}
-                    <div className="flex flex-wrap gap-2 mt-2">
-                      {college.shaliachPhone && (
-                        <a
-                          href={`tel:${college.shaliachPhone}`}
-                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                          </svg>
-                          Call
-                        </a>
-                      )}
-                      {college.shaliachEmail && (
-                        <a
-                          href={`mailto:${college.shaliachEmail}`}
-                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                          </svg>
-                          Email
-                        </a>
-                      )}
-                      {college.shaliachWebsite && (
-                        <a
-                          href={college.shaliachWebsite}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 px-2 py-1 text-xs font-medium text-white bg-[#0f172a] rounded-lg hover:bg-[#1e293b] transition-colors"
-                        >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                          </svg>
-                          Visit
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Linked Chabad House (if no shaliach but has linked house) */}
-                {!college.hasShaliach && linkedHouse ? (
-                  <div className="mt-3 pt-3 border-t border-gray-100">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-green-50 text-green-700 text-xs font-medium rounded-full">
-                        <span className="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                        Chabad on Campus
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-700 font-medium">{linkedHouse.name}</p>
-                    {linkedHouse.city && (
-                      <p className="text-xs text-gray-500 mt-0.5">{linkedHouse.city}, {linkedHouse.state}</p>
-                    )}
+                  {/* Linked Chabad House (if no shaliach but has linked house) */}
+                  {!college.hasShaliach && linkedHouse && (
+                    <div className="bg-gradient-to-br from-green-50 to-green-50/50 rounded-xl p-4 border border-green-200/50">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-full uppercase tracking-wide">
+                          <span className="w-2 h-2 bg-white rounded-full"></span>
+                          Chabad on Campus
+                        </span>
+                      </div>
+                      <p className="text-lg font-semibold text-gray-900">{linkedHouse.name}</p>
+                      {linkedHouse.city && (
+                        <p className="text-sm text-gray-500 mt-0.5">{linkedHouse.city}, {linkedHouse.state}</p>
+                      )}
 
-                    <div className="flex gap-2 mt-3">
-                      {linkedHouse.phone && (
-                        <a
-                          href={`tel:${linkedHouse.phone}`}
-                          className="flex-1 inline-flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-                        >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                          </svg>
-                          Call
-                        </a>
-                      )}
-                      {linkedHouse.website && (
-                        <a
-                          href={linkedHouse.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-1 inline-flex items-center justify-center gap-1 px-2 py-1.5 text-xs font-medium text-white bg-[#0f172a] rounded-lg hover:bg-[#1e293b] transition-colors"
-                        >
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                          </svg>
-                          Visit
-                        </a>
-                      )}
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {linkedHouse.phone && (
+                          <a
+                            href={`tel:${linkedHouse.phone}`}
+                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                            {formatPhone(linkedHouse.phone)}
+                          </a>
+                        )}
+                        {linkedHouse.website && (
+                          <a
+                            href={linkedHouse.website}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-white bg-[#0f172a] rounded-lg hover:bg-[#1e293b] transition-colors shadow-sm"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                            </svg>
+                            Visit Website
+                          </a>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                ) : !college.hasShaliach && !linkedHouse && !college.phone && !college.email ? (
-                  <div className="mt-3 pt-3 border-t border-gray-100">
-                    <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-500 text-xs font-medium rounded-full">
-                        <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                        Contact Tzach for info
-                      </span>
+                  )}
+
+                  {/* No contact info */}
+                  {!college.hasShaliach && !linkedHouse && !college.phone && !college.email && (
+                    <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-200 text-gray-600 text-xs font-medium rounded-full">
+                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                          Contact Tzach
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-500">Looking for Jewish resources at this campus? Reach out to us.</p>
                     </div>
-                    <p className="text-xs text-gray-400 mt-2">Looking for Jewish resources at this campus? Reach out to us.</p>
-                  </div>
-                ) : null}
+                  )}
+                </div>
               </div>
               </AnimatedCard>
             )

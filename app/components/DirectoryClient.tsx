@@ -15,10 +15,7 @@ interface Props {
   }
 }
 
-// Wait for preloader to finish (4s) + small buffer
-const PRELOADER_DELAY = 4200
-
-// Animated card wrapper - simple fade up
+// Animated card wrapper - simple fade up on scroll
 function AnimatedCard({ children, delay }: { children: React.ReactNode; delay: number }) {
   const [isVisible, setIsVisible] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -28,30 +25,22 @@ function AnimatedCard({ children, delay }: { children: React.ReactNode; delay: n
     const element = ref.current
     if (!element || hasAnimated.current) return
 
-    // Check if preloader was skipped
-    const preloaderSkipped = document.documentElement.classList.contains('preloader-skip')
-    const waitTime = preloaderSkipped ? 100 : PRELOADER_DELAY
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && !hasAnimated.current) {
+            hasAnimated.current = true
+            setTimeout(() => setIsVisible(true), Math.min(delay, 300))
+            observer.disconnect()
+          }
+        })
+      },
+      { threshold: 0.1, rootMargin: '20px' }
+    )
 
-    const startDelayTimer = setTimeout(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && !hasAnimated.current) {
-              hasAnimated.current = true
-              setTimeout(() => setIsVisible(true), Math.min(delay, 300))
-              observer.disconnect()
-            }
-          })
-        },
-        { threshold: 0.1, rootMargin: '20px' }
-      )
+    observer.observe(element)
 
-      observer.observe(element)
-
-      return () => observer.disconnect()
-    }, waitTime)
-
-    return () => clearTimeout(startDelayTimer)
+    return () => observer.disconnect()
   }, [delay])
 
   return (

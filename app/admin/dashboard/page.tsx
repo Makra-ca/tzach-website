@@ -14,6 +14,10 @@ async function getData() {
     orderBy: { name: 'asc' }
   })
 
+  const headquarters = await prisma.headquartersProgram.findMany({
+    orderBy: [{ order: 'asc' }, { name: 'asc' }]
+  })
+
   const counties = await prisma.chabadHouse.findMany({
     select: { county: true },
     distinct: ['county'],
@@ -32,6 +36,7 @@ async function getData() {
   return {
     houses,
     colleges,
+    headquarters,
     counties: counties.map(c => c.county).filter(Boolean) as string[],
     galleryImages,
     heroImages
@@ -45,7 +50,7 @@ export default async function DashboardPage() {
     redirect('/admin')
   }
 
-  const { houses, colleges, counties, galleryImages, heroImages } = await getData()
+  const { houses, colleges, headquarters, counties, galleryImages, heroImages } = await getData()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -53,7 +58,7 @@ export default async function DashboardPage() {
         <div className="flex justify-between items-center mb-8">
           <div>
             <h1 className="text-3xl font-bold text-[#1e3a5f]">Admin Dashboard</h1>
-            <p className="text-gray-600 mt-1">Manage Chabad Houses, Colleges, Gallery, and Hero Carousel</p>
+            <p className="text-gray-600 mt-1">Manage Chabad Houses, Colleges, Headquarters, Gallery, and Hero Carousel</p>
           </div>
           <LogoutButton />
         </div>
@@ -61,6 +66,7 @@ export default async function DashboardPage() {
         <AdminDashboard
           initialHouses={houses}
           initialColleges={colleges}
+          initialHeadquarters={headquarters}
           initialGalleryImages={galleryImages}
           initialHeroImages={heroImages}
           counties={counties}

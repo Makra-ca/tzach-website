@@ -33,8 +33,8 @@ export default function Header() {
           <Image
             src="/tzach logo.bmp"
             alt="LYO Logo"
-            width={56}
-            height={56}
+            width={72}
+            height={72}
             className="rounded"
           />
           <span className="font-semibold text-lg hidden sm:block">LYO Directory</span>
@@ -67,6 +67,13 @@ export default function Header() {
             className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
           >
             <span className="relative z-10">Services</span>
+            <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
+          </Link>
+          <Link
+            href="/headquarters"
+            className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
+          >
+            <span className="relative z-10">Headquarters</span>
             <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
           </Link>
           <Link
@@ -124,8 +131,8 @@ export default function Header() {
             <Image
               src="/tzach logo.bmp"
               alt="LYO Logo"
-              width={56}
-              height={56}
+              width={72}
+              height={72}
               className="rounded"
             />
             <span className="text-sm font-medium text-white/80">LYO Directory</span>
@@ -178,12 +185,23 @@ export default function Header() {
             Services
           </Link>
 
+          <Link
+            href="/headquarters"
+            onClick={closeMenu}
+            className={`text-3xl font-semibold text-white hover:text-[#d4a853] transition-all duration-500 py-3 ${
+              mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+            }`}
+            style={{ transitionDelay: '350ms' }}
+          >
+            Headquarters
+          </Link>
+
           {/* Divider */}
           <div
             className={`w-16 h-px bg-[#d4a853] my-4 transition-all duration-500 ${
               mobileMenuOpen ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
             }`}
-            style={{ transitionDelay: '350ms' }}
+            style={{ transitionDelay: '400ms' }}
           />
 
           <Link
@@ -192,7 +210,7 @@ export default function Header() {
             className={`text-xl text-gray-400 hover:text-white transition-all duration-500 py-2 ${
               mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
-            style={{ transitionDelay: '400ms' }}
+            style={{ transitionDelay: '450ms' }}
           >
             About Us
           </Link>
@@ -203,7 +221,7 @@ export default function Header() {
           className={`p-6 transition-all duration-500 ${
             mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '450ms' }}
+          style={{ transitionDelay: '500ms' }}
         >
           <a
             href="tel:718-953-1000"
