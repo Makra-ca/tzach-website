@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LYO - Home Redesign Mockup</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --navy: #0f172a;
+      --navy-light: #1e293b;
+      --gold: #d4a853;
+      --gold-dark: #b8943f;
+      --cream: #fafaf9;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      color: #1a1a1a;
+      background: white;
+    }
+
+    .font-display {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    /* Header */
+    header {
+      background: var(--navy);
+      color: white;
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+      color: white;
+    }
+
+    .logo img {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+    }
+
+    .logo span {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+    }
+
+    nav a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+
+    nav a:hover, nav a.active {
+      color: white;
+    }
+
+    /* Hero Carousel */
+    .hero {
+      position: relative;
+      height: 85vh;
+      min-height: 600px;
+      overflow: hidden;
+      margin-top: 64px;
+    }
+
+    .carousel {
+      position: absolute;
+      inset: 0;
+    }
+
+    .carousel-slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    .carousel-slide.active {
+      opacity: 1;
+    }
+
+    .carousel-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .carousel-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.6) 50%, rgba(15, 23, 42, 0.3) 100%);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      height: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero-text {
+      max-width: 650px;
+      color: white;
+    }
+
+    .hero-label {
+      color: var(--gold);
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-size: 4rem;
+      font-weight: 600;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      color: #cbd5e1;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s;
+      font-size: 1rem;
+    }
+
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+    }
+
+    .btn-primary:hover {
+      background: var(--gold-dark);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255,255,255,0.3);
+    }
+
+    .btn-secondary:hover {
+      border-color: white;
+    }
+
+    /* Carousel dots */
+    .carousel-dots {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 0.75rem;
+      z-index: 20;
+    }
+
+    .carousel-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .carousel-dot.active {
+      background: var(--gold);
+      transform: scale(1.2);
+    }
+
+    /* Stats Section */
+    .stats {
+      background: var(--navy);
+      padding: 4rem 0;
+    }
+
+    .stats-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      text-align: center;
+    }
+
+    .stat-item {
+      color: white;
+    }
+
+    .stat-number {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.95rem;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    /* About Section */
+    .about {
+      padding: 6rem 0;
+      background: white;
+    }
+
+    .about-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .about-content h2 {
+      font-size: 2.75rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .about-content p {
+      font-size: 1.1rem;
+      color: #64748b;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-quote {
+      border-left: 4px solid var(--gold);
+      padding-left: 1.5rem;
+      font-style: italic;
+      color: var(--navy);
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin: 2rem 0;
+    }
+
+    .about-image {
+      position: relative;
+    }
+
+    .about-image img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+    }
+
+    .about-image::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 100%;
+      height: 100%;
+      border: 3px solid var(--gold);
+      border-radius: 12px;
+      z-index: -1;
+    }
+
+    /* Programs Section */
+    .programs {
+      padding: 6rem 0;
+      background: var(--cream);
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 4rem;
+    }
+
+    .section-label {
+      color: var(--gold);
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .section-title {
+      font-size: 2.75rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 1rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: #64748b;
+    }
+
+    .programs-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .program-card {
+      background: white;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s;
+    }
+
+    .program-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.15);
+    }
+
+    .program-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+
+    .program-icon svg {
+      width: 32px;
+      height: 32px;
+      color: var(--gold);
+    }
+
+    .program-card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.75rem;
+    }
+
+    .program-card p {
+      font-size: 0.95rem;
+      color: #64748b;
+      line-height: 1.6;
+    }
+
+    /* Gallery Section */
+    .gallery {
+      padding: 6rem 0;
+      background: white;
+    }
+
+    .gallery-grid {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+    }
+
+    .gallery-item {
+      aspect-ratio: 1;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.1);
+    }
+
+    .gallery-item:first-child {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+
+    /* CTA Section */
+    .cta {
+      padding: 6rem 0;
+      background: var(--navy);
+      text-align: center;
+    }
+
+    .cta-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .cta h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .cta p {
+      font-size: 1.15rem;
+      color: #94a3b8;
+      margin-bottom: 2rem;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    /* Footer */
+    footer {
+      background: var(--navy-light);
+      color: white;
+      padding: 4rem 0 2rem;
+    }
+
+    .footer-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      gap: 4rem;
+    }
+
+    .footer-brand h3 {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .footer-brand p {
+      color: #94a3b8;
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .footer-links h4 {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.5rem;
+      color: #94a3b8;
+    }
+
+    .footer-links ul {
+      list-style: none;
+    }
+
+    .footer-links li {
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--gold);
+    }
+
+    .footer-bottom {
+      max-width: 1200px;
+      margin: 3rem auto 0;
+      padding: 2rem 1.5rem 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      text-align: center;
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .hero-title {
+        font-size: 3rem;
+      }
+      .stats-inner {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .programs-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .about-inner {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+      .hero-buttons {
+        flex-direction: column;
+      }
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .gallery-item:first-child {
+        grid-column: span 2;
+        grid-row: span 1;
+      }
+      .footer-inner {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+      .cta-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <a href="#" class="logo">
+        <img src="../public/logo.jpeg" alt="LYO">
+        <span>LYO Directory</span>
+      </a>
+      <nav>
+        <a href="#" class="active">Home</a>
+        <a href="#">Directory</a>
+        <a href="#">Colleges</a>
+        <a href="#">Services</a>
+        <a href="#">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Carousel -->
+  <section class="hero">
+    <div class="carousel">
+      <div class="carousel-slide active">
+        <img src="../public/chabad-images/Chanukah1.jpeg" alt="Chanukah celebration">
+        <div class="carousel-overlay"></div>
+      </div>
+      <div class="carousel-slide">
+        <img src="../public/chabad-images/IMG_4640.JPG" alt="Community gathering">
+        <div class="carousel-overlay"></div>
+      </div>
+      <div class="carousel-slide">
+        <img src="../public/chabad-images/DSC09685.jpg" alt="Group photo">
+        <div class="carousel-overlay"></div>
+      </div>
+      <div class="carousel-slide">
+        <img src="../public/chabad-images/IMG_8357.jpeg" alt="Community event">
+        <div class="carousel-overlay"></div>
+      </div>
+    </div>
+
+    <div class="hero-content">
+      <div class="hero-text">
+        <p class="hero-label">LUBAVITCH YOUTH ORGANIZATION</p>
+        <h1 class="hero-title font-display">Bringing Jewish Life to Every Corner</h1>
+        <p class="hero-subtitle">
+          For 70 years, LYO has connected thousands of families across the NYC Metro area
+          with vibrant Jewish community, education, and celebration.
+        </p>
+        <div class="hero-buttons">
+          <a href="#" class="btn btn-primary">
+            Find Your Chabad House
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </a>
+          <a href="#" class="btn btn-secondary">Learn About Us</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="carousel-dots">
+      <div class="carousel-dot active" data-slide="0"></div>
+      <div class="carousel-dot" data-slide="1"></div>
+      <div class="carousel-dot" data-slide="2"></div>
+      <div class="carousel-dot" data-slide="3"></div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-number font-display">205+</div>
+        <div class="stat-label">Chabad Houses</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number font-display">12</div>
+        <div class="stat-label">Counties Served</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number font-display">51</div>
+        <div class="stat-label">College Campuses</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number font-display">70</div>
+        <div class="stat-label">Years of Service</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="about">
+    <div class="about-inner">
+      <div class="about-content">
+        <h2 class="font-display">A Home Away From Home</h2>
+        <p>
+          The Lubavitch Youth Organization (LYO) was established in 1955 under the direction
+          of the Lubavitcher Rebbe to serve the Jewish community of the greater New York area.
+        </p>
+        <p>
+          Today, LYO coordinates over 200 Chabad Houses across NYC, Long Island, and Westchester,
+          each serving as a warm, welcoming center for Jewish life, learning, and celebration.
+        </p>
+        <blockquote class="about-quote font-display">
+          "A little light dispels a lot of darkness."
+          <cite style="display: block; margin-top: 0.5rem; font-size: 0.9rem; color: #64748b; font-style: normal;">
+            — The Lubavitcher Rebbe
+          </cite>
+        </blockquote>
+        <a href="#" class="btn btn-primary">Our Story</a>
+      </div>
+      <div class="about-image">
+        <img src="../public/chabad-images/DSC07556..jpg" alt="Community engagement">
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Section -->
+  <section class="programs">
+    <div class="section-header">
+      <p class="section-label">What We Do</p>
+      <h2 class="section-title font-display">Programs & Services</h2>
+      <p class="section-subtitle">
+        From youth programs to senior services, every Chabad House offers a full range of
+        Jewish programming for the entire community.
+      </p>
+    </div>
+    <div class="programs-grid">
+      <div class="program-card">
+        <div class="program-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <h3>Youth Programs</h3>
+        <p>Engaging activities for children and teens building Jewish identity and pride.</p>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        </div>
+        <h3>Torah Education</h3>
+        <p>Classes and study groups for all levels, from beginners to advanced scholars.</p>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <h3>Campus Outreach</h3>
+        <p>Supporting Jewish students at 51 colleges across the region.</p>
+      </div>
+      <div class="program-card">
+        <div class="program-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3>Holiday Events</h3>
+        <p>Joyous celebrations bringing communities together for every Jewish holiday.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery">
+    <div class="section-header">
+      <p class="section-label">Our Community</p>
+      <h2 class="section-title font-display">Moments That Matter</h2>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="../public/chabad-images/Chanukah1.jpeg" alt="Chanukah celebration">
+      </div>
+      <div class="gallery-item">
+        <img src="../public/chabad-images/IMG_5685.jpg" alt="Youth reading">
+      </div>
+      <div class="gallery-item">
+        <img src="../public/chabad-images/IMG_4640.JPG" alt="Sukkah gathering">
+      </div>
+      <div class="gallery-item">
+        <img src="../public/chabad-images/DSC09685.jpg" alt="Group photo">
+      </div>
+      <div class="gallery-item">
+        <img src="../public/chabad-images/IMG_8357.jpeg" alt="Community lecture">
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta">
+    <div class="cta-inner">
+      <h2 class="font-display">Find Your Community</h2>
+      <p>
+        Whether you're looking for a place to pray, learn, or celebrate,
+        there's a Chabad House near you ready to welcome you home.
+      </p>
+      <div class="cta-buttons">
+        <a href="#" class="btn btn-primary">Browse Directory</a>
+        <a href="#" class="btn btn-secondary">Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <h3>Lubavitch Youth Organization</h3>
+        <p>
+          Serving the NYC Metro area since 1955 with dedication to Jewish outreach and education.
+        </p>
+      </div>
+      <div class="footer-links">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="#">Directory</a></li>
+          <li><a href="#">Colleges</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">About</a></li>
+        </ul>
+      </div>
+      <div class="footer-links">
+        <h4>Contact</h4>
+        <ul>
+          <li>305 Kingston Ave</li>
+          <li>Brooklyn, NY 11213</li>
+          <li><a href="tel:718-953-1000">718.953.1000</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      &copy; 2024 Lubavitch Youth Organization. All rights reserved.
+    </div>
+  </footer>
+
+  <!-- Carousel Script -->
+  <script>
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.carousel-dot');
+    let currentSlide = 0;
+    const slideInterval = 5000;
+
+    function showSlide(index) {
+      slides.forEach(slide => slide.classList.remove('active'));
+      dots.forEach(dot => dot.classList.remove('active'));
+      slides[index].classList.add('active');
+      dots[index].classList.add('active');
+      currentSlide = index;
+    }
+
+    function nextSlide() {
+      const next = (currentSlide + 1) % slides.length;
+      showSlide(next);
+    }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener('click', () => showSlide(index));
+    });
+
+    setInterval(nextSlide, slideInterval);
+  </script>
+</body>
+</html>

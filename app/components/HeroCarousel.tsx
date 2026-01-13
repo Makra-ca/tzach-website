@@ -52,16 +52,16 @@ export default function HeroCarousel({ images }: HeroCarouselProps) {
       {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#0f172a]/90 via-[#0f172a]/60 to-[#0f172a]/30" />
 
-      {/* Dots */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+      {/* Dots - vertical on mobile (right side), horizontal on desktop (bottom center) */}
+      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-2 z-20 md:flex-row md:top-auto md:right-auto md:bottom-8 md:left-1/2 md:-translate-x-1/2 md:translate-y-0 md:gap-3">
         {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all ${
+            className={`w-2 h-2 md:w-3 md:h-3 rounded-full transition-all ${
               index === currentSlide
                 ? 'bg-[#d4a853] scale-125'
-                : 'bg-white/30 hover:bg-white/50'
+                : 'bg-white/40 hover:bg-white/60'
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />

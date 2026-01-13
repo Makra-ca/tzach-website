@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services Option 3 - Clean Icon List</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1a365d',
+            gold: '#b8860b',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@700&family=Open+Sans:wght@400;500;600&display=swap');
+    .font-display { font-family: 'Merriweather', serif; }
+    .font-body { font-family: 'Open Sans', sans-serif; }
+  </style>
+</head>
+<body class="font-body bg-white">
+  <!-- Header -->
+  <header class="border-b">
+    <div class="max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <span class="w-10 h-10 bg-navy rounded flex items-center justify-center text-white font-bold text-sm">LYO</span>
+        <div>
+          <div class="font-display text-sm text-navy">Lubavitch Youth</div>
+          <div class="text-xs text-gray-500">Organization</div>
+        </div>
+      </div>
+      <nav class="hidden md:flex gap-6 text-sm">
+        <a href="#" class="text-gray-500 hover:text-navy transition">Directory</a>
+        <a href="#" class="text-navy font-semibold border-b-2 border-gold pb-1">Services</a>
+        <a href="#" class="text-gray-500 hover:text-navy transition">About</a>
+        <a href="#" class="text-gray-500 hover:text-navy transition">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="py-20 bg-gradient-to-b from-gray-50 to-white">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <h1 class="font-display text-4xl md:text-5xl text-navy mb-6">Our Services</h1>
+      <p class="text-xl text-gray-600 leading-relaxed">
+        Chabad Houses offer comprehensive programs for Jewish life. Here's what you'll find at our locations across NYC Metro.
+      </p>
+    </div>
+  </section>
+
+  <!-- Services List -->
+  <section class="max-w-4xl mx-auto px-4 pb-20">
+    <div class="space-y-0">
+      <!-- Service 1 -->
+      <div class="group py-10 border-b border-gray-100 hover:bg-gray-50 transition -mx-6 px-6 rounded-lg">
+        <div class="flex gap-6">
+          <div class="flex-shrink-0">
+            <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center group-hover:bg-blue-100 transition">
+              <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-display text-2xl text-navy mb-3">Youth Groups</h3>
+            <p class="text-gray-600 leading-relaxed mb-4">
+              Building Jewish identity from a young age through engaging programs like Tzivos Hashem for children, Hebrew Schools, and CTeen for teenagers.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full">Tzivos Hashem</span>
+              <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full">Hebrew School</span>
+              <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full">CTeen</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service 2 -->
+      <div class="group py-10 border-b border-gray-100 hover:bg-gray-50 transition -mx-6 px-6 rounded-lg">
+        <div class="flex gap-6">
+          <div class="flex-shrink-0">
+            <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center group-hover:bg-emerald-100 transition">
+              <svg class="w-8 h-8 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-display text-2xl text-navy mb-3">Jewish Education</h3>
+            <p class="text-gray-600 leading-relaxed mb-4">
+              JLI courses and Torah classes for adults of all backgrounds. Explore the depth of Jewish wisdom through modern, engaging learning.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">JLI Courses</span>
+              <span class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">Torah Study</span>
+              <span class="text-xs bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full">One-on-One</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service 3 -->
+      <div class="group py-10 border-b border-gray-100 hover:bg-gray-50 transition -mx-6 px-6 rounded-lg">
+        <div class="flex gap-6">
+          <div class="flex-shrink-0">
+            <div class="w-16 h-16 bg-orange-50 rounded-2xl flex items-center justify-center group-hover:bg-orange-100 transition">
+              <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-display text-2xl text-navy mb-3">Campus Outreach</h3>
+            <p class="text-gray-600 leading-relaxed mb-4">
+              Chabad on 60+ college campuses across the NYC Metro area. A home away from home for Jewish students with Shabbat dinners, holiday celebrations, and more.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-orange-50 text-orange-700 px-3 py-1 rounded-full">60+ Campuses</span>
+              <span class="text-xs bg-orange-50 text-orange-700 px-3 py-1 rounded-full">Shabbat Dinners</span>
+              <span class="text-xs bg-orange-50 text-orange-700 px-3 py-1 rounded-full">Student Events</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service 4 -->
+      <div class="group py-10 border-b border-gray-100 hover:bg-gray-50 transition -mx-6 px-6 rounded-lg">
+        <div class="flex gap-6">
+          <div class="flex-shrink-0">
+            <div class="w-16 h-16 bg-purple-50 rounded-2xl flex items-center justify-center group-hover:bg-purple-100 transition">
+              <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-display text-2xl text-navy mb-3">Community Events</h3>
+            <p class="text-gray-600 leading-relaxed mb-4">
+              Major public celebrations including the Columbus Circle Menorah lighting, Purim parades, and community gatherings that bring Jews together.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-purple-50 text-purple-700 px-3 py-1 rounded-full">Menorah Lightings</span>
+              <span class="text-xs bg-purple-50 text-purple-700 px-3 py-1 rounded-full">Purim Parties</span>
+              <span class="text-xs bg-purple-50 text-purple-700 px-3 py-1 rounded-full">Public Events</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service 5 -->
+      <div class="group py-10 border-b border-gray-100 hover:bg-gray-50 transition -mx-6 px-6 rounded-lg">
+        <div class="flex gap-6">
+          <div class="flex-shrink-0">
+            <div class="w-16 h-16 bg-yellow-50 rounded-2xl flex items-center justify-center group-hover:bg-yellow-100 transition">
+              <svg class="w-8 h-8 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-display text-2xl text-navy mb-3">Holiday Programs</h3>
+            <p class="text-gray-600 leading-relaxed mb-4">
+              Experience the joy of Jewish holidays with Shabbat dinners, High Holiday services, Passover Seders, Chanukah celebrations, and more.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full">Shabbat</span>
+              <span class="text-xs bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full">High Holidays</span>
+              <span class="text-xs bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full">Passover</span>
+              <span class="text-xs bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full">Chanukah</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service 6 -->
+      <div class="group py-10 hover:bg-gray-50 transition -mx-6 px-6 rounded-lg">
+        <div class="flex gap-6">
+          <div class="flex-shrink-0">
+            <div class="w-16 h-16 bg-rose-50 rounded-2xl flex items-center justify-center group-hover:bg-rose-100 transition">
+              <svg class="w-8 h-8 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+              </svg>
+            </div>
+          </div>
+          <div class="flex-1">
+            <h3 class="font-display text-2xl text-navy mb-3">Lifecycle Events</h3>
+            <p class="text-gray-600 leading-relaxed mb-4">
+              Guidance and support for life's milestones including Bar/Bat Mitzvahs, weddings, and other celebrations.
+            </p>
+            <div class="flex flex-wrap gap-2">
+              <span class="text-xs bg-rose-50 text-rose-700 px-3 py-1 rounded-full">Bar/Bat Mitzvah</span>
+              <span class="text-xs bg-rose-50 text-rose-700 px-3 py-1 rounded-full">Weddings</span>
+              <span class="text-xs bg-rose-50 text-rose-700 px-3 py-1 rounded-full">Celebrations</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-navy py-16">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="font-display text-3xl text-white mb-4">Ready to get connected?</h2>
+      <p class="text-gray-300 mb-8">Find your local Chabad House and discover programs in your community.</p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href="#" class="bg-gold hover:bg-yellow-600 text-white px-8 py-3 rounded-lg font-semibold transition">
+          Find a Chabad House
+        </a>
+        <a href="tel:718-953-1000" class="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition">
+          Call 718.953.1000
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-navy text-gray-400 py-8 border-t border-white/10">
+    <div class="max-w-5xl mx-auto px-4 text-center text-sm">
+      © 2024 Lubavitch Youth Organization. All rights reserved.
+    </div>
+  </footer>
+</body>
+</html>

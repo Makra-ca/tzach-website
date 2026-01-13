@@ -51,17 +51,17 @@ export default function Preloader() {
       {/* Background Image of the Rebbe */}
       <div className="absolute inset-0 preloader-image">
         <Image
-          src="/The rebbe.png"
+          src="/rebbe (Large).jpg"
           alt="The Rebbe"
           fill
-          className="object-cover object-[center_20%]"
+          className="object-cover object-[center_25%]"
           priority
           sizes="100vw"
         />
       </div>
 
       {/* Dark Gradient Overlay - stronger for text readability */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/50 via-[#0f172a]/30 to-[#0f172a]/95" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/40 via-[#0f172a]/50 to-[#0f172a]/95" />
 
       {/* Content - centered vertically and horizontally */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full px-4 sm:px-6">

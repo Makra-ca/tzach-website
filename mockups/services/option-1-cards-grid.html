@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services Option 1 - Visual Cards with Photos</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1e3a5f',
+            gold: '#c5a572',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+    .font-display { font-family: 'Playfair Display', serif; }
+    .font-body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="font-body bg-gray-50">
+  <!-- Header -->
+  <header class="bg-navy text-white py-4">
+    <div class="max-w-7xl mx-auto px-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-gold/20 rounded-lg flex items-center justify-center">
+          <span class="text-gold font-bold">LYO</span>
+        </div>
+        <span class="font-display font-bold">Lubavitch Youth Organization</span>
+      </div>
+      <nav class="hidden md:flex gap-6">
+        <a href="#" class="hover:text-gold transition">Directory</a>
+        <a href="#" class="text-gold">Services</a>
+        <a href="#" class="hover:text-gold transition">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="bg-navy text-white py-20 relative overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-r from-navy via-navy to-blue-900"></div>
+    <div class="absolute top-0 right-0 w-1/2 h-full opacity-10">
+      <svg viewBox="0 0 200 200" class="w-full h-full">
+        <pattern id="pattern" patternUnits="userSpaceOnUse" width="40" height="40">
+          <path d="M0 20 L20 0 L40 20 L20 40 Z" fill="currentColor" fill-opacity="0.3"/>
+        </pattern>
+        <rect width="100%" height="100%" fill="url(#pattern)"/>
+      </svg>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 relative">
+      <p class="text-gold uppercase tracking-widest text-sm mb-4">What We Offer</p>
+      <h1 class="font-display text-5xl md:text-6xl font-bold mb-6">Our Services</h1>
+      <p class="text-xl text-gray-300 max-w-2xl">
+        Each Chabad House offers unique programs tailored to their community. Here are the core services available across our network.
+      </p>
+    </div>
+  </section>
+
+  <!-- Services Grid -->
+  <section class="py-20 -mt-8">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Service Card 1 -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div class="h-48 bg-gradient-to-br from-blue-500 to-indigo-600 relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full">Youth Programs</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-xl font-bold text-navy mb-3">Youth Groups</h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Tzivos Hashem for children, Hebrew Schools, and CTeen for teenagers. Building strong Jewish foundations through engaging activities.
+            </p>
+            <a href="#" class="inline-flex items-center gap-2 text-gold font-medium hover:gap-3 transition-all">
+              Learn more
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Service Card 2 -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div class="h-48 bg-gradient-to-br from-emerald-500 to-teal-600 relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full">Learning</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-xl font-bold text-navy mb-3">Jewish Education</h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              JLI courses, Torah classes, and learning opportunities for all ages and backgrounds. Discover the depth of Jewish wisdom.
+            </p>
+            <a href="#" class="inline-flex items-center gap-2 text-gold font-medium hover:gap-3 transition-all">
+              Learn more
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Service Card 3 -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div class="h-48 bg-gradient-to-br from-orange-500 to-red-500 relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+              </svg>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full">Campus</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-xl font-bold text-navy mb-3">Campus Outreach</h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Chabad on 60+ campuses providing a home away from home for Jewish students with Shabbat dinners and holiday events.
+            </p>
+            <a href="#" class="inline-flex items-center gap-2 text-gold font-medium hover:gap-3 transition-all">
+              Learn more
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Service Card 4 -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div class="h-48 bg-gradient-to-br from-purple-500 to-pink-500 relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full">Events</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-xl font-bold text-navy mb-3">Community Events</h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Major public celebrations including the Columbus Circle Menorah lighting, attracting thousands of Jews each year.
+            </p>
+            <a href="#" class="inline-flex items-center gap-2 text-gold font-medium hover:gap-3 transition-all">
+              Learn more
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Service Card 5 -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div class="h-48 bg-gradient-to-br from-yellow-500 to-orange-500 relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+              </svg>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full">Holidays</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-xl font-bold text-navy mb-3">Holiday Programs</h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Shabbat dinners, High Holiday services, Passover Seders, Chanukah celebrations, Purim parties, and more.
+            </p>
+            <a href="#" class="inline-flex items-center gap-2 text-gold font-medium hover:gap-3 transition-all">
+              Learn more
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- Service Card 6 -->
+        <div class="bg-white rounded-2xl shadow-lg overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+          <div class="h-48 bg-gradient-to-br from-rose-500 to-red-600 relative overflow-hidden">
+            <div class="absolute inset-0 flex items-center justify-center">
+              <svg class="w-24 h-24 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>
+              </svg>
+            </div>
+            <div class="absolute bottom-4 left-4">
+              <span class="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-3 py-1 rounded-full">Lifecycle</span>
+            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-xl font-bold text-navy mb-3">Lifecycle Events</h3>
+            <p class="text-gray-600 mb-4 leading-relaxed">
+              Support for Bar/Bat Mitzvahs, weddings, and life celebrations. Making your special moments meaningful.
+            </p>
+            <a href="#" class="inline-flex items-center gap-2 text-gold font-medium hover:gap-3 transition-all">
+              Learn more
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-navy text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <h2 class="font-display text-3xl font-bold mb-4">Ready to Connect?</h2>
+      <p class="text-gray-300 mb-8">Find your local Chabad House and discover all the programs available in your community.</p>
+      <a href="#" class="inline-flex items-center gap-2 bg-gold hover:bg-yellow-600 text-navy px-8 py-4 rounded-xl font-semibold transition">
+        Find a Chabad House
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-navy/95 text-gray-400 py-8">
+    <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+      © 2024 Lubavitch Youth Organization
+    </div>
+  </footer>
+</body>
+</html>

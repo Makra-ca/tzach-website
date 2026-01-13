@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Option 3 - Minimal Compact Design</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1a365d',
+            gold: '#b8860b',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-white">
+  <!-- Minimal Header -->
+  <header class="border-b">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-6">
+        <div class="flex items-center gap-2">
+          <span class="w-7 h-7 bg-navy rounded flex items-center justify-center text-white font-bold text-xs">L</span>
+          <span class="text-sm font-medium text-gray-900">LYO Admin</span>
+        </div>
+        <nav class="hidden md:flex gap-4 text-sm">
+          <a href="#" class="text-navy font-medium">Directory</a>
+          <a href="#" class="text-gray-500 hover:text-gray-900 transition">Services</a>
+          <a href="#" class="text-gray-500 hover:text-gray-900 transition">Team</a>
+          <a href="#" class="text-gray-500 hover:text-gray-900 transition">Settings</a>
+        </nav>
+      </div>
+      <button class="text-sm text-gray-500 hover:text-gray-900">Logout</button>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6">
+    <!-- Compact Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-4">
+        <h1 class="text-lg font-semibold text-gray-900">Chabad Houses</h1>
+        <span class="text-sm text-gray-400">215 total</span>
+      </div>
+      <button class="bg-navy hover:bg-blue-900 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
+        + Add New
+      </button>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="flex gap-6 mb-6 text-sm">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 bg-green-500 rounded-full"></span>
+        <span class="text-gray-600">89 with website</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 bg-yellow-500 rounded-full"></span>
+        <span class="text-gray-600">126 without</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
+        <span class="text-gray-600">51 campuses</span>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="flex gap-3 mb-6">
+      <div class="flex-1 relative">
+        <input type="text" placeholder="Search entries..." class="w-full px-4 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 focus:border-navy">
+        <kbd class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">⌘K</kbd>
+      </div>
+      <select class="px-4 py-2.5 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 bg-white">
+        <option>All Counties</option>
+        <option>Manhattan</option>
+        <option>Brooklyn</option>
+        <option>Queens</option>
+        <option>Nassau</option>
+        <option>Suffolk</option>
+        <option>Westchester</option>
+      </select>
+    </div>
+
+    <!-- Compact Table -->
+    <div class="border rounded-lg overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 text-left">
+          <tr>
+            <th class="px-4 py-3 font-medium text-gray-600">Name</th>
+            <th class="px-4 py-3 font-medium text-gray-600">Location</th>
+            <th class="px-4 py-3 font-medium text-gray-600">Contact</th>
+            <th class="px-4 py-3 font-medium text-gray-600 w-24">Status</th>
+            <th class="px-4 py-3 w-20"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y">
+          <tr class="hover:bg-gray-50 group">
+            <td class="px-4 py-3">
+              <div class="font-medium text-gray-900">Chabad of Midtown</div>
+              <div class="text-xs text-gray-500">Rabbi Yakov Bankhalter</div>
+            </td>
+            <td class="px-4 py-3 text-gray-600">Manhattan, NY 10003</td>
+            <td class="px-4 py-3">
+              <div class="text-gray-600">917-613-1678</div>
+              <div class="text-xs text-gray-400">chabadloft@gmail.com</div>
+            </td>
+            <td class="px-4 py-3">
+              <span class="inline-flex items-center gap-1 text-green-700 text-xs">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                Website
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                <button class="p-1.5 hover:bg-gray-100 rounded text-gray-500 hover:text-navy">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </button>
+                <button class="p-1.5 hover:bg-red-50 rounded text-gray-500 hover:text-red-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 group">
+            <td class="px-4 py-3">
+              <div class="font-medium text-gray-900">Chabad Upper East Side</div>
+              <div class="text-xs text-gray-500">Rabbi Moshe Vigler</div>
+            </td>
+            <td class="px-4 py-3 text-gray-600">Manhattan, NY 10075</td>
+            <td class="px-4 py-3">
+              <div class="text-gray-600">212-717-4613</div>
+              <div class="text-xs text-gray-400">info@jewishues.com</div>
+            </td>
+            <td class="px-4 py-3">
+              <span class="inline-flex items-center gap-1 text-green-700 text-xs">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                Website
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                <button class="p-1.5 hover:bg-gray-100 rounded text-gray-500 hover:text-navy">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </button>
+                <button class="p-1.5 hover:bg-red-50 rounded text-gray-500 hover:text-red-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 group">
+            <td class="px-4 py-3">
+              <div class="font-medium text-gray-900">Chabad of Great Neck</div>
+              <div class="text-xs text-gray-500">Rabbi Shalom Paltiel</div>
+            </td>
+            <td class="px-4 py-3 text-gray-600">Nassau, NY 11021</td>
+            <td class="px-4 py-3">
+              <div class="text-gray-600">516-487-4554</div>
+              <div class="text-xs text-gray-400">—</div>
+            </td>
+            <td class="px-4 py-3">
+              <span class="inline-flex items-center gap-1 text-gray-400 text-xs">
+                <span class="w-1.5 h-1.5 bg-gray-300 rounded-full"></span>
+                No site
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                <button class="p-1.5 hover:bg-gray-100 rounded text-gray-500 hover:text-navy">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </button>
+                <button class="p-1.5 hover:bg-red-50 rounded text-gray-500 hover:text-red-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 group">
+            <td class="px-4 py-3">
+              <div class="font-medium text-gray-900">Chabad of Bay Ridge</div>
+              <div class="text-xs text-gray-500">Rabbi Chaim Brikman</div>
+            </td>
+            <td class="px-4 py-3 text-gray-600">Brooklyn, NY 11209</td>
+            <td class="px-4 py-3">
+              <div class="text-gray-600">718-833-5595</div>
+              <div class="text-xs text-gray-400">info@chabadofbayridge.com</div>
+            </td>
+            <td class="px-4 py-3">
+              <span class="inline-flex items-center gap-1 text-green-700 text-xs">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                Website
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                <button class="p-1.5 hover:bg-gray-100 rounded text-gray-500 hover:text-navy">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </button>
+                <button class="p-1.5 hover:bg-red-50 rounded text-gray-500 hover:text-red-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 group">
+            <td class="px-4 py-3">
+              <div class="font-medium text-gray-900">Chabad of East Hampton</div>
+              <div class="text-xs text-gray-500">Rabbi Aizik Baumgarten</div>
+            </td>
+            <td class="px-4 py-3 text-gray-600">Suffolk, NY 11937</td>
+            <td class="px-4 py-3">
+              <div class="text-gray-600">631-377-0511</div>
+              <div class="text-xs text-gray-400">aizik@jewishhamptons.com</div>
+            </td>
+            <td class="px-4 py-3">
+              <span class="inline-flex items-center gap-1 text-green-700 text-xs">
+                <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
+                Website
+              </span>
+            </td>
+            <td class="px-4 py-3">
+              <div class="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                <button class="p-1.5 hover:bg-gray-100 rounded text-gray-500 hover:text-navy">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"/></svg>
+                </button>
+                <button class="p-1.5 hover:bg-red-50 rounded text-gray-500 hover:text-red-600">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="flex items-center justify-between mt-4 text-sm">
+      <span class="text-gray-500">1-10 of 215</span>
+      <div class="flex items-center gap-1">
+        <button class="px-2 py-1 text-gray-400" disabled>←</button>
+        <button class="px-2 py-1 bg-navy text-white rounded">1</button>
+        <button class="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded">2</button>
+        <button class="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded">3</button>
+        <span class="text-gray-400">...</span>
+        <button class="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded">22</button>
+        <button class="px-2 py-1 text-gray-600 hover:bg-gray-100 rounded">→</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Edit Modal (shown as overlay concept) -->
+  <div class="hidden fixed inset-0 bg-black/50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-xl max-w-lg w-full p-6">
+      <h2 class="text-lg font-semibold mb-4">Edit Entry</h2>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Name</label>
+          <input type="text" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy/20">
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">City</label>
+            <input type="text" class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy/20">
+          </div>
+          <div>
+            <label class="block text-sm text-gray-600 mb-1">County</label>
+            <select class="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-navy/20 bg-white">
+              <option>Manhattan</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="flex gap-2 mt-6">
+        <button class="flex-1 px-4 py-2 border rounded-lg text-sm hover:bg-gray-50 transition">Cancel</button>
+        <button class="flex-1 px-4 py-2 bg-navy text-white rounded-lg text-sm hover:bg-blue-900 transition">Save</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

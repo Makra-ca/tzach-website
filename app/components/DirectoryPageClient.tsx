@@ -11,14 +11,21 @@ interface CountyData {
   count: number
 }
 
+interface HeroImage {
+  src: string
+  alt: string
+  position: string
+}
+
 interface Props {
   houses: ChabadHouse[]
   filters: {
     counties: CountyData[]
   }
+  heroImages: HeroImage[]
 }
 
-export default function DirectoryPageClient({ houses, filters }: Props) {
+export default function DirectoryPageClient({ houses, filters, heroImages }: Props) {
   return (
     <>
       <Preloader />
@@ -26,7 +33,7 @@ export default function DirectoryPageClient({ houses, filters }: Props) {
       <div className="min-h-screen bg-white">
         {/* Hero with Carousel */}
         <section className="relative h-[85vh] min-h-[600px] overflow-hidden">
-          <HeroCarousel />
+          <HeroCarousel images={heroImages} />
 
           <div className="relative z-10 h-full max-w-6xl mx-auto px-4 flex items-center">
             <div className="max-w-2xl text-white hero-animate">

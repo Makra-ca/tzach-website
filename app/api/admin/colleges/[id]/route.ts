@@ -23,7 +23,15 @@ export async function PUT(
       where: { id },
       data: {
         name: data.name,
-        chabadId
+        chabadId,
+        phone: data.phone || null,
+        email: data.email || null,
+        imageUrl: data.imageUrl || null,
+        hasShaliach: data.hasShaliach || false,
+        shaliachName: data.shaliachName || null,
+        shaliachPhone: data.shaliachPhone || null,
+        shaliachEmail: data.shaliachEmail || null,
+        shaliachWebsite: data.shaliachWebsite || null
       }
     })
 

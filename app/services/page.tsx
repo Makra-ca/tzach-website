@@ -9,8 +9,20 @@ async function getServices() {
   })
 }
 
+async function getHeroImages() {
+  const images = await prisma.heroImage.findMany({
+    orderBy: { order: 'asc' }
+  })
+  return images.map(img => ({
+    src: img.url,
+    alt: img.alt || 'Hero image',
+    position: img.position || 'center'
+  }))
+}
+
 export default async function ServicesPage() {
   const services = await getServices()
+  const heroImages = await getHeroImages()
 
-  return <ServicesPageClient services={services} />
+  return <ServicesPageClient services={services} heroImages={heroImages} />
 }

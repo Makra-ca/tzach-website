@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/db'
-import DirectoryClient from '../components/DirectoryClient'
 import DirectoryPageClient from '../components/DirectoryPageClient'
 
 export const dynamic = 'force-dynamic'
@@ -42,14 +41,27 @@ async function getFilters() {
   return { counties: countyData }
 }
 
+async function getHeroImages() {
+  const images = await prisma.heroImage.findMany({
+    orderBy: { order: 'asc' }
+  })
+  return images.map(img => ({
+    src: img.url,
+    alt: img.alt || 'Hero image',
+    position: img.position || 'center'
+  }))
+}
+
 export default async function DirectoryPage() {
   const houses = await getChabadHouses()
   const filters = await getFilters()
+  const heroImages = await getHeroImages()
 
   return (
     <DirectoryPageClient
       houses={houses}
       filters={filters}
+      heroImages={heroImages}
     />
   )
 }

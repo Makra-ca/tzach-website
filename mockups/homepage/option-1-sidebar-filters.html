@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Homepage Option 1 - Sidebar Filters with Map View</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1e3a5f',
+            gold: '#c5a572',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap');
+    .font-display { font-family: 'Playfair Display', serif; }
+    .font-body { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="font-body bg-gray-50">
+  <!-- Header -->
+  <header class="bg-navy text-white">
+    <div class="bg-navy/90 border-b border-white/10">
+      <div class="max-w-7xl mx-auto px-4 py-2 flex justify-between text-sm">
+        <span class="flex items-center gap-2">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+          305 Kingston Ave, Brooklyn NY 11213
+        </span>
+        <a href="tel:718-953-1000" class="flex items-center gap-2 hover:text-gold transition">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+          718.953.1000
+        </a>
+      </div>
+    </div>
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-4">
+        <div class="w-14 h-14 bg-white/10 rounded-lg flex items-center justify-center">
+          <span class="text-2xl font-bold text-gold">LYO</span>
+        </div>
+        <div>
+          <h1 class="font-display text-xl font-bold tracking-wide">LUBAVITCH YOUTH ORGANIZATION</h1>
+          <p class="text-xs text-gray-300">Serving NYC Metro Since 1955</p>
+        </div>
+      </div>
+      <nav class="hidden md:flex gap-8">
+        <a href="#" class="font-medium text-gold border-b-2 border-gold pb-1">Directory</a>
+        <a href="#" class="font-medium hover:text-gold transition">Services</a>
+        <a href="#" class="font-medium hover:text-gold transition">About</a>
+        <a href="#" class="font-medium hover:text-gold transition">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero with Search -->
+  <section class="bg-gradient-to-br from-navy via-navy to-blue-900 text-white py-16 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.4\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+    </div>
+    <div class="max-w-4xl mx-auto px-4 text-center relative">
+      <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Find Your Local Chabad</h2>
+      <p class="text-xl text-gray-200 mb-8">Over 200 Chabad Houses across NYC Metro, Long Island & Westchester</p>
+
+      <!-- Large Search Bar -->
+      <div class="bg-white rounded-2xl shadow-2xl p-2 flex gap-2 max-w-2xl mx-auto">
+        <div class="flex-1 relative">
+          <svg class="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Search by location, rabbi name, or zip code..." class="w-full pl-12 pr-4 py-4 text-gray-900 rounded-xl focus:outline-none text-lg">
+        </div>
+        <button class="bg-navy hover:bg-blue-900 text-white px-8 py-4 rounded-xl font-semibold transition flex items-center gap-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          Search
+        </button>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="flex justify-center gap-12 mt-10 text-sm">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-gold">215</div>
+          <div class="text-gray-300">Chabad Houses</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-gold">9</div>
+          <div class="text-gray-300">Counties</div>
+        </div>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-gold">60+</div>
+          <div class="text-gray-300">Campuses</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content with Sidebar -->
+  <main class="max-w-7xl mx-auto px-4 py-8">
+    <div class="flex gap-8">
+      <!-- Sidebar Filters -->
+      <aside class="w-72 flex-shrink-0 hidden lg:block">
+        <div class="bg-white rounded-xl shadow-sm p-6 sticky top-4">
+          <h3 class="font-semibold text-navy mb-4 flex items-center justify-between">
+            Filters
+            <button class="text-sm text-gold hover:underline">Clear all</button>
+          </h3>
+
+          <!-- View Toggle -->
+          <div class="mb-6">
+            <label class="text-sm text-gray-600 mb-2 block">View</label>
+            <div class="flex bg-gray-100 rounded-lg p-1">
+              <button class="flex-1 py-2 px-3 rounded-md bg-white shadow text-sm font-medium text-navy">List</button>
+              <button class="flex-1 py-2 px-3 rounded-md text-sm font-medium text-gray-600 hover:text-navy">Map</button>
+            </div>
+          </div>
+
+          <!-- County/Borough -->
+          <div class="mb-6">
+            <label class="text-sm text-gray-600 mb-2 block">County/Borough</label>
+            <div class="space-y-2 max-h-48 overflow-y-auto">
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                <input type="checkbox" class="w-4 h-4 text-navy rounded border-gray-300">
+                <span class="text-sm">Manhattan</span>
+                <span class="text-xs text-gray-400 ml-auto">42</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                <input type="checkbox" class="w-4 h-4 text-navy rounded border-gray-300">
+                <span class="text-sm">Brooklyn</span>
+                <span class="text-xs text-gray-400 ml-auto">38</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                <input type="checkbox" class="w-4 h-4 text-navy rounded border-gray-300">
+                <span class="text-sm">Queens</span>
+                <span class="text-xs text-gray-400 ml-auto">28</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                <input type="checkbox" class="w-4 h-4 text-navy rounded border-gray-300">
+                <span class="text-sm">Nassau</span>
+                <span class="text-xs text-gray-400 ml-auto">35</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                <input type="checkbox" class="w-4 h-4 text-navy rounded border-gray-300">
+                <span class="text-sm">Suffolk</span>
+                <span class="text-xs text-gray-400 ml-auto">32</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                <input type="checkbox" class="w-4 h-4 text-navy rounded border-gray-300">
+                <span class="text-sm">Westchester</span>
+                <span class="text-xs text-gray-400 ml-auto">25</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Type -->
+          <div class="mb-6">
+            <label class="text-sm text-gray-600 mb-2 block">Type</label>
+            <div class="space-y-2">
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                <input type="checkbox" class="w-4 h-4 text-navy rounded border-gray-300">
+                <span class="text-sm">Community</span>
+              </label>
+              <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+                <input type="checkbox" class="w-4 h-4 text-navy rounded border-gray-300">
+                <span class="text-sm">Campus</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Has Website -->
+          <div>
+            <label class="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-lg">
+              <input type="checkbox" class="w-4 h-4 text-navy rounded border-gray-300">
+              <span class="text-sm">Has website</span>
+            </label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Results -->
+      <div class="flex-1">
+        <!-- Results Header -->
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-xl font-semibold text-navy">All Chabad Houses</h3>
+            <p class="text-sm text-gray-500">Showing 215 results</p>
+          </div>
+          <div class="flex items-center gap-4">
+            <select class="border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-navy/20">
+              <option>Sort by: A-Z</option>
+              <option>Sort by: Nearest</option>
+              <option>Sort by: Recently Added</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- County Groups -->
+        <div class="space-y-8">
+          <!-- Manhattan -->
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 bg-navy/10 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-navy" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-navy">Manhattan</h4>
+                <p class="text-xs text-gray-500">42 locations</p>
+              </div>
+              <button class="ml-auto text-sm text-gold hover:underline">View all →</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Card -->
+              <div class="bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border border-gray-100 group">
+                <div class="flex items-start justify-between mb-3">
+                  <h5 class="font-semibold text-navy group-hover:text-blue-800 transition">Chabad of Midtown</h5>
+                  <span class="text-xs bg-navy/10 text-navy px-2 py-1 rounded-full">Community</span>
+                </div>
+                <p class="text-sm text-gray-600 mb-1">Rabbi Yakov & Avital Sara Bankhalter</p>
+                <p class="text-sm text-gray-400 mb-4">10 E 8th Street, New York, NY 10003</p>
+                <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
+                  <a href="#" class="flex items-center gap-1 text-sm text-navy hover:text-gold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                    Call
+                  </a>
+                  <a href="#" class="flex items-center gap-1 text-sm text-navy hover:text-gold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    Email
+                  </a>
+                  <a href="#" class="flex items-center gap-1 text-sm text-navy hover:text-gold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+                    Website
+                  </a>
+                  <a href="#" class="ml-auto text-sm text-gray-400 hover:text-navy transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                  </a>
+                </div>
+              </div>
+
+              <!-- Card -->
+              <div class="bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border border-gray-100 group">
+                <div class="flex items-start justify-between mb-3">
+                  <h5 class="font-semibold text-navy group-hover:text-blue-800 transition">Chabad of the Upper East Side</h5>
+                  <span class="text-xs bg-navy/10 text-navy px-2 py-1 rounded-full">Community</span>
+                </div>
+                <p class="text-sm text-gray-600 mb-1">Rabbi Moshe & Sarah Vigler</p>
+                <p class="text-sm text-gray-400 mb-4">419 E 77th Street, New York, NY 10075</p>
+                <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
+                  <a href="#" class="flex items-center gap-1 text-sm text-navy hover:text-gold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                    Call
+                  </a>
+                  <a href="#" class="flex items-center gap-1 text-sm text-navy hover:text-gold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    Email
+                  </a>
+                  <a href="#" class="flex items-center gap-1 text-sm text-navy hover:text-gold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+                    Website
+                  </a>
+                  <a href="#" class="ml-auto text-sm text-gray-400 hover:text-navy transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Long Island -->
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-10 h-10 bg-gold/20 rounded-full flex items-center justify-center">
+                <svg class="w-5 h-5 text-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-navy">Nassau County</h4>
+                <p class="text-xs text-gray-500">35 locations</p>
+              </div>
+              <button class="ml-auto text-sm text-gold hover:underline">View all →</button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <!-- Card -->
+              <div class="bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition border border-gray-100 group">
+                <div class="flex items-start justify-between mb-3">
+                  <h5 class="font-semibold text-navy group-hover:text-blue-800 transition">Chabad of Great Neck</h5>
+                  <span class="text-xs bg-gold/20 text-gold px-2 py-1 rounded-full">Community</span>
+                </div>
+                <p class="text-sm text-gray-600 mb-1">Rabbi Shalom & Devorah Paltiel</p>
+                <p class="text-sm text-gray-400 mb-4">15 Maple Drive, Great Neck, NY 11021</p>
+                <div class="flex items-center gap-3 pt-3 border-t border-gray-100">
+                  <a href="#" class="flex items-center gap-1 text-sm text-navy hover:text-gold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                    Call
+                  </a>
+                  <a href="#" class="flex items-center gap-1 text-sm text-navy hover:text-gold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    Email
+                  </a>
+                  <a href="#" class="flex items-center gap-1 text-sm text-navy hover:text-gold transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"/></svg>
+                    Website
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Load More -->
+        <div class="text-center mt-10">
+          <button class="bg-white border-2 border-navy text-navy px-8 py-3 rounded-xl font-semibold hover:bg-navy hover:text-white transition">
+            Load More Chabad Houses
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-navy text-white mt-16 py-12">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <p class="text-gray-400">© 2024 Lubavitch Youth Organization. All rights reserved.</p>
+    </div>
+  </footer>
+</body>
+</html>

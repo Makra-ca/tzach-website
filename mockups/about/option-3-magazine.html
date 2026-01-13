@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Option 3 - Magazine Style</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1a365d',
+            gold: '#b8860b',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,500&family=Open+Sans:wght@400;500;600&display=swap');
+    .font-display { font-family: 'Lora', serif; }
+    .font-body { font-family: 'Open Sans', sans-serif; }
+    .drop-cap::first-letter {
+      float: left;
+      font-size: 4rem;
+      line-height: 1;
+      margin-right: 0.5rem;
+      font-family: 'Lora', serif;
+      color: #1a365d;
+    }
+  </style>
+</head>
+<body class="font-body bg-white">
+  <!-- Header -->
+  <header class="border-b">
+    <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <span class="w-10 h-10 bg-navy rounded flex items-center justify-center text-white font-bold text-sm">LYO</span>
+        <span class="font-display font-semibold text-navy">Lubavitch Youth Organization</span>
+      </div>
+      <nav class="hidden md:flex gap-6 text-sm">
+        <a href="#" class="text-gray-500 hover:text-navy transition">Directory</a>
+        <a href="#" class="text-gray-500 hover:text-navy transition">Services</a>
+        <a href="#" class="text-navy font-semibold border-b-2 border-gold pb-1">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Magazine Hero -->
+  <section class="max-w-5xl mx-auto px-4 py-16">
+    <div class="text-center mb-16">
+      <p class="text-gold uppercase tracking-widest text-sm font-semibold mb-4">About the Organization</p>
+      <h1 class="font-display text-5xl md:text-7xl text-navy mb-6 leading-tight">Lubavitch Youth<br>Organization</h1>
+      <p class="text-xl text-gray-500 font-display italic">Connecting Jews to their heritage since 1955</p>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="grid grid-cols-4 gap-4 border-y border-gray-200 py-8 mb-16">
+      <div class="text-center">
+        <div class="text-3xl font-bold text-navy">1955</div>
+        <div class="text-xs text-gray-500 uppercase tracking-wide">Founded</div>
+      </div>
+      <div class="text-center border-l border-gray-200">
+        <div class="text-3xl font-bold text-navy">200+</div>
+        <div class="text-xs text-gray-500 uppercase tracking-wide">Shluchim</div>
+      </div>
+      <div class="text-center border-l border-gray-200">
+        <div class="text-3xl font-bold text-navy">170</div>
+        <div class="text-xs text-gray-500 uppercase tracking-wide">Centers</div>
+      </div>
+      <div class="text-center border-l border-gray-200">
+        <div class="text-3xl font-bold text-navy">60+</div>
+        <div class="text-xs text-gray-500 uppercase tracking-wide">Campuses</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Two Column Article -->
+  <section class="max-w-5xl mx-auto px-4 pb-16">
+    <div class="grid md:grid-cols-2 gap-12">
+      <div>
+        <p class="drop-cap text-gray-700 leading-relaxed mb-6">
+          The Lubavitch Youth Organization was established by the seventh Chabad-Lubavitch Rebbe, Rabbi Menachem Mendel Schneerson zy"a, to provide services and educational programs for Jewish youth and adults of all ages and backgrounds.
+        </p>
+        <p class="text-gray-600 leading-relaxed mb-6">
+          At a 1955 gathering, the Rebbe declared that "one should focus on tangible actions" (peulas m'mashi'os). This philosophy became the foundation of LYO's mission.
+        </p>
+        <p class="text-gray-600 leading-relaxed">
+          The establishment of LYO was part of the Rebbe's broader vision to invigorate Jewish life globally through extensive outreach and social services, building on the foundations laid by his father-in-law, the sixth Rebbe.
+        </p>
+      </div>
+      <div>
+        <p class="text-gray-600 leading-relaxed mb-6">
+          The core philosophy of Chabad is to reach every single Jew with unconditional love and acceptance, regardless of their background or affiliation, and to connect them with their heritage.
+        </p>
+        <p class="text-gray-600 leading-relaxed mb-6">
+          LYO translates this philosophy into action by offering numerous programs in the New York City Metro area, including Long Island and Westchester. Each Chabad House offers its own unique combination of programs.
+        </p>
+
+        <blockquote class="border-l-4 border-gold pl-6 my-8">
+          <p class="font-display text-xl text-navy italic leading-relaxed">
+            "Today's LYO represents an important part of the vast network of over 3,500 Chabad institutions across the globe."
+          </p>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- Programs Grid -->
+  <section class="bg-gray-50 py-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="font-display text-3xl text-navy text-center mb-12">Our Programs</h2>
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-navy/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="text-navy font-bold">01</span>
+          </div>
+          <div>
+            <h3 class="font-display text-lg text-navy mb-2">Youth Groups</h3>
+            <p class="text-gray-600 text-sm">Tzivos Hashem, Hebrew Schools, and CTeen programs building strong Jewish foundations.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-navy/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="text-navy font-bold">02</span>
+          </div>
+          <div>
+            <h3 class="font-display text-lg text-navy mb-2">Education</h3>
+            <p class="text-gray-600 text-sm">JLI courses and learning opportunities for Jews of all ages and backgrounds.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-navy/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="text-navy font-bold">03</span>
+          </div>
+          <div>
+            <h3 class="font-display text-lg text-navy mb-2">Campus Outreach</h3>
+            <p class="text-gray-600 text-sm">Chabad Houses on 60+ campuses providing a home away from home.</p>
+          </div>
+        </div>
+        <div class="flex gap-4">
+          <div class="w-12 h-12 bg-navy/10 rounded-lg flex items-center justify-center flex-shrink-0">
+            <span class="text-navy font-bold">04</span>
+          </div>
+          <div>
+            <h3 class="font-display text-lg text-navy mb-2">Community Events</h3>
+            <p class="text-gray-600 text-sm">Public celebrations including the Columbus Circle Menorah lighting.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Team Section -->
+  <section class="py-16">
+    <div class="max-w-5xl mx-auto px-4">
+      <h2 class="font-display text-3xl text-navy text-center mb-4">Leadership</h2>
+      <p class="text-gray-500 text-center mb-12">The team behind LYO</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div>
+          <div class="w-20 h-20 bg-gradient-to-br from-navy to-blue-800 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-3">KK</div>
+          <h4 class="font-semibold text-navy text-sm">Rabbi Kasriel Kastel</h4>
+          <p class="text-xs text-gray-500">Program Director</p>
+        </div>
+        <div>
+          <div class="w-20 h-20 bg-gradient-to-br from-navy to-blue-800 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-3">SF</div>
+          <h4 class="font-semibold text-navy text-sm">Rabbi Shlomo Friedman</h4>
+          <p class="text-xs text-gray-500">Administrator</p>
+        </div>
+        <div>
+          <div class="w-20 h-20 bg-gradient-to-br from-navy to-blue-800 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-3">YB</div>
+          <h4 class="font-semibold text-navy text-sm">Rabbi Yossi Butman</h4>
+          <p class="text-xs text-gray-500">Event Manager</p>
+        </div>
+        <div>
+          <div class="w-20 h-20 bg-gradient-to-br from-gold to-yellow-600 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-3">NG</div>
+          <h4 class="font-semibold text-navy text-sm">Nili Gurevitch</h4>
+          <p class="text-xs text-gray-500">Executive Secretary</p>
+        </div>
+      </div>
+
+      <div class="mt-12 text-center">
+        <p class="text-xs text-gray-400 uppercase tracking-wide mb-4">Board of Directors</p>
+        <p class="text-sm text-gray-600">
+          Rabbi Kasriel Kastel • Rabbi Shlomo Friedman • Rabbi Leibel Baumgarten • Rabbi Tuvia Teldon • Rabbi Sholom Tenenbaum
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="bg-navy text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <p class="font-display text-2xl italic text-gray-300 mb-6">
+        "Our hope is that you will use this site to find your local Chabad House and get in touch with them."
+      </p>
+      <a href="#" class="inline-flex items-center gap-2 bg-gold hover:bg-yellow-600 text-navy px-8 py-3 rounded-lg font-semibold transition">
+        Find Your Chabad House
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-navy text-gray-400 py-8 border-t border-white/10">
+    <div class="max-w-5xl mx-auto px-4 text-center text-sm">
+      © 2024 Lubavitch Youth Organization • 305 Kingston Ave, Brooklyn NY 11213 • 718.953.1000
+    </div>
+  </footer>
+</body>
+</html>

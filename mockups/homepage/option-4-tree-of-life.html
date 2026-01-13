@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LYO Directory - Tree of Life</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: '#1a365d',
+            gold: '#b8860b',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Open+Sans:wght@400;500;600&display=swap');
+    .font-display { font-family: 'Cormorant Garamond', serif; }
+    .font-body { font-family: 'Open Sans', sans-serif; }
+
+    /* Leaf cluster hover */
+    .leaf-cluster {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .leaf-cluster:hover {
+      filter: brightness(1.1);
+      transform: scale(1.03);
+    }
+
+    .leaf-cluster.active {
+      filter: brightness(1.15) drop-shadow(0 0 10px rgba(0,0,0,0.3));
+    }
+
+    /* Gentle sway */
+    @keyframes sway {
+      0%, 100% { transform: rotate(-0.3deg); }
+      50% { transform: rotate(0.3deg); }
+    }
+
+    .tree-sway {
+      animation: sway 8s ease-in-out infinite;
+      transform-origin: bottom center;
+    }
+
+    /* Tooltip */
+    .county-tooltip {
+      position: absolute;
+      background: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      z-index: 100;
+      font-family: 'Open Sans', sans-serif;
+      font-size: 14px;
+    }
+
+    .leaf-cluster:hover .county-tooltip {
+      opacity: 1;
+    }
+
+    /* Scroll area */
+    .scroll-area {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .scroll-area::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .scroll-area::-webkit-scrollbar-thumb {
+      background: #ccc;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body class="font-body bg-gradient-to-b from-sky-100 via-sky-50 to-green-100 min-h-screen">
+  <!-- Header -->
+  <header class="bg-white/90 backdrop-blur-sm border-b border-gray-200 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-navy rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold text-sm">LYO</span>
+        </div>
+        <div>
+          <h1 class="font-display font-semibold text-navy text-xl">Lubavitch Youth Organization</h1>
+          <p class="text-xs text-gray-500">NYC Metro Area Directory</p>
+        </div>
+      </div>
+      <nav class="hidden md:flex items-center gap-6 text-sm">
+        <a href="#" class="text-navy font-semibold">Directory</a>
+        <a href="#" class="text-gray-500 hover:text-navy transition">Services</a>
+        <a href="#" class="text-gray-500 hover:text-navy transition">About</a>
+        <a href="#" class="text-gray-500 hover:text-navy transition">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="py-6 text-center">
+    <p class="text-gold uppercase tracking-widest text-sm font-semibold mb-2">Etz Chaim - Tree of Life</p>
+    <h2 class="font-display text-4xl md:text-5xl text-navy mb-3">Find Your Chabad House</h2>
+    <p class="text-gray-600">215 locations across the NYC Metro Area</p>
+
+    <!-- Search -->
+    <div class="max-w-md mx-auto mt-6 px-4">
+      <div class="relative">
+        <input type="text" id="searchInput" placeholder="Search by name, city, or rabbi..."
+               class="w-full px-5 py-3 pl-12 rounded-full border-2 border-green-200 focus:border-green-500 focus:outline-none shadow-lg bg-white">
+        <svg class="w-5 h-5 text-green-600 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tree Section -->
+  <section class="relative pb-8">
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="flex flex-col lg:flex-row gap-8 items-start justify-center">
+
+        <!-- Tree Visualization - SVG Based -->
+        <div class="flex-1 flex justify-center">
+          <div class="tree-sway">
+            <svg width="600" height="650" viewBox="0 0 600 650" class="max-w-full h-auto">
+              <!-- Definitions for gradients and filters -->
+              <defs>
+                <!-- Tree trunk gradient -->
+                <linearGradient id="trunkGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#5D4037"/>
+                  <stop offset="30%" style="stop-color:#795548"/>
+                  <stop offset="70%" style="stop-color:#6D4C41"/>
+                  <stop offset="100%" style="stop-color:#4E342E"/>
+                </linearGradient>
+
+                <!-- Branch gradient -->
+                <linearGradient id="branchGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color:#6D4C41"/>
+                  <stop offset="100%" style="stop-color:#8D6E63"/>
+                </linearGradient>
+
+                <!-- Ground gradient -->
+                <linearGradient id="groundGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#7CB342"/>
+                  <stop offset="100%" style="stop-color:#558B2F"/>
+                </linearGradient>
+
+                <!-- Leaf cluster colors -->
+                <radialGradient id="leafBrooklyn" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" style="stop-color:#EF5350"/>
+                  <stop offset="100%" style="stop-color:#C62828"/>
+                </radialGradient>
+                <radialGradient id="leafManhattan" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" style="stop-color:#42A5F5"/>
+                  <stop offset="100%" style="stop-color:#1565C0"/>
+                </radialGradient>
+                <radialGradient id="leafQueens" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" style="stop-color:#FFA726"/>
+                  <stop offset="100%" style="stop-color:#EF6C00"/>
+                </radialGradient>
+                <radialGradient id="leafNassau" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" style="stop-color:#26C6DA"/>
+                  <stop offset="100%" style="stop-color:#00838F"/>
+                </radialGradient>
+                <radialGradient id="leafSuffolk" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" style="stop-color:#7E57C2"/>
+                  <stop offset="100%" style="stop-color:#4527A0"/>
+                </radialGradient>
+                <radialGradient id="leafWestchester" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" style="stop-color:#EC407A"/>
+                  <stop offset="100%" style="stop-color:#AD1457"/>
+                </radialGradient>
+                <radialGradient id="leafBronx" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" style="stop-color:#66BB6A"/>
+                  <stop offset="100%" style="stop-color:#2E7D32"/>
+                </radialGradient>
+                <radialGradient id="leafStaten" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" style="stop-color:#AB47BC"/>
+                  <stop offset="100%" style="stop-color:#6A1B9A"/>
+                </radialGradient>
+                <radialGradient id="leafRockland" cx="50%" cy="30%" r="60%">
+                  <stop offset="0%" style="stop-color:#FFCA28"/>
+                  <stop offset="100%" style="stop-color:#FF8F00"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Ground -->
+              <ellipse cx="300" cy="630" rx="280" ry="25" fill="url(#groundGradient)"/>
+
+              <!-- Roots -->
+              <path d="M270 580 Q240 600 200 620" stroke="#5D4037" stroke-width="12" fill="none" stroke-linecap="round"/>
+              <path d="M280 585 Q260 610 240 630" stroke="#5D4037" stroke-width="10" fill="none" stroke-linecap="round"/>
+              <path d="M330 580 Q360 600 400 620" stroke="#5D4037" stroke-width="12" fill="none" stroke-linecap="round"/>
+              <path d="M320 585 Q340 610 360 630" stroke="#5D4037" stroke-width="10" fill="none" stroke-linecap="round"/>
+
+              <!-- Main Trunk -->
+              <path d="M280 580 Q275 500 285 420 Q290 380 300 340
+                       Q310 380 315 420 Q325 500 320 580 Z"
+                    fill="url(#trunkGradient)"/>
+
+              <!-- Trunk texture lines -->
+              <path d="M290 560 Q288 500 292 440" stroke="#4E342E" stroke-width="2" fill="none" opacity="0.5"/>
+              <path d="M308 560 Q310 500 306 440" stroke="#4E342E" stroke-width="2" fill="none" opacity="0.5"/>
+
+              <!-- Main Branches -->
+              <!-- Left main branch -->
+              <path d="M290 400 Q240 380 180 350 Q140 330 100 340"
+                    stroke="url(#branchGradient)" stroke-width="18" fill="none" stroke-linecap="round"/>
+              <!-- Left lower branch -->
+              <path d="M285 440 Q230 450 170 430 Q130 420 90 440"
+                    stroke="url(#branchGradient)" stroke-width="14" fill="none" stroke-linecap="round"/>
+
+              <!-- Right main branch -->
+              <path d="M310 400 Q360 380 420 350 Q460 330 500 340"
+                    stroke="url(#branchGradient)" stroke-width="18" fill="none" stroke-linecap="round"/>
+              <!-- Right lower branch -->
+              <path d="M315 440 Q370 450 430 430 Q470 420 510 440"
+                    stroke="url(#branchGradient)" stroke-width="14" fill="none" stroke-linecap="round"/>
+
+              <!-- Upper branches -->
+              <path d="M295 380 Q260 340 220 290 Q190 260 160 250"
+                    stroke="url(#branchGradient)" stroke-width="12" fill="none" stroke-linecap="round"/>
+              <path d="M305 380 Q340 340 380 290 Q410 260 440 250"
+                    stroke="url(#branchGradient)" stroke-width="12" fill="none" stroke-linecap="round"/>
+
+              <!-- Top branches -->
+              <path d="M300 360 Q300 300 300 240 Q300 200 300 160"
+                    stroke="url(#branchGradient)" stroke-width="10" fill="none" stroke-linecap="round"/>
+              <path d="M298 340 Q260 280 220 220 Q200 190 180 170"
+                    stroke="url(#branchGradient)" stroke-width="8" fill="none" stroke-linecap="round"/>
+              <path d="M302 340 Q340 280 380 220 Q400 190 420 170"
+                    stroke="url(#branchGradient)" stroke-width="8" fill="none" stroke-linecap="round"/>
+
+              <!-- Small twigs -->
+              <path d="M180 350 Q160 320 140 300" stroke="#8D6E63" stroke-width="5" fill="none" stroke-linecap="round"/>
+              <path d="M420 350 Q440 320 460 300" stroke="#8D6E63" stroke-width="5" fill="none" stroke-linecap="round"/>
+              <path d="M220 290 Q200 260 180 240" stroke="#8D6E63" stroke-width="4" fill="none" stroke-linecap="round"/>
+              <path d="M380 290 Q400 260 420 240" stroke="#8D6E63" stroke-width="4" fill="none" stroke-linecap="round"/>
+
+              <!-- LEAF CLUSTERS (Clickable) -->
+
+              <!-- Brooklyn - Largest, center bottom of canopy (52 locations) -->
+              <g class="leaf-cluster" data-county="Brooklyn" onclick="selectCounty('Brooklyn')">
+                <ellipse cx="300" cy="400" rx="75" ry="50" fill="url(#leafBrooklyn)" opacity="0.9"/>
+                <ellipse cx="280" cy="385" rx="35" ry="25" fill="url(#leafBrooklyn)"/>
+                <ellipse cx="320" cy="385" rx="35" ry="25" fill="url(#leafBrooklyn)"/>
+                <ellipse cx="300" cy="420" rx="40" ry="25" fill="url(#leafBrooklyn)" opacity="0.85"/>
+                <ellipse cx="260" cy="410" rx="25" ry="18" fill="url(#leafBrooklyn)" opacity="0.8"/>
+                <ellipse cx="340" cy="410" rx="25" ry="18" fill="url(#leafBrooklyn)" opacity="0.8"/>
+                <text x="300" y="405" text-anchor="middle" fill="white" font-size="11" font-weight="600" font-family="Open Sans">Brooklyn</text>
+                <text x="300" y="418" text-anchor="middle" fill="white" font-size="9" opacity="0.9" font-family="Open Sans">52 locations</text>
+                <circle cx="340" cy="375" r="10" fill="#b8860b"/>
+                <text x="340" y="379" text-anchor="middle" fill="white" font-size="8" font-weight="bold">HQ</text>
+                <div class="county-tooltip" style="left: 300px; top: 350px;">Brooklyn - 52 locations</div>
+              </g>
+
+              <!-- Nassau - Right side, large (45 locations) -->
+              <g class="leaf-cluster" data-county="Nassau" onclick="selectCounty('Nassau')">
+                <ellipse cx="480" cy="380" rx="70" ry="55" fill="url(#leafNassau)" opacity="0.9"/>
+                <ellipse cx="460" cy="360" rx="35" ry="25" fill="url(#leafNassau)"/>
+                <ellipse cx="500" cy="370" rx="30" ry="22" fill="url(#leafNassau)"/>
+                <ellipse cx="470" cy="400" rx="35" ry="22" fill="url(#leafNassau)" opacity="0.85"/>
+                <ellipse cx="510" cy="395" rx="25" ry="18" fill="url(#leafNassau)" opacity="0.8"/>
+                <text x="480" y="385" text-anchor="middle" fill="white" font-size="11" font-weight="600" font-family="Open Sans">Nassau</text>
+                <text x="480" y="398" text-anchor="middle" fill="white" font-size="9" opacity="0.9" font-family="Open Sans">45 locations</text>
+              </g>
+
+              <!-- Suffolk - Far right, upper (38 locations) -->
+              <g class="leaf-cluster" data-county="Suffolk" onclick="selectCounty('Suffolk')">
+                <ellipse cx="470" cy="280" rx="65" ry="50" fill="url(#leafSuffolk)" opacity="0.9"/>
+                <ellipse cx="450" cy="265" rx="32" ry="22" fill="url(#leafSuffolk)"/>
+                <ellipse cx="490" cy="275" rx="30" ry="20" fill="url(#leafSuffolk)"/>
+                <ellipse cx="460" cy="300" rx="30" ry="20" fill="url(#leafSuffolk)" opacity="0.85"/>
+                <ellipse cx="500" cy="295" rx="22" ry="16" fill="url(#leafSuffolk)" opacity="0.8"/>
+                <text x="470" y="285" text-anchor="middle" fill="white" font-size="11" font-weight="600" font-family="Open Sans">Suffolk</text>
+                <text x="470" y="298" text-anchor="middle" fill="white" font-size="9" opacity="0.9" font-family="Open Sans">38 locations</text>
+              </g>
+
+              <!-- Manhattan - Center top (28 locations) -->
+              <g class="leaf-cluster" data-county="Manhattan" onclick="selectCounty('Manhattan')">
+                <ellipse cx="300" cy="200" rx="60" ry="50" fill="url(#leafManhattan)" opacity="0.9"/>
+                <ellipse cx="280" cy="185" rx="30" ry="22" fill="url(#leafManhattan)"/>
+                <ellipse cx="320" cy="190" rx="28" ry="20" fill="url(#leafManhattan)"/>
+                <ellipse cx="300" cy="220" rx="32" ry="20" fill="url(#leafManhattan)" opacity="0.85"/>
+                <ellipse cx="270" cy="210" rx="20" ry="15" fill="url(#leafManhattan)" opacity="0.8"/>
+                <ellipse cx="330" cy="210" rx="20" ry="15" fill="url(#leafManhattan)" opacity="0.8"/>
+                <text x="300" y="205" text-anchor="middle" fill="white" font-size="11" font-weight="600" font-family="Open Sans">Manhattan</text>
+                <text x="300" y="218" text-anchor="middle" fill="white" font-size="9" opacity="0.9" font-family="Open Sans">28 locations</text>
+              </g>
+
+              <!-- Queens - Left side, middle (22 locations) -->
+              <g class="leaf-cluster" data-county="Queens" onclick="selectCounty('Queens')">
+                <ellipse cx="120" cy="380" rx="55" ry="45" fill="url(#leafQueens)" opacity="0.9"/>
+                <ellipse cx="105" cy="365" rx="28" ry="20" fill="url(#leafQueens)"/>
+                <ellipse cx="140" cy="370" rx="25" ry="18" fill="url(#leafQueens)"/>
+                <ellipse cx="115" cy="395" rx="28" ry="18" fill="url(#leafQueens)" opacity="0.85"/>
+                <ellipse cx="145" cy="390" rx="20" ry="15" fill="url(#leafQueens)" opacity="0.8"/>
+                <text x="120" y="382" text-anchor="middle" fill="white" font-size="11" font-weight="600" font-family="Open Sans">Queens</text>
+                <text x="120" y="395" text-anchor="middle" fill="white" font-size="9" opacity="0.9" font-family="Open Sans">22 locations</text>
+              </g>
+
+              <!-- Westchester - Top left (18 locations) -->
+              <g class="leaf-cluster" data-county="Westchester" onclick="selectCounty('Westchester')">
+                <ellipse cx="160" cy="200" rx="50" ry="42" fill="url(#leafWestchester)" opacity="0.9"/>
+                <ellipse cx="145" cy="185" rx="25" ry="18" fill="url(#leafWestchester)"/>
+                <ellipse cx="175" cy="190" rx="22" ry="16" fill="url(#leafWestchester)"/>
+                <ellipse cx="155" cy="215" rx="25" ry="16" fill="url(#leafWestchester)" opacity="0.85"/>
+                <text x="160" y="202" text-anchor="middle" fill="white" font-size="10" font-weight="600" font-family="Open Sans">Westchester</text>
+                <text x="160" y="214" text-anchor="middle" fill="white" font-size="8" opacity="0.9" font-family="Open Sans">18 locations</text>
+              </g>
+
+              <!-- Bronx - Upper left middle (5 locations) -->
+              <g class="leaf-cluster" data-county="Bronx" onclick="selectCounty('Bronx')">
+                <ellipse cx="130" cy="290" rx="40" ry="35" fill="url(#leafBronx)" opacity="0.9"/>
+                <ellipse cx="120" cy="278" rx="20" ry="15" fill="url(#leafBronx)"/>
+                <ellipse cx="145" cy="285" rx="18" ry="13" fill="url(#leafBronx)"/>
+                <ellipse cx="130" cy="305" rx="20" ry="14" fill="url(#leafBronx)" opacity="0.85"/>
+                <text x="130" y="295" text-anchor="middle" fill="white" font-size="10" font-weight="600" font-family="Open Sans">Bronx</text>
+                <text x="130" y="306" text-anchor="middle" fill="white" font-size="8" opacity="0.9" font-family="Open Sans">5 locations</text>
+              </g>
+
+              <!-- Staten Island - Lower left (4 locations) -->
+              <g class="leaf-cluster" data-county="Staten Island" onclick="selectCounty('Staten Island')">
+                <ellipse cx="100" cy="460" rx="38" ry="32" fill="url(#leafStaten)" opacity="0.9"/>
+                <ellipse cx="90" cy="450" rx="18" ry="14" fill="url(#leafStaten)"/>
+                <ellipse cx="112" cy="455" rx="16" ry="12" fill="url(#leafStaten)"/>
+                <ellipse cx="100" cy="472" rx="18" ry="12" fill="url(#leafStaten)" opacity="0.85"/>
+                <text x="100" y="460" text-anchor="middle" fill="white" font-size="9" font-weight="600" font-family="Open Sans">Staten Is.</text>
+                <text x="100" y="471" text-anchor="middle" fill="white" font-size="8" opacity="0.9" font-family="Open Sans">4 locations</text>
+              </g>
+
+              <!-- Rockland - Top (3 locations) -->
+              <g class="leaf-cluster" data-county="Rockland" onclick="selectCounty('Rockland')">
+                <ellipse cx="230" cy="130" rx="35" ry="30" fill="url(#leafRockland)" opacity="0.9"/>
+                <ellipse cx="220" cy="120" rx="16" ry="12" fill="url(#leafRockland)"/>
+                <ellipse cx="242" cy="125" rx="14" ry="11" fill="url(#leafRockland)"/>
+                <ellipse cx="230" cy="142" rx="16" ry="11" fill="url(#leafRockland)" opacity="0.85"/>
+                <text x="230" y="133" text-anchor="middle" fill="white" font-size="9" font-weight="600" font-family="Open Sans">Rockland</text>
+                <text x="230" y="143" text-anchor="middle" fill="white" font-size="7" opacity="0.9" font-family="Open Sans">3 locations</text>
+              </g>
+
+              <!-- Top right extra foliage for balance -->
+              <g class="leaf-cluster" data-county="Suffolk" onclick="selectCounty('Suffolk')">
+                <ellipse cx="400" cy="160" rx="40" ry="35" fill="url(#leafSuffolk)" opacity="0.7"/>
+                <ellipse cx="385" cy="150" rx="20" ry="15" fill="url(#leafSuffolk)" opacity="0.8"/>
+                <ellipse cx="415" cy="155" rx="18" ry="13" fill="url(#leafSuffolk)" opacity="0.8"/>
+              </g>
+
+              <!-- Est. 1955 badge -->
+              <rect x="330" y="520" width="70" height="24" rx="12" fill="#b8860b"/>
+              <text x="365" y="536" text-anchor="middle" fill="white" font-size="10" font-weight="600" font-family="Open Sans">Est. 1955</text>
+
+              <!-- Address on ground -->
+              <text x="300" y="635" text-anchor="middle" fill="white" font-size="11" font-weight="500" font-family="Open Sans">305 Kingston Ave, Brooklyn NY</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Detail Panel -->
+        <div id="detail-panel" class="w-80 bg-white rounded-2xl shadow-xl overflow-hidden sticky top-24 hidden lg:block">
+          <div id="panel-header" class="p-4 bg-navy text-white">
+            <h3 class="font-display text-xl">Select a Branch</h3>
+            <p class="text-sm text-gray-300">Click any leaf cluster to explore</p>
+          </div>
+          <div id="panel-content" class="p-4">
+            <div class="text-center py-8">
+              <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+                </svg>
+              </div>
+              <p class="text-gray-500 text-sm">Click on any branch to see<br>Chabad Houses in that area</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legend -->
+      <div class="mt-6 flex flex-wrap justify-center gap-3">
+        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm cursor-pointer hover:shadow-md transition" onclick="selectCounty('Brooklyn')">
+          <span class="w-4 h-4 rounded-full bg-red-600"></span>
+          <span class="text-sm text-gray-700">Brooklyn (52)</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm cursor-pointer hover:shadow-md transition" onclick="selectCounty('Nassau')">
+          <span class="w-4 h-4 rounded-full bg-cyan-600"></span>
+          <span class="text-sm text-gray-700">Nassau (45)</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm cursor-pointer hover:shadow-md transition" onclick="selectCounty('Suffolk')">
+          <span class="w-4 h-4 rounded-full bg-purple-600"></span>
+          <span class="text-sm text-gray-700">Suffolk (38)</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm cursor-pointer hover:shadow-md transition" onclick="selectCounty('Manhattan')">
+          <span class="w-4 h-4 rounded-full bg-blue-600"></span>
+          <span class="text-sm text-gray-700">Manhattan (28)</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm cursor-pointer hover:shadow-md transition" onclick="selectCounty('Queens')">
+          <span class="w-4 h-4 rounded-full bg-orange-500"></span>
+          <span class="text-sm text-gray-700">Queens (22)</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm cursor-pointer hover:shadow-md transition" onclick="selectCounty('Westchester')">
+          <span class="w-4 h-4 rounded-full bg-pink-600"></span>
+          <span class="text-sm text-gray-700">Westchester (18)</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm cursor-pointer hover:shadow-md transition" onclick="selectCounty('Bronx')">
+          <span class="w-4 h-4 rounded-full bg-green-600"></span>
+          <span class="text-sm text-gray-700">Bronx (5)</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm cursor-pointer hover:shadow-md transition" onclick="selectCounty('Staten Island')">
+          <span class="w-4 h-4 rounded-full bg-violet-600"></span>
+          <span class="text-sm text-gray-700">Staten Island (4)</span>
+        </div>
+        <div class="flex items-center gap-2 bg-white px-3 py-2 rounded-full shadow-sm cursor-pointer hover:shadow-md transition" onclick="selectCounty('Rockland')">
+          <span class="w-4 h-4 rounded-full bg-amber-500"></span>
+          <span class="text-sm text-gray-700">Rockland (3)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="bg-navy text-white py-8 mt-8">
+    <div class="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div>
+        <div class="text-3xl font-bold text-gold">215</div>
+        <div class="text-sm text-gray-300">Chabad Houses</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold text-gold">9</div>
+        <div class="text-sm text-gray-300">Counties</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold text-gold">60+</div>
+        <div class="text-sm text-gray-300">Campuses</div>
+      </div>
+      <div>
+        <div class="text-3xl font-bold text-gold">1955</div>
+        <div class="text-sm text-gray-300">Founded</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-6">
+    <div class="max-w-5xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+          <span class="font-bold text-sm">LYO</span>
+        </div>
+        <div>
+          <p class="font-semibold">Lubavitch Youth Organization</p>
+          <p class="text-sm text-gray-400">305 Kingston Ave, Brooklyn NY 11213</p>
+        </div>
+      </div>
+      <p class="text-sm text-gray-400">718.953.1000 | info@lyony.org</p>
+    </div>
+  </footer>
+
+  <script>
+    const countyColors = {
+      'Manhattan': { bg: '#1565c0', light: '#e3f2fd', text: '#0d47a1' },
+      'Brooklyn': { bg: '#c62828', light: '#ffebee', text: '#b71c1c' },
+      'Queens': { bg: '#ef6c00', light: '#fff3e0', text: '#e65100' },
+      'Bronx': { bg: '#2e7d32', light: '#e8f5e9', text: '#1b5e20' },
+      'Staten Island': { bg: '#6a1b9a', light: '#f3e5f5', text: '#4a148c' },
+      'Nassau': { bg: '#00838f', light: '#e0f7fa', text: '#006064' },
+      'Suffolk': { bg: '#4527a0', light: '#ede7f6', text: '#311b92' },
+      'Westchester': { bg: '#ad1457', light: '#fce4ec', text: '#880e4f' },
+      'Rockland': { bg: '#ff8f00', light: '#fff8e1', text: '#ff6f00' }
+    };
+
+    const sampleData = {
+      'Manhattan': [
+        { name: 'Chabad of the Upper East Side', rabbi: 'Rabbi & Mrs. Yossi Goldstein', phone: '212-717-4613' },
+        { name: 'Chabad of Midtown', rabbi: 'Rabbi & Mrs. Shalom Klein', phone: '212-355-0770' },
+        { name: 'Chabad of the West Side', rabbi: 'Rabbi & Mrs. Dovid Lerner', phone: '212-864-5010' },
+        { name: 'Chabad of NYU', rabbi: 'Rabbi & Mrs. Yisroel Bluming', phone: '212-982-4674' },
+        { name: 'Chabad of Columbia University', rabbi: 'Rabbi & Mrs. Yonah Blum', phone: '212-749-2488' },
+      ],
+      'Brooklyn': [
+        { name: 'Chabad of Crown Heights', rabbi: 'Rabbi & Mrs. Moshe Stern', phone: '718-778-6000' },
+        { name: 'Chabad of Flatbush', rabbi: 'Rabbi & Mrs. Yitzchak Levy', phone: '718-252-0770' },
+        { name: 'Chabad of Park Slope', rabbi: 'Rabbi & Mrs. Menachem Wolf', phone: '718-832-1266' },
+        { name: 'Chabad of Sheepshead Bay', rabbi: 'Rabbi & Mrs. Moshe Winner', phone: '718-646-4300' },
+        { name: 'Chabad of Bay Ridge', rabbi: 'Rabbi & Mrs. Shmuel Kogan', phone: '718-745-5100' },
+      ],
+      'Queens': [
+        { name: 'Chabad of Jamaica Estates', rabbi: 'Rabbi & Mrs. Sholom Lipskar', phone: '718-380-4500' },
+        { name: 'Chabad of Forest Hills', rabbi: 'Rabbi & Mrs. Yossi Mendelson', phone: '718-520-0770' },
+        { name: 'Chabad of Flushing', rabbi: 'Rabbi & Mrs. Eli Blokh', phone: '718-762-4000' },
+      ],
+      'Nassau': [
+        { name: 'Chabad of Great Neck', rabbi: 'Rabbi & Mrs. Yosef Geisinsky', phone: '516-487-4554' },
+        { name: 'Chabad of Roslyn', rabbi: 'Rabbi & Mrs. Yaakov Saacks', phone: '516-484-8185' },
+        { name: 'Chabad of Port Washington', rabbi: 'Rabbi & Mrs. Shalom Paltiel', phone: '516-767-8672' },
+        { name: 'Chabad of Merrick', rabbi: 'Rabbi & Mrs. Shimon Kramer', phone: '516-868-0404' },
+      ],
+      'Suffolk': [
+        { name: 'Chabad of the Hamptons', rabbi: 'Rabbi & Mrs. Leibel Baumgarten', phone: '631-329-6800' },
+        { name: 'Chabad of Huntington', rabbi: 'Rabbi & Mrs. Asher Vaisfiche', phone: '631-427-4070' },
+        { name: 'Chabad of Stony Brook', rabbi: 'Rabbi & Mrs. Adam Stein', phone: '631-585-0521' },
+      ],
+      'Westchester': [
+        { name: 'Chabad of Scarsdale', rabbi: 'Rabbi & Mrs. Avrohom Butman', phone: '914-723-0105' },
+        { name: 'Chabad of White Plains', rabbi: 'Rabbi & Mrs. Yosef Yitzchok Carlebach', phone: '914-215-1441' },
+      ],
+      'Bronx': [
+        { name: 'Chabad of Riverdale', rabbi: 'Rabbi & Mrs. Levi Shemtov', phone: '718-549-1100' },
+        { name: 'Chabad of Co-op City', rabbi: 'Rabbi & Mrs. Shmuel Butman', phone: '718-320-4700' },
+      ],
+      'Staten Island': [
+        { name: 'Chabad of Staten Island', rabbi: 'Rabbi & Mrs. Moshe Katzman', phone: '718-370-8953' },
+      ],
+      'Rockland': [
+        { name: 'Chabad of Suffern', rabbi: 'Rabbi & Mrs. Abe Hecht', phone: '845-368-1889' },
+      ]
+    };
+
+    function selectCounty(county) {
+      // Update panel header
+      const header = document.getElementById('panel-header');
+      const colors = countyColors[county];
+      header.style.background = colors.bg;
+      header.innerHTML = `
+        <h3 class="font-display text-xl">${county}</h3>
+        <p class="text-sm opacity-80">${sampleData[county]?.length || 0}+ Chabad Houses</p>
+      `;
+
+      // Update panel content
+      const content = document.getElementById('panel-content');
+      const houses = sampleData[county] || [];
+
+      content.innerHTML = `
+        <div class="scroll-area space-y-3">
+          ${houses.map(h => `
+            <div class="p-3 rounded-lg hover:shadow-md transition cursor-pointer border-l-4" style="background: ${colors.light}; border-color: ${colors.bg}">
+              <h4 class="font-semibold text-gray-800 text-sm">${h.name}</h4>
+              <p class="text-xs text-gray-500">${h.rabbi}</p>
+              <div class="flex gap-3 mt-2">
+                <a href="tel:${h.phone}" class="text-xs hover:underline" style="color: ${colors.text}">
+                  ${h.phone}
+                </a>
+              </div>
+            </div>
+          `).join('')}
+          ${houses.length > 0 ? `
+            <button class="w-full py-2 text-sm font-medium rounded-lg transition mt-2" style="background: ${colors.bg}; color: white;">
+              View All in ${county}
+            </button>
+          ` : '<p class="text-gray-400 text-sm text-center py-4">No sample data available</p>'}
+        </div>
+      `;
+
+      // Highlight active cluster
+      document.querySelectorAll('.leaf-cluster').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll(`[data-county="${county}"]`).forEach(el => el.classList.add('active'));
+
+      // Show panel on mobile
+      document.getElementById('detail-panel').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

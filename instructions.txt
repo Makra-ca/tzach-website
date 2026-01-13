@@ -1,0 +1,45 @@
+So the about us
+Lubavitch organization latlrger font
+70 years logo change
+For nav event who we are 
+Picture of rebbe before description on homepage
+
+Remove ZYA in first paragraph
+170 to 140 centers
+212 plus shluchim couples not chabad houses
+It's 8 counties
+In carousel remove the rabbi with 3 students
+
+
+In services change chabd outreach in over 50 college campuses so currently its 60
+
+Add another card
+Social services
+Friendship circle, provides programming dod rfamilies with special needs chila as well as highschool volunteers. Hospital and prison chaplancies touch the lives of all the jews whom they visit throughout the year.
+
+About us I Navratilova does nothing
+
+To colleges you phone number and contact info either phone or email
+
+X The college cards that have shaliavh bigger with contact info with website or email and phone
+
+X Searchable by zip code as well.
+
+X 	Brooklyn is in long Island bug
+
+X In admin dashboard have 8 counties
+
+
+Home page button in navbar
+
+Admin feauture to change images in carousel and separate for monetary that matter
+
+X Admin feature for posting chanukah brochures and pdfs
+
+Celebrating 70 years
+
+CHabad house activities will remain in /directory, Crown height based programming(lets call it Headquarters) so have CTA buttons for them
+
+at top put 
+change phone number from 718-774-4270 to 718 953 1000
+option to add pictures if admin decides so

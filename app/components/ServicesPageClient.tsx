@@ -12,8 +12,15 @@ interface Service {
   order: number
 }
 
+interface HeroImage {
+  src: string
+  alt: string
+  position: string
+}
+
 interface Props {
   services: Service[]
+  heroImages: HeroImage[]
 }
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -51,7 +58,7 @@ const iconMap: Record<string, React.ReactNode> = {
   )
 }
 
-export default function ServicesPageClient({ services }: Props) {
+export default function ServicesPageClient({ services, heroImages }: Props) {
   return (
     <>
       <Preloader />
@@ -59,7 +66,7 @@ export default function ServicesPageClient({ services }: Props) {
       <div className="min-h-screen bg-white">
         {/* Hero with Carousel */}
         <section className="relative h-[85vh] min-h-[600px] overflow-hidden">
-          <HeroCarousel />
+          <HeroCarousel images={heroImages} />
 
           <div className="relative z-10 h-full max-w-6xl mx-auto px-4 flex items-center">
             <div className="max-w-2xl text-white hero-animate">

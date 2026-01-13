@@ -32,8 +32,21 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-white/10 text-center text-sm text-gray-500">
-          &copy; {new Date().getFullYear()} Lubavitch Youth Organization
+        <div className="mt-8 pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 text-sm text-gray-500">
+          <span>&copy; {new Date().getFullYear()} Lubavitch Youth Organization</span>
+          <span className="hidden sm:inline text-gray-600">·</span>
+          <a
+            href="https://makra.ca"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 hover:border-[#d4a853]/50 hover:bg-white/10 transition-all"
+          >
+            <span className="text-gray-400">Website by</span>
+            <span className="text-[#d4a853] font-medium">Makra.ca</span>
+            <svg className="w-3.5 h-3.5 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+            </svg>
+          </a>
         </div>
       </div>
     </footer>

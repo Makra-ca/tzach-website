@@ -258,11 +258,11 @@ export default function HomePageClient({ stats, teamMembers, galleryImages, hero
                   <div className="relative">
                     <div className="absolute -bottom-3 -right-3 w-full h-full bg-[#d4a853]/20 rounded-lg" />
                     <Image
-                      src="/The rebbe.png"
+                      src="/rebbe (Large).jpg"
                       alt="The Rebbe, Rabbi Menachem Mendel Schneerson"
                       width={280}
-                      height={350}
-                      className="relative z-10 rounded-lg shadow-xl grayscale"
+                      height={280}
+                      className="relative z-10 rounded-lg shadow-xl object-cover object-top"
                     />
                   </div>
                 </div>
