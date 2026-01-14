@@ -41,12 +41,13 @@ export default function RootLayout({
             `,
           }}
         />
-        {/* Check session and add class - CSS above will immediately hide preloader */}
+        {/* Check session/route and add class - CSS above will immediately hide preloader */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                if (sessionStorage.getItem('lyo-preloader-shown')) {
+                // Skip preloader on admin routes or if already shown this session
+                if (window.location.pathname.startsWith('/admin') || sessionStorage.getItem('lyo-preloader-shown')) {
                   document.documentElement.classList.add('preloader-skip');
                 }
               } catch (e) {}

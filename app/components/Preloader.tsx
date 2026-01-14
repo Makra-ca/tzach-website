@@ -1,17 +1,25 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import Image from 'next/image'
 
 const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
 
 export default function Preloader() {
   const router = useRouter()
+  const pathname = usePathname()
   const [show, setShow] = useState(true)
   const [isNavigating, setIsNavigating] = useState(false)
 
   useEffect(() => {
+    // Skip preloader on admin routes
+    if (pathname?.startsWith('/admin')) {
+      document.documentElement.classList.add('preloader-skip')
+      setShow(false)
+      return
+    }
+
     // Check if preloader should be skipped:
     // - Class added by inline script on hard page load, OR
     // - SessionStorage set from previous navigation (client-side nav doesn't re-run inline script)
@@ -22,7 +30,7 @@ export default function Preloader() {
       setShow(false)
       return
     }
-  }, [])
+  }, [pathname])
 
   const handleNavigate = (path: string) => {
     if (isNavigating) return // Prevent double clicks
