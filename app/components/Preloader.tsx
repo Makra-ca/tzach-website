@@ -1,14 +1,15 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import Image from 'next/image'
-import Link from 'next/link'
 
 const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
 
 export default function Preloader() {
+  const router = useRouter()
   const [show, setShow] = useState(true)
-  const [fadeOut, setFadeOut] = useState(false)
+  const [isNavigating, setIsNavigating] = useState(false)
 
   useEffect(() => {
     // Check if preloader should be skipped:
@@ -23,22 +24,23 @@ export default function Preloader() {
     }
   }, [])
 
-  const handleEnter = () => {
+  const handleNavigate = (path: string) => {
+    if (isNavigating) return // Prevent double clicks
+
+    setIsNavigating(true)
     // Mark as shown for this session
     sessionStorage.setItem(PRELOADER_SESSION_KEY, 'true')
-    setFadeOut(true)
-    // Hide after fade animation
-    setTimeout(() => setShow(false), 500)
+    // Add class to document - CSS will hide preloader and show site content
+    document.documentElement.classList.add('preloader-skip')
+    // Navigate immediately - content is hidden by CSS until preloader-skip is added
+    router.push(path)
+    setShow(false)
   }
 
   if (!show) return null
 
   return (
-    <div
-      className={`preloader-container fixed inset-0 z-[9999] bg-[#0f172a] transition-all duration-500 ease-out ${
-        fadeOut ? 'opacity-0' : 'opacity-100'
-      }`}
-    >
+    <div className="preloader-container fixed inset-0 z-[9999] bg-[#0f172a]">
       {/* Content Layout */}
       <div className="relative z-10 flex flex-col lg:flex-row h-full overflow-hidden">
         {/* Left Side - Rebbe Image */}
@@ -92,10 +94,10 @@ export default function Preloader() {
 
             {/* CTA Buttons */}
             <div className="flex gap-3 sm:gap-4">
-              <Link
-                href="/directory"
-                onClick={handleEnter}
-                className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-7 py-3 sm:py-3.5 bg-gradient-to-r from-[#d4a853] to-[#e5bc6a] text-[#0f172a] rounded-full font-semibold text-sm sm:text-base shadow-lg shadow-[#d4a853]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[#d4a853]/40 hover:scale-105 hover:-translate-y-0.5"
+              <button
+                onClick={() => handleNavigate('/directory')}
+                disabled={isNavigating}
+                className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-7 py-3 sm:py-3.5 bg-gradient-to-r from-[#d4a853] to-[#e5bc6a] text-[#0f172a] rounded-full font-semibold text-sm sm:text-base shadow-lg shadow-[#d4a853]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[#d4a853]/40 hover:scale-105 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0"
               >
                 <span>Chabad Houses</span>
                 <span className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 bg-[#0f172a]/10 rounded-full transition-all duration-500 group-hover:bg-[#0f172a]/20 group-hover:translate-x-1">
@@ -103,11 +105,11 @@ export default function Preloader() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                   </svg>
                 </span>
-              </Link>
-              <Link
-                href="/headquarters"
-                onClick={handleEnter}
-                className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-7 py-3 sm:py-3.5 bg-transparent text-[#d4a853] rounded-full font-semibold text-sm sm:text-base border-2 border-[#d4a853]/40 transition-all duration-500 hover:bg-[#d4a853] hover:text-[#0f172a] hover:border-[#d4a853] hover:shadow-xl hover:shadow-[#d4a853]/30 hover:scale-105 hover:-translate-y-0.5"
+              </button>
+              <button
+                onClick={() => handleNavigate('/headquarters')}
+                disabled={isNavigating}
+                className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-7 py-3 sm:py-3.5 bg-transparent text-[#d4a853] rounded-full font-semibold text-sm sm:text-base border-2 border-[#d4a853]/40 transition-all duration-500 hover:bg-[#d4a853] hover:text-[#0f172a] hover:border-[#d4a853] hover:shadow-xl hover:shadow-[#d4a853]/30 hover:scale-105 hover:-translate-y-0.5 disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:translate-y-0 disabled:hover:bg-transparent disabled:hover:text-[#d4a853]"
               >
                 <span>Headquarters</span>
                 <span className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 bg-[#d4a853]/20 rounded-full transition-all duration-500 group-hover:bg-[#0f172a]/20 group-hover:translate-x-1">
@@ -115,7 +117,7 @@ export default function Preloader() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
                   </svg>
                 </span>
-              </Link>
+              </button>
             </div>
           </div>
         </div>

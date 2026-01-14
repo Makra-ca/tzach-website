@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import Preloader from "./components/Preloader";
 
 export const metadata: Metadata = {
   title: "Lubavitch Youth Organization | Chabad Directory NYC Metro",
@@ -27,7 +28,13 @@ export default function RootLayout({
         <style
           dangerouslySetInnerHTML={{
             __html: `
+              /* Hide site content when preloader is active (prevents flash during transition) */
+              html:not(.preloader-skip) .site-content { visibility: hidden; }
+
+              /* Hide preloader when it should be skipped */
               .preloader-skip .preloader-container { display: none !important; }
+
+              /* Hero animation for when preloader is skipped */
               .preloader-skip .hero-animate { visibility: hidden; }
               @keyframes fadeSlideIn { 0% { visibility: visible; opacity: 0; transform: translateX(-40px); } 100% { visibility: visible; opacity: 1; transform: none; } }
               .preloader-skip .hero-animate { animation: fadeSlideIn 0.6s ease-out 0.1s forwards; }
@@ -53,19 +60,25 @@ export default function RootLayout({
       <body
         className="antialiased flex flex-col min-h-screen"
       >
-        {/* Celebration Banner */}
-        <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] text-center py-2.5 px-4">
-          <p className="font-display text-base md:text-lg tracking-wide">
-            <span className="font-semibold">Celebrating 70 Years</span>
-            <span className="mx-2 opacity-60">|</span>
-            <span className="italic">Serving the Jewish Community Since 1955</span>
-          </p>
+        {/* Entry Page / Preloader - overlays everything */}
+        <Preloader />
+
+        {/* Site content - hidden until preloader is dismissed */}
+        <div className="site-content flex flex-col min-h-screen">
+          {/* Celebration Banner */}
+          <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] text-center py-2.5 px-4">
+            <p className="font-display text-base md:text-lg tracking-wide">
+              <span className="font-semibold">Celebrating 70 Years</span>
+              <span className="mx-2 opacity-60">|</span>
+              <span className="italic">Serving the Jewish Community Since 1955</span>
+            </p>
+          </div>
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
         </div>
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
       </body>
     </html>
   );

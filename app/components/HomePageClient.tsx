@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import HeroCarousel from './HeroCarousel'
 import GallerySection from './GallerySection'
-import Preloader from './Preloader'
 import AnimatedCounter from './AnimatedCounter'
 import AnimatedSection from './AnimatedSection'
 
@@ -83,8 +82,6 @@ export default function HomePageClient({ stats, teamMembers, galleryImages, hero
 
   return (
     <>
-      <Preloader />
-
       <div className="min-h-screen bg-white">
         {/* Hero with Carousel */}
         <section className="relative h-[85vh] min-h-[600px] overflow-hidden">
