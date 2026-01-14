@@ -197,3 +197,23 @@ body {
   animation: blink 0.8s infinite;
 }
 
+/* Scroll indicator - mouse wheel animation */
+@keyframes scrollWheel {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+.animate-scroll-wheel {
+  animation: scrollWheel 1.5s ease-in-out infinite;
+}
+

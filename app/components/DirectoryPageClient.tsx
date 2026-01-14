@@ -46,12 +46,17 @@ export default function DirectoryPageClient({ houses, filters, heroImages }: Pro
           </div>
         </div>
 
-        {/* Scroll Down Indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 animate-bounce">
-          <span className="text-white/60 text-xs uppercase tracking-widest">Scroll</span>
-          <svg className="w-6 h-6 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
+        {/* Scroll Down Indicator - Clear and obvious, hidden on small screens */}
+        <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-10 hidden sm:flex flex-col items-center gap-1">
+          <span className="text-white text-xs md:text-sm font-medium tracking-wide">Scroll Down</span>
+          <div className="flex flex-col items-center animate-bounce">
+            <svg className="w-6 h-6 md:w-8 md:h-8 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+            </svg>
+            <svg className="w-6 h-6 md:w-8 md:h-8 text-[#d4a853]/50 -mt-3 md:-mt-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
         </div>
       </section>
 
