@@ -52,7 +52,7 @@ export default function Header() {
             href="/directory"
             className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
           >
-            <span className="relative z-10">Directory</span>
+            <span className="relative z-10">Chabad Houses</span>
             <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
           </Link>
           <Link
@@ -162,7 +162,7 @@ export default function Header() {
             }`}
             style={{ transitionDelay: '200ms' }}
           >
-            Directory
+            Chabad Houses
           </Link>
 
           <Link

@@ -12,6 +12,7 @@ async function getPrograms() {
 
 async function getHeroImages() {
   const images = await prisma.heroImage.findMany({
+    where: { page: 'headquarters' },
     orderBy: { order: 'asc' }
   })
   return images.map(img => ({

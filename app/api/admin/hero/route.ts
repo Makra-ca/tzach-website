@@ -29,13 +29,15 @@ export async function POST(request: NextRequest) {
     const file = formData.get('file') as File
     const alt = formData.get('alt') as string || ''
     const position = formData.get('position') as string || 'center'
+    const page = formData.get('page') as string || 'homepage'
 
     if (!file) {
       return NextResponse.json({ error: 'No file provided' }, { status: 400 })
     }
 
-    // Get the highest order number
+    // Get the highest order number for this page
     const lastImage = await prisma.heroImage.findFirst({
+      where: { page },
       orderBy: { order: 'desc' }
     })
     const nextOrder = (lastImage?.order ?? -1) + 1
@@ -51,7 +53,8 @@ export async function POST(request: NextRequest) {
         url: blob.url,
         alt,
         position,
-        order: nextOrder
+        order: nextOrder,
+        page
       }
     })
 

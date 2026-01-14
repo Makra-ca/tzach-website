@@ -48,11 +48,20 @@ export default function Preloader() {
   if (!show) return null
 
   return (
-    <div className="preloader-container fixed inset-0 z-[9999] bg-[#0f172a]">
+    <div className="preloader-container fixed inset-0 z-[9999] bg-[#0f172a] flex flex-col">
+      {/* Celebration Banner */}
+      <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] text-center py-2.5 px-4 shrink-0">
+        <p className="font-display text-sm sm:text-base md:text-lg tracking-wide">
+          <span className="font-semibold">Celebrating 70 Years</span>
+          <span className="mx-2 opacity-60">|</span>
+          <span className="italic">Serving the Jewish Community Since 1955</span>
+        </p>
+      </div>
+
       {/* Content Layout */}
-      <div className="relative z-10 flex flex-col lg:flex-row h-full overflow-hidden">
+      <div className="relative z-10 flex flex-col lg:flex-row flex-1 overflow-hidden">
         {/* Left Side - Rebbe Image */}
-        <div className="relative w-full lg:w-1/2 h-[30vh] sm:h-[35vh] lg:h-full shrink-0">
+        <div className="relative w-full lg:w-1/2 h-[28vh] sm:h-[32vh] lg:h-full shrink-0">
           <Image
             src="/rebbe (Large).jpg"
             alt="The Rebbe, Rabbi Menachem Mendel Schneerson"
@@ -68,14 +77,23 @@ export default function Preloader() {
         {/* Right Side - Content */}
         <div className="flex-1 flex flex-col px-6 sm:px-10 lg:px-12 xl:px-16 py-6 sm:py-8 lg:py-12 overflow-y-auto lg:justify-center">
           <div className="max-w-xl">
-            {/* LYO Branding */}
-            <div className="mb-6 md:mb-8">
-              <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-2">
-                LYO
-              </h1>
-              <p className="text-[#d4a853] tracking-[0.2em] text-xs sm:text-sm uppercase">
-                Lubavitch Youth Organization
-              </p>
+            {/* LYO Branding with Logo */}
+            <div className="mb-6 md:mb-8 flex items-center gap-4">
+              <Image
+                src="/tzach logo.bmp"
+                alt="LYO Logo"
+                width={72}
+                height={72}
+                className="rounded shrink-0"
+              />
+              <div>
+                <h1 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-1">
+                  LYO
+                </h1>
+                <p className="text-[#d4a853] tracking-[0.2em] text-xs sm:text-sm uppercase">
+                  Lubavitch Youth Organization
+                </p>
+              </div>
             </div>
 
             {/* Gold divider */}

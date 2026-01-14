@@ -43,6 +43,7 @@ async function getFilters() {
 
 async function getHeroImages() {
   const images = await prisma.heroImage.findMany({
+    where: { page: 'directory' },
     orderBy: { order: 'asc' }
   })
   return images.map(img => ({

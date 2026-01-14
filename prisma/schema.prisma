@@ -92,7 +92,10 @@ model HeroImage {
   alt       String   @default("")
   position  String   @default("center") // CSS object-position value
   order     Int      @default(0)
+  page      String   @default("homepage") // homepage, directory, colleges, headquarters
   createdAt DateTime @default(now())
+
+  @@index([page])
 }
 
 model HeadquartersProgram {

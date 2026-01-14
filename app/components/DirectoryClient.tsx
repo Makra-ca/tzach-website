@@ -165,8 +165,8 @@ export default function DirectoryClient({ houses, filters }: Props) {
       if (!groups[key]) groups[key] = []
       groups[key].push(house as HouseWithOptionalDistance)
     }
-    // Sort by count
-    return Object.entries(groups).sort((a, b) => b[1].length - a[1].length)
+    // Sort alphabetically by county name
+    return Object.entries(groups).sort((a, b) => a[0].localeCompare(b[0]))
   }, [filteredHouses])
 
   return (
@@ -241,7 +241,7 @@ export default function DirectoryClient({ houses, filters }: Props) {
             >
               All <span className="ml-1 opacity-70">({houses.length})</span>
             </button>
-            {filters.counties.map(county => (
+            {[...filters.counties].sort((a, b) => a.name.localeCompare(b.name)).map(county => (
               <button
                 key={county.name}
                 onClick={() => setSelectedCounty(selectedCounty === county.name ? null : county.name)}

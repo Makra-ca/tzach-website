@@ -210,6 +210,7 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
   const [colleges, setColleges] = useState(initialColleges)
   const [galleryImages, setGalleryImages] = useState(initialGalleryImages)
   const [heroImages, setHeroImages] = useState(initialHeroImages)
+  const [heroPage, setHeroPage] = useState<'homepage' | 'directory' | 'colleges' | 'headquarters'>('homepage')
   const [search, setSearch] = useState('')
   const [showForm, setShowForm] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
@@ -280,6 +281,9 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
 
     return searchWords.every(word => searchableText.includes(word))
   })
+
+  // Filter hero images by selected page
+  const filteredHeroImages = heroImages.filter(img => img.page === heroPage)
 
   // House handlers
   const handleEditHouse = (house: ChabadHouse) => {
@@ -767,6 +771,7 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
         formData.append('file', file)
         formData.append('alt', file.name.replace(/\.[^/.]+$/, ''))
         formData.append('position', 'center')
+        formData.append('page', heroPage)
 
         const res = await fetch('/api/admin/hero', {
           method: 'POST',
@@ -815,17 +820,22 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
   }
 
   const moveHeroImage = async (fromIndex: number, toIndex: number) => {
-    const newImages = [...heroImages]
-    const [movedImage] = newImages.splice(fromIndex, 1)
-    newImages.splice(toIndex, 0, movedImage)
-    setHeroImages(newImages)
+    // Work with filtered images for the current page
+    const pageImages = heroImages.filter(img => img.page === heroPage)
+    const newPageImages = [...pageImages]
+    const [movedImage] = newPageImages.splice(fromIndex, 1)
+    newPageImages.splice(toIndex, 0, movedImage)
 
-    // Save new order
+    // Update state with reordered images for this page
+    const otherImages = heroImages.filter(img => img.page !== heroPage)
+    setHeroImages([...otherImages, ...newPageImages])
+
+    // Save new order for this page
     try {
       await fetch('/api/admin/hero/reorder', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ imageIds: newImages.map(img => img.id) })
+        body: JSON.stringify({ imageIds: newPageImages.map(img => img.id), page: heroPage })
       })
     } catch {
       // Revert on error
@@ -1116,10 +1126,14 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
                   >
                     <option value="">Select...</option>
-                    {counties.map(c => (
-                      <option key={c} value={c}>{c}</option>
-                    ))}
-                    <option value="Other">Other</option>
+                    <option value="Brooklyn">Brooklyn</option>
+                    <option value="Bronx">Bronx</option>
+                    <option value="Manhattan">Manhattan</option>
+                    <option value="Nassau">Nassau</option>
+                    <option value="Queens">Queens</option>
+                    <option value="Staten Island">Staten Island</option>
+                    <option value="Suffolk">Suffolk</option>
+                    <option value="Westchester">Westchester</option>
                   </select>
                 </div>
 
@@ -2127,6 +2141,29 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
       {/* Hero Carousel Management */}
       {activeTab === 'hero' && (
         <div className="space-y-6">
+          {/* Page Selector Tabs */}
+          <div className="bg-white rounded-lg shadow-md p-4">
+            <h3 className="text-sm font-medium text-gray-600 mb-3">Select Page Carousel</h3>
+            <div className="flex flex-wrap gap-2">
+              {(['homepage', 'directory', 'colleges', 'headquarters'] as const).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setHeroPage(page)}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                    heroPage === page
+                      ? 'bg-[#1e3a5f] text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {page === 'homepage' ? 'Homepage' :
+                   page === 'directory' ? 'Chabad Houses' :
+                   page === 'colleges' ? 'Colleges' : 'Headquarters'}
+                  {' '}({heroImages.filter(img => img.page === page).length})
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Upload Zone */}
           <div
             onDragOver={handleDragOver}
@@ -2146,7 +2183,7 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
               </div>
               <div>
                 <p className="text-lg font-medium text-gray-700">
-                  {uploadProgress ? 'Uploading...' : 'Drag & drop hero images here'}
+                  {uploadProgress ? 'Uploading...' : `Drag & drop images for ${heroPage === 'homepage' ? 'Homepage' : heroPage === 'directory' ? 'Chabad Houses' : heroPage === 'colleges' ? 'Colleges' : 'Headquarters'}`}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">or click to browse (recommended: 1920x1080 or wider)</p>
               </div>
@@ -2175,21 +2212,21 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
           {/* Image Grid */}
           <div className="bg-white rounded-lg shadow-md p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
-              Hero Carousel Images ({heroImages.length})
+              {heroPage === 'homepage' ? 'Homepage' : heroPage === 'directory' ? 'Chabad Houses' : heroPage === 'colleges' ? 'Colleges' : 'Headquarters'} Carousel Images ({filteredHeroImages.length})
             </h3>
             <p className="text-sm text-gray-500 mb-6">
-              These images rotate in the hero section on the homepage. Use the arrows to reorder. If no images are uploaded, default images will be shown.
+              These images rotate in the hero section on the {heroPage === 'homepage' ? 'homepage' : heroPage === 'directory' ? 'Chabad Houses page' : heroPage === 'colleges' ? 'Colleges page' : 'Headquarters page'}. Use the arrows to reorder.
             </p>
 
-            {heroImages.length === 0 ? (
+            {filteredHeroImages.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
-                No hero images yet. Upload some to customize the homepage carousel.
+                No images for this page yet. Upload some to customize the carousel.
                 <br />
                 <span className="text-sm">Default images will be displayed until you add your own.</span>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {heroImages.map((image, index) => (
+                {filteredHeroImages.map((image, index) => (
                   <div
                     key={image.id}
                     className="relative group rounded-lg overflow-hidden bg-gray-100 border border-gray-200"
@@ -2232,7 +2269,7 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                       </button>
 
                       {/* Move right */}
-                      {index < heroImages.length - 1 && (
+                      {index < filteredHeroImages.length - 1 && (
                         <button
                           onClick={() => moveHeroImage(index, index + 1)}
                           className="p-2 bg-white rounded-full hover:bg-gray-100 transition-colors"
