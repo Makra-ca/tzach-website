@@ -22,6 +22,14 @@ interface HeroImage {
   position: string
 }
 
+interface Service {
+  id: string
+  name: string
+  description: string | null
+  icon: string | null
+  order: number
+}
+
 interface HomePageClientProps {
   stats: {
     houses: number
@@ -31,9 +39,45 @@ interface HomePageClientProps {
   teamMembers: TeamMember[]
   galleryImages: { src: string; alt: string }[]
   heroImages: HeroImage[]
+  services: Service[]
 }
 
-export default function HomePageClient({ stats, teamMembers, galleryImages, heroImages }: HomePageClientProps) {
+const iconMap: Record<string, React.ReactNode> = {
+  users: (
+    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg>
+  ),
+  'book-open': (
+    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+    </svg>
+  ),
+  'graduation-cap': (
+    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14v7m0-7l-4-2.222" />
+    </svg>
+  ),
+  calendar: (
+    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+  ),
+  star: (
+    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
+    </svg>
+  ),
+  heart: (
+    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+    </svg>
+  )
+}
+
+export default function HomePageClient({ stats, teamMembers, galleryImages, heroImages, services }: HomePageClientProps) {
   const staff = teamMembers.filter(m => !m.isBoard && !m.isDeceased)
   const boardMembers = teamMembers.filter(m => m.isBoard && !m.isDeceased)
 
@@ -52,21 +96,34 @@ export default function HomePageClient({ stats, teamMembers, galleryImages, hero
                 LUBAVITCH YOUTH ORGANIZATION
               </p>
               <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold mb-6 leading-[1.1]">
-                Bringing Jewish Life to Every Corner
+                Bringing Jewish Life to Every Jew
               </h1>
               <p className="text-xl text-gray-300 mb-10 leading-relaxed">
                 For 70 years, LYO has connected thousands of families across the NYC Metro area
                 with vibrant Jewish community, education, and celebration.
               </p>
-              <div className="flex flex-wrap gap-4">
+              <div className="flex gap-3 sm:gap-5">
                 <Link
                   href="/directory"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-[#d4a853] text-[#0f172a] rounded-lg font-medium hover:bg-[#b8943f] transition-colors"
+                  className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-[#d4a853] to-[#e5bc6a] text-[#0f172a] rounded-full font-semibold text-sm sm:text-base shadow-lg shadow-[#d4a853]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[#d4a853]/40 hover:scale-105 hover:-translate-y-0.5"
                 >
-                  Find Your Chabad House
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
+                  <span>Chabad Houses</span>
+                  <span className="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 bg-[#0f172a]/10 rounded-full transition-all duration-500 group-hover:bg-[#0f172a]/20 group-hover:translate-x-1">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
+                </Link>
+                <Link
+                  href="/headquarters"
+                  className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-8 py-3 sm:py-4 bg-white/5 text-white rounded-full font-semibold text-sm sm:text-base border border-white/20 backdrop-blur-sm transition-all duration-500 hover:bg-white hover:text-[#0f172a] hover:border-white hover:shadow-xl hover:shadow-white/20 hover:scale-105 hover:-translate-y-0.5"
+                >
+                  <span>Headquarters</span>
+                  <span className="flex items-center justify-center w-6 h-6 sm:w-8 sm:h-8 bg-white/10 rounded-full transition-all duration-500 group-hover:bg-[#0f172a]/10 group-hover:translate-x-1">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
                 </Link>
               </div>
             </div>
@@ -131,12 +188,30 @@ export default function HomePageClient({ stats, teamMembers, galleryImages, hero
                     — The Rebbe, at the 1955 launch of LYO
                   </cite>
                 </blockquote>
-                <Link
-                  href="/directory"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#0f172a] text-white rounded-lg font-medium hover:bg-[#1e293b] transition-colors"
-                >
-                  Find Your Chabad House
-                </Link>
+                <div className="flex gap-3 sm:gap-4">
+                  <Link
+                    href="/directory"
+                    className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-7 py-3 sm:py-3.5 bg-gradient-to-r from-[#0f172a] to-[#1e293b] text-white rounded-full font-semibold text-sm sm:text-base shadow-lg shadow-[#0f172a]/20 transition-all duration-500 hover:shadow-xl hover:shadow-[#0f172a]/30 hover:scale-105 hover:-translate-y-0.5"
+                  >
+                    <span>Chabad Houses</span>
+                    <span className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 bg-white/10 rounded-full transition-all duration-500 group-hover:bg-white/20 group-hover:translate-x-1">
+                      <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </Link>
+                  <Link
+                    href="/headquarters"
+                    className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-7 py-3 sm:py-3.5 bg-transparent text-[#0f172a] rounded-full font-semibold text-sm sm:text-base border-2 border-[#0f172a]/20 transition-all duration-500 hover:bg-[#0f172a] hover:text-white hover:border-[#0f172a] hover:shadow-xl hover:shadow-[#0f172a]/20 hover:scale-105 hover:-translate-y-0.5"
+                  >
+                    <span>Headquarters</span>
+                    <span className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 bg-[#0f172a]/10 rounded-full transition-all duration-500 group-hover:bg-white/20 group-hover:translate-x-1">
+                      <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </span>
+                  </Link>
+                </div>
               </AnimatedSection>
               <AnimatedSection direction="slideRight" delay={200} skipPreloaderDelay>
                 <div className="relative">
@@ -154,7 +229,7 @@ export default function HomePageClient({ stats, teamMembers, galleryImages, hero
           </div>
         </section>
 
-        {/* Programs Section */}
+        {/* Programs Section - Dynamic from DB */}
         <section className="py-24 bg-[#fafaf9]">
           <div className="max-w-6xl mx-auto px-4">
             <AnimatedSection className="text-center max-w-2xl mx-auto mb-16" direction="up" skipPreloaderDelay>
@@ -164,83 +239,29 @@ export default function HomePageClient({ stats, teamMembers, galleryImages, hero
               <h2 className="font-display text-4xl md:text-5xl font-semibold text-[#0f172a] mb-4">
                 Programs &amp; Services
               </h2>
-              <p className="text-lg text-gray-600 mb-6">
+              <p className="text-lg text-gray-600">
                 From youth programs to senior services, every Chabad House offers a full range of
                 Jewish programming for the entire community.
               </p>
-              <Link
-                href="/services"
-                className="inline-flex items-center gap-2 text-[#d4a853] font-medium hover:text-[#b8943f] transition-colors"
-              >
-                View All Services
-                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
             </AnimatedSection>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Youth Programs */}
-              <AnimatedSection delay={0} direction="slideLeft" skipPreloaderDelay>
-                <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all h-full">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-2xl flex items-center justify-center mb-6">
-                    <svg className="w-8 h-8 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {services.map((service, index) => (
+                <AnimatedSection
+                  key={service.id}
+                  delay={index * 100}
+                  direction={index % 2 === 0 ? 'slideLeft' : 'slideRight'}
+                  skipPreloaderDelay
+                >
+                  <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all h-full">
+                    <div className="w-16 h-16 bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-2xl flex items-center justify-center mb-6 text-[#d4a853]">
+                      {service.icon && iconMap[service.icon]}
+                    </div>
+                    <h3 className="text-xl font-semibold text-[#0f172a] mb-3">{service.name}</h3>
+                    <p className="text-gray-600">{service.description}</p>
                   </div>
-                  <h3 className="text-xl font-semibold text-[#0f172a] mb-3">Youth Programs</h3>
-                  <p className="text-gray-600">
-                    Tzivos Hashem groups for children, Hebrew Schools, and Cteens for teenagers foster a strong foundation in Jewish learning.
-                  </p>
-                </div>
-              </AnimatedSection>
-
-              {/* Torah Education */}
-              <AnimatedSection delay={100} direction="slideRight" skipPreloaderDelay>
-                <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all h-full">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-2xl flex items-center justify-center mb-6">
-                    <svg className="w-8 h-8 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-[#0f172a] mb-3">Torah Education</h3>
-                  <p className="text-gray-600">
-                    Extensive formal and informal educational opportunities including JLI classes for Jews of all ages and backgrounds.
-                  </p>
-                </div>
-              </AnimatedSection>
-
-              {/* Campus Outreach */}
-              <AnimatedSection delay={200} direction="slideLeft" skipPreloaderDelay>
-                <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all h-full">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-2xl flex items-center justify-center mb-6">
-                    <svg className="w-8 h-8 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-[#0f172a] mb-3">Campus Outreach</h3>
-                  <p className="text-gray-600">
-                    Chabad Houses on over 50 college campuses provide a &ldquo;home away from home&rdquo; for Jewish students.
-                  </p>
-                </div>
-              </AnimatedSection>
-
-              {/* Holiday Events */}
-              <AnimatedSection delay={300} direction="slideRight" skipPreloaderDelay>
-                <div className="bg-white rounded-xl p-8 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all h-full">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#0f172a] to-[#1e293b] rounded-2xl flex items-center justify-center mb-6">
-                    <svg className="w-8 h-8 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-[#0f172a] mb-3">Community Events</h3>
-                  <p className="text-gray-600">
-                    Major public events like the annual Menorah lighting at Columbus Circle attract tens of thousands.
-                  </p>
-                </div>
-              </AnimatedSection>
+                </AnimatedSection>
+              ))}
             </div>
           </div>
         </section>
@@ -279,10 +300,34 @@ export default function HomePageClient({ stats, teamMembers, galleryImages, hero
                     we know only too well we still have much work to do in order to fulfill the Rebbe&apos;s goal of
                     bringing about the Messianic Era, may it be quickly in our days.
                   </p>
-                  <p className="text-xl text-[#d4a853] font-medium">
-                    Our hope is that you will use this site to find your local Chabad House and your local Chabad
-                    Rabbi and Rebbetzin and get in touch with them.
+                  <p className="text-xl text-[#d4a853] font-medium mb-8">
+                    Our hope is that you will use this portal site to find your local Chabad House, Chabad program,
+                    or your local Chabad Rabbi and Rebbetzin, to get in touch with the vibrant Judaism that Chabad offers you.
                   </p>
+                  <div className="flex gap-3 sm:gap-4">
+                    <Link
+                      href="/directory"
+                      className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-7 py-3 sm:py-3.5 bg-gradient-to-r from-[#d4a853] to-[#e5bc6a] text-[#0f172a] rounded-full font-semibold text-sm sm:text-base shadow-lg shadow-[#d4a853]/30 transition-all duration-500 hover:shadow-xl hover:shadow-[#d4a853]/40 hover:scale-105 hover:-translate-y-0.5"
+                    >
+                      <span>Chabad Houses</span>
+                      <span className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 bg-[#0f172a]/10 rounded-full transition-all duration-500 group-hover:bg-[#0f172a]/20 group-hover:translate-x-1">
+                        <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                    </Link>
+                    <Link
+                      href="/headquarters"
+                      className="group relative inline-flex items-center gap-2 sm:gap-3 px-5 sm:px-7 py-3 sm:py-3.5 bg-transparent text-[#d4a853] rounded-full font-semibold text-sm sm:text-base border-2 border-[#d4a853]/40 transition-all duration-500 hover:bg-[#d4a853] hover:text-[#0f172a] hover:border-[#d4a853] hover:shadow-xl hover:shadow-[#d4a853]/30 hover:scale-105 hover:-translate-y-0.5"
+                    >
+                      <span>Headquarters</span>
+                      <span className="flex items-center justify-center w-6 h-6 sm:w-7 sm:h-7 bg-[#d4a853]/20 rounded-full transition-all duration-500 group-hover:bg-[#0f172a]/20 group-hover:translate-x-1">
+                        <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </span>
+                    </Link>
+                  </div>
                 </div>
               </div>
             </div>

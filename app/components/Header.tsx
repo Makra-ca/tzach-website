@@ -62,6 +62,7 @@ export default function Header() {
             <span className="relative z-10">Colleges</span>
             <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
           </Link>
+          {/* Services link commented out - content moved to homepage
           <Link
             href="/services"
             className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
@@ -69,6 +70,7 @@ export default function Header() {
             <span className="relative z-10">Services</span>
             <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
           </Link>
+          */}
           <Link
             href="/headquarters"
             className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
@@ -174,6 +176,7 @@ export default function Header() {
             Colleges
           </Link>
 
+          {/* Services link commented out - content moved to homepage
           <Link
             href="/services"
             onClick={closeMenu}
@@ -184,6 +187,7 @@ export default function Header() {
           >
             Services
           </Link>
+          */}
 
           <Link
             href="/headquarters"
@@ -191,7 +195,7 @@ export default function Header() {
             className={`text-3xl font-semibold text-white hover:text-[#d4a853] transition-all duration-500 py-3 ${
               mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
-            style={{ transitionDelay: '350ms' }}
+            style={{ transitionDelay: '300ms' }}
           >
             Headquarters
           </Link>

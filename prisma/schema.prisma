@@ -21,6 +21,8 @@ model ChabadHouse {
   zip         String?
   county      String?
   country     String   @default("USA")
+  lat         Float?   // latitude for distance calc
+  lng         Float?   // longitude for distance calc
   yearEstablished Int?
   type        String?  // community, campus, etc.
   createdAt   DateTime @default(now())
@@ -29,6 +31,7 @@ model ChabadHouse {
   @@index([state])
   @@index([county])
   @@index([city])
+  @@index([zip])
 }
 
 model College {

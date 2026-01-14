@@ -593,12 +593,14 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
         throw new Error(data.error || 'Failed to save')
       }
 
+      const isUpdate = !!editingId
       router.refresh()
       handleCancelHeadquarters()
 
       const hqRes = await fetch('/api/admin/headquarters')
       const hqData = await hqRes.json()
       setHeadquarters(hqData)
+      showToast(isUpdate ? 'Program updated successfully' : 'Program created successfully', 'success')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to save')
     } finally {

@@ -57,15 +57,71 @@ function AnimatedCard({ children, delay }: { children: React.ReactNode; delay: n
   )
 }
 
+interface NearbyHouse extends ChabadHouse {
+  distance: number
+}
+
 export default function DirectoryClient({ houses, filters }: Props) {
   const [search, setSearch] = useState('')
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null)
+  const [zipSearch, setZipSearch] = useState('')
+  const [nearbyHouses, setNearbyHouses] = useState<NearbyHouse[] | null>(null)
+  const [nearbyLoading, setNearbyLoading] = useState(false)
+  const [nearbyError, setNearbyError] = useState('')
+
+  // Search by zip code
+  const handleZipSearch = async () => {
+    const zip = zipSearch.trim()
+    if (!zip) {
+      setNearbyHouses(null)
+      setNearbyError('')
+      return
+    }
+
+    // Validate zip format (5 digits)
+    if (!/^\d{5}$/.test(zip)) {
+      setNearbyError('Enter a valid 5-digit zip code')
+      return
+    }
+
+    setNearbyLoading(true)
+    setNearbyError('')
+
+    try {
+      const res = await fetch(`/api/nearby?zip=${zip}&radius=5`)
+      const data = await res.json()
+
+      if (!res.ok) {
+        setNearbyError(data.error || 'Failed to search')
+        setNearbyHouses(null)
+      } else {
+        setNearbyHouses(data.houses)
+        if (data.houses.length === 0) {
+          setNearbyError('No Chabad Houses found within 5 miles')
+        }
+      }
+    } catch {
+      setNearbyError('Failed to search. Please try again.')
+      setNearbyHouses(null)
+    } finally {
+      setNearbyLoading(false)
+    }
+  }
+
+  const clearZipSearch = () => {
+    setZipSearch('')
+    setNearbyHouses(null)
+    setNearbyError('')
+  }
+
+  // Use nearby houses as base when zip filter is active, otherwise use all houses
+  const baseHouses = nearbyHouses ?? houses
 
   const filteredHouses = useMemo(() => {
     // Trim and normalize search query
     const query = search.trim().toLowerCase()
 
-    return houses.filter(house => {
+    return baseHouses.filter(house => {
       // Search filter
       if (query) {
         // Split into words for multi-word search
@@ -96,15 +152,18 @@ export default function DirectoryClient({ houses, filters }: Props) {
       }
       return true
     })
-  }, [houses, search, selectedCounty])
+  }, [baseHouses, search, selectedCounty])
+
+  // Type for houses that may have distance
+  type HouseWithOptionalDistance = ChabadHouse & { distance?: number }
 
   // Group by county
   const grouped = useMemo(() => {
-    const groups: Record<string, ChabadHouse[]> = {}
+    const groups: Record<string, HouseWithOptionalDistance[]> = {}
     for (const house of filteredHouses) {
       const key = house.county || 'Other'
       if (!groups[key]) groups[key] = []
-      groups[key].push(house)
+      groups[key].push(house as HouseWithOptionalDistance)
     }
     // Sort by count
     return Object.entries(groups).sort((a, b) => b[1].length - a[1].length)
@@ -114,19 +173,54 @@ export default function DirectoryClient({ houses, filters }: Props) {
     <div>
       {/* Search and Filters */}
       <div className="sticky top-0 bg-white z-10 pb-6 pt-2 -mt-2">
-        {/* Search */}
-        <div className="relative mb-6">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by name, rabbi, or city..."
-            className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-transparent"
-          />
-          <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
+        {/* Search Row */}
+        <div className="flex gap-3 mb-6">
+          {/* Main Search */}
+          <div className="relative flex-1">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by name, rabbi, or city..."
+              className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-transparent"
+            />
+            <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+
+          {/* Zip Code Search */}
+          <div className="flex gap-2">
+            <div className="relative">
+              <input
+                type="text"
+                value={zipSearch}
+                onChange={(e) => setZipSearch(e.target.value.replace(/\D/g, '').slice(0, 5))}
+                onKeyDown={(e) => e.key === 'Enter' && handleZipSearch()}
+                placeholder="Zip code"
+                className="w-28 px-3 py-3 pl-9 bg-gray-50 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-transparent"
+                maxLength={5}
+              />
+              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              </svg>
+            </div>
+            <button
+              onClick={handleZipSearch}
+              disabled={nearbyLoading || zipSearch.length < 5}
+              className="px-4 py-2 bg-[#0f172a] text-white font-medium rounded-lg hover:bg-[#1e293b] transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
+            >
+              {nearbyLoading ? '...' : 'Find Nearby'}
+            </button>
+          </div>
         </div>
+
+        {/* Zip Search Error */}
+        {nearbyError && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+            {nearbyError}
+          </div>
+        )}
 
         {/* County Filter Tabs */}
         <div>
@@ -165,15 +259,34 @@ export default function DirectoryClient({ houses, filters }: Props) {
       </div>
 
       {/* Results Count */}
-      <div className="mb-6 text-sm text-gray-500">
-        {filteredHouses.length === houses.length ? (
-          <span>Showing all {houses.length} Chabad Houses</span>
-        ) : (
-          <span>
-            Showing {filteredHouses.length} of {houses.length}
-            {search && <span> matching "{search}"</span>}
-            {selectedCounty && <span> in {selectedCounty}</span>}
-          </span>
+      <div className="mb-6 flex items-center justify-between">
+        <div className="text-sm text-gray-500">
+          {nearbyHouses ? (
+            <span>
+              Showing {filteredHouses.length} Chabad House{filteredHouses.length !== 1 ? 's' : ''} within 5 miles of {zipSearch}
+              {search && <span> matching "{search}"</span>}
+              {selectedCounty && <span> in {selectedCounty}</span>}
+            </span>
+          ) : filteredHouses.length === houses.length ? (
+            <span>Showing all {houses.length} Chabad Houses</span>
+          ) : (
+            <span>
+              Showing {filteredHouses.length} of {houses.length}
+              {search && <span> matching "{search}"</span>}
+              {selectedCounty && <span> in {selectedCounty}</span>}
+            </span>
+          )}
+        </div>
+        {nearbyHouses && (
+          <button
+            onClick={clearZipSearch}
+            className="text-sm text-[#d4a853] hover:text-[#c49743] font-medium flex items-center gap-1"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            Clear zip filter
+          </button>
         )}
       </div>
 
@@ -215,9 +328,16 @@ export default function DirectoryClient({ houses, filters }: Props) {
   )
 }
 
-function HouseCard({ house }: { house: ChabadHouse }) {
+function HouseCard({ house }: { house: ChabadHouse & { distance?: number } }) {
   return (
-    <div className="card-hover bg-white border border-gray-200 rounded-xl p-5">
+    <div className={`card-hover bg-white rounded-xl p-5 relative ${house.distance !== undefined ? 'border-2 border-[#d4a853]' : 'border border-gray-200'}`}>
+      {/* Distance Badge */}
+      {house.distance !== undefined && (
+        <div className="absolute -top-2 -right-2 bg-[#d4a853] text-[#0f172a] text-xs font-bold px-2 py-1 rounded-full">
+          {house.distance.toFixed(1)} mi
+        </div>
+      )}
+
       {/* Rabbi Name */}
       {house.rabbiName && (
         <p className="font-semibold text-gray-900 mb-1">

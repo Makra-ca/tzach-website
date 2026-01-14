@@ -45,11 +45,18 @@ async function getHeroImages() {
   }))
 }
 
+async function getServices() {
+  return prisma.service.findMany({
+    orderBy: { order: 'asc' }
+  })
+}
+
 export default async function Home() {
   const stats = await getStats()
   const teamMembers = await getTeamMembers()
   const galleryImages = await getGalleryImages()
   const heroImages = await getHeroImages()
+  const services = await getServices()
 
   return (
     <HomePageClient
@@ -57,6 +64,7 @@ export default async function Home() {
       teamMembers={teamMembers}
       galleryImages={galleryImages}
       heroImages={heroImages}
+      services={services}
     />
   )
 }
