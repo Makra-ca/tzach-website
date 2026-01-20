@@ -95,6 +95,9 @@ export default function HomePageClient({ stats, teamMembers, galleryImages, hero
               <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold mb-6 leading-[1.1]">
                 Bringing Jewish Life to Every Jew
               </h1>
+              <p className="text-xl text-gray-300 mb-6 leading-relaxed">
+                It was over 70 years ago, during a public gathering, when the Lubavitcher Rebbe, Rabbi Menachem Mendel Schneerson, established the Lubavitch Youth Organization. Since then it has grown from humble beginnings to become a dynamic force in Crown Heights and the eight county NYC Metro area.
+              </p>
               <p className="text-xl text-gray-300 mb-10 leading-relaxed">
                 For 70 years, LYO has connected thousands of families across the NYC Metro area
                 with vibrant Jewish community, education, and celebration.
