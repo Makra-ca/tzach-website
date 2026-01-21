@@ -104,10 +104,10 @@ export default function HeadquartersPageClient({ programs, heroImages, teamMembe
             <h2 className="font-display text-4xl md:text-5xl font-semibold text-[#0f172a] text-center mb-12">Who We Are</h2>
           </AnimatedSection>
 
-          {/* Directors - Rabbi Kasriel & Rabbi Shlomo Friedman */}
+          {/* Under Their Supervision - Rabbi Kasriel & Rabbi Shlomo Friedman */}
           <div className="mb-12">
             <AnimatedSection skipPreloaderDelay>
-              <h3 className="text-xl font-bold text-gray-700 mb-6 text-center">Directors</h3>
+              <h3 className="text-xl font-bold text-gray-700 mb-6 text-center">Under Their Supervision</h3>
             </AnimatedSection>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
               <AnimatedSection delay={0} direction="slideLeft" skipPreloaderDelay>
