@@ -27,6 +27,8 @@ export default function Preloader() {
       sessionStorage.getItem(PRELOADER_SESSION_KEY) === 'true'
 
     if (shouldSkip) {
+      // Add class here (after navigation completes) to trigger site content visibility
+      document.documentElement.classList.add('preloader-skip')
       setShow(false)
       return
     }
@@ -36,13 +38,11 @@ export default function Preloader() {
     if (isNavigating) return // Prevent double clicks
 
     setIsNavigating(true)
-    // Mark as shown for this session
+    // Mark as shown for this session (so destination page knows to skip preloader)
     sessionStorage.setItem(PRELOADER_SESSION_KEY, 'true')
-    // Add class to document - CSS will hide preloader and show site content
-    document.documentElement.classList.add('preloader-skip')
-    // Navigate immediately - content is hidden by CSS until preloader-skip is added
+    // Don't add preloader-skip class here - let the useEffect add it after navigation
+    // This keeps the preloader visible until the new page loads
     router.push(path)
-    setShow(false)
   }
 
   if (!show) return null
