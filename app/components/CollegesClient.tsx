@@ -91,9 +91,20 @@ export default function CollegesClient({ colleges, houses }: Props) {
 
   return (
     <div>
+      {/* Contact Tzach Notice */}
+      <div className="mb-6 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+        <p className="text-sm text-gray-600 leading-relaxed">
+          Looking for Jewish resources at a campus? Contact Tzach at{' '}
+          <a href="tel:7189531000" className="text-[#0f172a] font-semibold hover:text-blue-600 transition-colors">
+            718-953-1000
+          </a>{' '}
+          for more information.
+        </p>
+      </div>
+
       {/* Stats Bar */}
       <div className="mb-8">
-        <div className="bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] rounded-xl p-5 text-white inline-flex">
+        <div className="bg-gradient-to-br from-[#0f172a] to-[#1e3a5f] rounded-xl p-5 text-white inline-flex shadow-lg">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
               <GraduationCapIcon className="w-5 h-5" />
@@ -107,14 +118,14 @@ export default function CollegesClient({ colleges, houses }: Props) {
       </div>
 
       {/* Search */}
-      <div className="sticky top-0 bg-white z-10 pb-6 pt-2 -mt-2">
+      <div className="sticky top-0 z-10 pb-6 pt-2 -mt-2 bg-gradient-to-b from-white via-white to-transparent">
         <div className="relative">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search colleges..."
-            className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-transparent"
+            className="w-full px-4 py-3 pl-11 bg-white border border-gray-200 rounded-xl text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
           />
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -137,7 +148,7 @@ export default function CollegesClient({ colleges, houses }: Props) {
       {/* Results */}
       {filteredColleges.length === 0 ? (
         <div className="text-center py-16">
-          <div className="text-gray-400 mb-4">
+          <div className="text-gray-300 mb-4">
             <GraduationCapIcon className="w-16 h-16 mx-auto" />
           </div>
           <p className="text-gray-600 text-lg">No colleges found</p>
@@ -221,35 +232,29 @@ export default function CollegesClient({ colleges, houses }: Props) {
                       {college.shaliachName && (
                         <p className="text-lg font-semibold text-gray-900 mb-3">{college.shaliachName}</p>
                       )}
-                      <div className="flex flex-wrap gap-2">
+                      <div className="space-y-1 mt-2">
                         {college.shaliachPhone && (
-                          <a
-                            href={`tel:${college.shaliachPhone}`}
-                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                             </svg>
-                            {formatPhone(college.shaliachPhone)}
-                          </a>
+                            <a href={`tel:${college.shaliachPhone.replace(/\D/g, '')}`} className="hover:text-[#d4a853] transition-colors">{formatPhone(college.shaliachPhone)}</a>
+                          </div>
                         )}
                         {college.shaliachEmail && (
-                          <a
-                            href={`mailto:${college.shaliachEmail}`}
-                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                             </svg>
-                            Email
-                          </a>
+                            <a href={`mailto:${college.shaliachEmail}`} className="hover:text-[#d4a853] transition-colors">{college.shaliachEmail}</a>
+                          </div>
                         )}
                         {college.shaliachWebsite && (
                           <a
                             href={college.shaliachWebsite}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-white bg-[#0f172a] rounded-lg hover:bg-[#1e293b] transition-colors shadow-sm"
+                            className="inline-flex items-center gap-1.5 mt-2 text-sm font-medium text-[#0f172a] hover:text-[#d4a853] transition-colors"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -275,24 +280,21 @@ export default function CollegesClient({ colleges, houses }: Props) {
                         <p className="text-sm text-gray-500 mt-0.5">{linkedHouse.city}, {linkedHouse.state}</p>
                       )}
 
-                      <div className="flex flex-wrap gap-2 mt-3">
+                      <div className="space-y-1 mt-3">
                         {linkedHouse.phone && (
-                          <a
-                            href={`tel:${linkedHouse.phone}`}
-                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-gray-700 bg-white rounded-lg hover:bg-gray-50 transition-colors shadow-sm"
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <div className="flex items-center gap-2 text-sm text-gray-600">
+                            <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                             </svg>
-                            {formatPhone(linkedHouse.phone)}
-                          </a>
+                            <a href={`tel:${linkedHouse.phone.replace(/\D/g, '')}`} className="hover:text-[#d4a853] transition-colors">{formatPhone(linkedHouse.phone)}</a>
+                          </div>
                         )}
                         {linkedHouse.website && (
                           <a
                             href={linkedHouse.website}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-white bg-[#0f172a] rounded-lg hover:bg-[#1e293b] transition-colors shadow-sm"
+                            className="inline-flex items-center gap-1.5 mt-2 text-sm font-medium text-[#0f172a] hover:text-[#d4a853] transition-colors"
                           >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -304,20 +306,6 @@ export default function CollegesClient({ colleges, houses }: Props) {
                     </div>
                   )}
 
-                  {/* No contact info */}
-                  {!college.hasShaliach && !linkedHouse && !college.phone && !college.email && (
-                    <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-gray-200 text-gray-600 text-xs font-medium rounded-full">
-                          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                          </svg>
-                          Contact Tzach
-                        </span>
-                      </div>
-                      <p className="text-sm text-gray-500">Looking for Jewish resources at this campus? Reach out to us.</p>
-                    </div>
-                  )}
                 </div>
               </div>
               </AnimatedCard>

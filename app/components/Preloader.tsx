@@ -106,15 +106,20 @@ export default function Preloader() {
               </p>
               <p className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed">
                 Today&apos;s LYO, with over 212+ shluchim couples and 140 centers, is responsible for the largest
-                Jewish population center outside of Israel. We represent an important part of the vast network
-                of over 3,500 Chabad institutions directed by thousands of full-time emissary families across
-                the globe, dedicated to the welfare and spiritual needs of the Jewish people.
+                Jewish population center outside of Israel.
               </p>
               <p className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed">
                 As we celebrate over seven decades of reaching out to the Jewish community in the NYC Metro area,
                 we know only too well we still have much work to do in order to fulfill the Rebbe&apos;s goal of
                 bringing about the Messianic Era, may it be quickly in our days.
               </p>
+              {/* Commented out per request:
+              <p className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed">
+                We represent an important part of the vast network of over 3,500 Chabad institutions directed
+                by thousands of full-time emissary families across the globe, dedicated to the welfare and
+                spiritual needs of the Jewish people.
+              </p>
+              */}
               <p className="text-[#d4a853] text-xs sm:text-sm md:text-base leading-relaxed font-medium">
                 Our hope is that you will use this portal site to find your local Chabad House, Chabad program,
                 or your local Chabad Rabbi and Rebbetzin, to get in touch with the vibrant Judaism that Chabad offers you.

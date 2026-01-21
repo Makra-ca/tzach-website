@@ -73,15 +73,27 @@ export default function HeadquartersClient({ programs }: Props) {
 
   return (
     <div>
+      {/* Supervision Notice */}
+      <div className="mb-6 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
+        <p className="text-sm text-gray-600 leading-relaxed">
+          All the programs and activities below are under supervision of Rabbi Kasriel and Rabbi Shlomo Friedman,
+          unless otherwise noted. Please call{' '}
+          <a href="tel:7189531000" className="text-[#0f172a] font-semibold hover:text-blue-600 transition-colors">
+            718-953-1000
+          </a>{' '}
+          for more information.
+        </p>
+      </div>
+
       {/* Search */}
-      <div className="sticky top-0 bg-white z-10 pb-6 pt-2 -mt-2">
+      <div className="sticky top-0 z-10 pb-6 pt-2 -mt-2 bg-gradient-to-b from-white via-white to-transparent">
         <div className="relative">
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search programs or contact person..."
-            className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-transparent"
+            className="w-full px-4 py-3 pl-11 bg-white border border-gray-200 rounded-xl text-base text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
           />
           <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -160,27 +172,7 @@ function ProgramCard({ program }: { program: HeadquartersProgram }) {
             <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
             </svg>
-            <a
-              href={`tel:${program.phone.replace(/\D/g, '')}`}
-              className="hover:text-[#d4a853] transition-colors"
-            >
-              {formatPhone(program.phone)}
-            </a>
-          </div>
-        )}
-
-        {/* Call Button */}
-        {program.phone && (
-          <div className="mt-4 pt-4 border-t border-gray-100">
-            <a
-              href={`tel:${program.phone.replace(/\D/g, '')}`}
-              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium text-white bg-[#0f172a] rounded-lg hover:bg-[#1e293b] transition-colors"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              Call
-            </a>
+            <a href={`tel:${program.phone.replace(/\D/g, '')}`} className="hover:text-[#d4a853] transition-colors">{formatPhone(program.phone)}</a>
           </div>
         )}
       </div>

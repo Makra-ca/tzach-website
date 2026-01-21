@@ -19,7 +19,7 @@ interface Props {
 
 export default function CollegesPageClient({ colleges, houses, heroImages }: Props) {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       {/* Hero with Carousel */}
       <section className="relative h-[85vh] min-h-[600px] overflow-hidden">
         <HeroCarousel images={heroImages} />
@@ -54,8 +54,32 @@ export default function CollegesPageClient({ colleges, houses, heroImages }: Pro
       </section>
 
       {/* Directory */}
-      <section className="py-12">
-        <div className="max-w-6xl mx-auto px-4">
+      <section className="py-16 relative overflow-hidden bg-gradient-to-br from-blue-50 via-slate-50 to-indigo-50">
+        {/* Large blue glow - top left */}
+        <div
+          className="absolute -top-32 -left-32 w-[700px] h-[700px] rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.25) 0%, rgba(59, 130, 246, 0.1) 40%, transparent 70%)',
+          }}
+        />
+
+        {/* Indigo glow - bottom right */}
+        <div
+          className="absolute -bottom-40 -right-40 w-[800px] h-[800px] rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(99, 102, 241, 0.2) 0%, rgba(99, 102, 241, 0.08) 40%, transparent 70%)',
+          }}
+        />
+
+        {/* Center accent */}
+        <div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full pointer-events-none"
+          style={{
+            background: 'radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 60%)',
+          }}
+        />
+
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
           <AnimatedSection delay={100} direction="up" skipPreloaderDelay triggerOnLoad>
             <CollegesClient colleges={colleges} houses={houses} />
           </AnimatedSection>
