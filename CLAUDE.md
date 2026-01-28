@@ -72,3 +72,11 @@ JWT_SECRET=...                 # Optional, has default for dev
 - Path alias: `@/*` maps to project root
 - Excel data files in `/public` are imported during seed
 - Admin dashboard uses tabs for Chabad Houses vs Colleges management
+
+## Recent Changes
+
+### 2026-01-28: Preloader responsive layout improvements
+- **Files modified**: `app/components/Preloader.tsx`
+- Changed side-by-side layout breakpoint from `lg` (1024px) to `sm` (640px) so tablet-sized screens show Rebbe image alongside content
+- Added scroll indicator with IntersectionObserver that appears when CTA buttons are below the fold
+- Indicator positioned at center dividing line between image and content sections
