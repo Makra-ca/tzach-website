@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Image from 'next/image'
 
@@ -11,6 +11,9 @@ export default function Preloader() {
   const pathname = usePathname()
   const [show, setShow] = useState(true)
   const [isNavigating, setIsNavigating] = useState(false)
+  const [showScrollIndicator, setShowScrollIndicator] = useState(false)
+  const buttonsRef = useRef<HTMLDivElement>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     // Skip preloader on admin routes
@@ -33,6 +36,28 @@ export default function Preloader() {
       return
     }
   }, [pathname])
+
+  // Detect if buttons are visible in viewport
+  useEffect(() => {
+    if (!show) return
+
+    const buttons = buttonsRef.current
+    const scrollContainer = scrollContainerRef.current
+    if (!buttons || !scrollContainer) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowScrollIndicator(!entry.isIntersecting)
+      },
+      {
+        root: scrollContainer,
+        threshold: 0.5,
+      }
+    )
+
+    observer.observe(buttons)
+    return () => observer.disconnect()
+  }, [show])
 
   const handleNavigate = (path: string) => {
     if (isNavigating) return // Prevent double clicks
@@ -59,23 +84,23 @@ export default function Preloader() {
       </div>
 
       {/* Content Layout */}
-      <div className="relative z-10 flex flex-col lg:flex-row flex-1 overflow-hidden">
+      <div className="relative z-10 flex flex-col sm:flex-row flex-1 overflow-hidden">
         {/* Left Side - Rebbe Image */}
-        <div className="relative w-full lg:w-1/2 h-[22vh] sm:h-[28vh] lg:h-full shrink-0">
+        <div className="relative w-full sm:w-1/2 h-[35vh] sm:h-full shrink-0">
           <Image
             src="/rebbe (Large).jpg"
             alt="The Rebbe, Rabbi Menachem Mendel Schneerson"
             fill
             className="object-cover object-[center_20%]"
             priority
-            sizes="(max-width: 1024px) 100vw, 50vw"
+            sizes="(max-width: 640px) 100vw, 50vw"
           />
           {/* Gradient overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0f172a] lg:bg-gradient-to-r lg:from-transparent lg:to-[#0f172a]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#0f172a] sm:bg-gradient-to-r sm:from-transparent sm:to-[#0f172a]" />
         </div>
 
         {/* Right Side - Content */}
-        <div className="flex-1 flex flex-col px-4 sm:px-8 lg:px-12 xl:px-16 py-4 sm:py-6 lg:py-8 overflow-y-auto">
+        <div ref={scrollContainerRef} className="flex-1 flex flex-col px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 py-4 sm:py-6 lg:py-8 overflow-y-auto relative">
           <div className="max-w-xl my-auto">
             {/* LYO Branding with Logo */}
             <div className="mb-4 sm:mb-6 md:mb-8 flex items-center gap-3 sm:gap-4">
@@ -127,7 +152,7 @@ export default function Preloader() {
             </div>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
+            <div ref={buttonsRef} className="flex flex-wrap gap-2 sm:gap-3 md:gap-4">
               <button
                 onClick={() => handleNavigate('/directory')}
                 disabled={isNavigating}
@@ -154,7 +179,20 @@ export default function Preloader() {
               </button>
             </div>
           </div>
+
         </div>
+
+        {/* Scroll Indicator - centered at the dividing line between image and content */}
+        {showScrollIndicator && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none z-20">
+            <span className="text-white/90 text-xs font-medium tracking-wide mb-1.5 drop-shadow-lg">Scroll Down</span>
+            <div className="flex flex-col items-center animate-bounce">
+              <svg className="w-6 h-6 text-[#d4a853] drop-shadow-lg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+              </svg>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )
