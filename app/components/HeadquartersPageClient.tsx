@@ -190,6 +190,30 @@ export default function HeadquartersPageClient({ programs, heroImages, teamMembe
               </AnimatedSection>
             </div>
           </div>
+
+          {/* Past Board Members */}
+          <div className="mt-12">
+            <AnimatedSection skipPreloaderDelay>
+              <h3 className="text-xl font-bold text-gray-700 mb-6 text-center">Past Board Members</h3>
+            </AnimatedSection>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 max-w-3xl mx-auto">
+              {[
+                'Yeshua Dubrovsky',
+                'Heshka Gansbourg',
+                'Moshe Pesach Goldman',
+                'Chaim Osher Kahanov',
+                'Zelig Katzman',
+                'Chaim Meir Lieberman',
+                'Mendel Shemtov',
+              ].map((name, index) => (
+                <AnimatedSection key={name} delay={index * 50} direction={index % 2 === 0 ? 'slideLeft' : 'slideRight'} skipPreloaderDelay>
+                  <div className="bg-white rounded-lg p-4 text-center shadow-md border-t-4 border-gray-400">
+                    <h4 className="font-medium text-[#0f172a] text-sm">{name} a&quot;h</h4>
+                  </div>
+                </AnimatedSection>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
