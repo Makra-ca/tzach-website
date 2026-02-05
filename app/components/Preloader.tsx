@@ -109,7 +109,7 @@ export default function Preloader() {
                 alt="LYO Logo"
                 width={72}
                 height={72}
-                className="rounded shrink-0 w-12 h-12 sm:w-16 sm:h-16 md:w-[72px] md:h-[72px]"
+                className="rounded shrink-0 w-12 h-12 sm:w-16 sm:h-16 md:w-[72px] md:h-[72px] invert"
               />
               <div>
                 <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-0.5 sm:mb-1">

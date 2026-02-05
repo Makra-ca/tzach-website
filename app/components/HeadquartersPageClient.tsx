@@ -133,9 +133,6 @@ export default function HeadquartersPageClient({ programs, heroImages, teamMembe
 
           {/* Staff */}
           <div className="mb-12">
-            <AnimatedSection skipPreloaderDelay>
-              <h3 className="text-xl font-bold text-gray-700 mb-6 text-center">Leadership</h3>
-            </AnimatedSection>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {staff.map((member, index) => (
                 <AnimatedSection key={member.id} delay={index * 100} direction={index % 2 === 0 ? 'slideLeft' : 'slideRight'} skipPreloaderDelay>
@@ -152,7 +149,7 @@ export default function HeadquartersPageClient({ programs, heroImages, teamMembe
           </div>
 
           {/* Board */}
-          <div>
+          <div className="mb-12">
             <AnimatedSection skipPreloaderDelay>
               <h3 className="text-xl font-bold text-gray-700 mb-6 text-center">Board Members</h3>
             </AnimatedSection>
@@ -164,6 +161,33 @@ export default function HeadquartersPageClient({ programs, heroImages, teamMembe
                   </div>
                 </AnimatedSection>
               ))}
+            </div>
+          </div>
+
+          {/* Past Directors */}
+          <div>
+            <AnimatedSection skipPreloaderDelay>
+              <h3 className="text-xl font-bold text-gray-700 mb-6 text-center">In Loving Memory</h3>
+            </AnimatedSection>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
+              <AnimatedSection delay={0} direction="slideLeft" skipPreloaderDelay>
+                <div className="bg-white rounded-lg p-6 text-center shadow-md border-t-4 border-gray-400">
+                  <div className="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                    DR
+                  </div>
+                  <h4 className="font-bold text-[#0f172a]">Rabbi Dovid Raskin a&quot;h</h4>
+                  <p className="text-gray-500 text-sm">Original Director</p>
+                </div>
+              </AnimatedSection>
+              <AnimatedSection delay={100} direction="slideRight" skipPreloaderDelay>
+                <div className="bg-white rounded-lg p-6 text-center shadow-md border-t-4 border-gray-400">
+                  <div className="w-16 h-16 bg-gray-600 rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+                    SB
+                  </div>
+                  <h4 className="font-bold text-[#0f172a]">Rabbi Shmuel Butman a&quot;h</h4>
+                  <p className="text-gray-500 text-sm">Past Director</p>
+                </div>
+              </AnimatedSection>
             </div>
           </div>
         </div>

@@ -35,7 +35,7 @@ export default function Header() {
             alt="LYO Logo"
             width={72}
             height={72}
-            className="rounded"
+            className="rounded invert"
           />
           <span className="font-semibold text-lg hidden sm:block">LYO Directory</span>
         </Link>
@@ -135,7 +135,7 @@ export default function Header() {
               alt="LYO Logo"
               width={72}
               height={72}
-              className="rounded"
+              className="rounded invert"
             />
             <span className="text-sm font-medium text-white/80">LYO Directory</span>
           </Link>

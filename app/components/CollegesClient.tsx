@@ -162,7 +162,9 @@ export default function CollegesClient({ colleges, houses }: Props) {
 
             return (
               <AnimatedCard key={college.id} delay={index * 30}>
-              <div className="group card-hover bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all h-full">
+              {/* Gradient border wrapper */}
+              <div className="p-[3px] rounded-2xl bg-gradient-to-br from-[#d4a853] via-[#e5c778] to-[#d4a853] shadow-lg hover:shadow-xl hover:shadow-[#d4a853]/40 transition-all h-full">
+              <div className="group card-hover bg-white rounded-[13px] overflow-hidden h-full">
                 {/* Image Section */}
                 {hasImage ? (
                   <div className="relative h-48 bg-gradient-to-br from-[#0f172a] to-[#1e3a5f]">
@@ -307,6 +309,7 @@ export default function CollegesClient({ colleges, houses }: Props) {
                   )}
 
                 </div>
+              </div>
               </div>
               </AnimatedCard>
             )

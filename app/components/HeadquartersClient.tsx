@@ -139,10 +139,10 @@ export default function HeadquartersClient({ programs }: Props) {
 
 function ProgramCard({ program }: { program: HeadquartersProgram }) {
   return (
-    <div className="card-hover bg-white border border-gray-200 rounded-xl overflow-hidden">
+    <div className="card-hover bg-white border border-gray-200 border-l-4 border-l-[#d4a853] rounded-xl overflow-hidden">
       {/* Image */}
       {program.image && (
-        <div className="relative h-40 w-full">
+        <div className="relative aspect-[16/10] w-full">
           <Image
             src={program.image}
             alt={program.name}

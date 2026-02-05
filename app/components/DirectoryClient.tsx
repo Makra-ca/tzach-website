@@ -64,25 +64,20 @@ interface NearbyHouse extends ChabadHouse {
 export default function DirectoryClient({ houses, filters }: Props) {
   const [search, setSearch] = useState('')
   const [selectedCounty, setSelectedCounty] = useState<string | null>(null)
-  const [zipSearch, setZipSearch] = useState('')
   const [nearbyHouses, setNearbyHouses] = useState<NearbyHouse[] | null>(null)
   const [nearbyLoading, setNearbyLoading] = useState(false)
   const [nearbyError, setNearbyError] = useState('')
+  const [activeZip, setActiveZip] = useState<string | null>(null) // The zip code used for nearby search
+
+  // Check if search looks like a zip code
+  const searchTrimmed = search.trim()
+  const isZipCode = /^\d{5}$/.test(searchTrimmed)
+  const isPartialZip = /^\d{2,4}$/.test(searchTrimmed) // 2-4 digits - looks like they're typing a zip
 
   // Search by zip code
   const handleZipSearch = async () => {
-    const zip = zipSearch.trim()
-    if (!zip) {
-      setNearbyHouses(null)
-      setNearbyError('')
-      return
-    }
-
-    // Validate zip format (5 digits)
-    if (!/^\d{5}$/.test(zip)) {
-      setNearbyError('Enter a valid 5-digit zip code')
-      return
-    }
+    const zip = search.trim()
+    if (!zip || !isZipCode) return
 
     setNearbyLoading(true)
     setNearbyError('')
@@ -94,8 +89,10 @@ export default function DirectoryClient({ houses, filters }: Props) {
       if (!res.ok) {
         setNearbyError(data.error || 'Failed to search')
         setNearbyHouses(null)
+        setActiveZip(null)
       } else {
         setNearbyHouses(data.houses)
+        setActiveZip(zip)
         if (data.houses.length === 0) {
           setNearbyError('No Chabad Houses found within 5 miles')
         }
@@ -103,15 +100,17 @@ export default function DirectoryClient({ houses, filters }: Props) {
     } catch {
       setNearbyError('Failed to search. Please try again.')
       setNearbyHouses(null)
+      setActiveZip(null)
     } finally {
       setNearbyLoading(false)
     }
   }
 
   const clearZipSearch = () => {
-    setZipSearch('')
+    setSearch('')
     setNearbyHouses(null)
     setNearbyError('')
+    setActiveZip(null)
   }
 
   // Use nearby houses as base when zip filter is active, otherwise use all houses
@@ -119,10 +118,11 @@ export default function DirectoryClient({ houses, filters }: Props) {
 
   const filteredHouses = useMemo(() => {
     // Trim and normalize search query
-    const query = search.trim().toLowerCase()
+    // Don't apply text filter if nearby search is active (search field contains zip code)
+    const query = nearbyHouses ? '' : search.trim().toLowerCase()
 
     return baseHouses.filter(house => {
-      // Search filter
+      // Search filter (skip if nearby search is active)
       if (query) {
         // Split into words for multi-word search
         const searchWords = query.split(/\s+/).filter(word => word.length > 0)
@@ -152,7 +152,7 @@ export default function DirectoryClient({ houses, filters }: Props) {
       }
       return true
     })
-  }, [baseHouses, search, selectedCounty])
+  }, [baseHouses, search, selectedCounty, nearbyHouses])
 
   // Type for houses that may have distance
   type HouseWithOptionalDistance = ChabadHouse & { distance?: number }
@@ -173,46 +173,59 @@ export default function DirectoryClient({ houses, filters }: Props) {
     <div>
       {/* Search and Filters */}
       <div className="sticky top-0 bg-white z-10 pb-6 pt-2 -mt-2">
-        {/* Search Row */}
-        <div className="flex gap-3 mb-6">
-          {/* Main Search */}
-          <div className="relative flex-1">
+        {/* Search Row - Combined Search */}
+        <div className="mb-6">
+          <div className="relative">
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search by name, rabbi, or city..."
-              className="w-full px-4 py-3 pl-11 bg-gray-50 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-transparent"
+              onChange={(e) => {
+                setSearch(e.target.value)
+                // Clear nearby results if user changes search after a zip search
+                if (nearbyHouses && e.target.value !== activeZip) {
+                  setNearbyHouses(null)
+                  setActiveZip(null)
+                  setNearbyError('')
+                }
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && isZipCode && handleZipSearch()}
+              placeholder="Search by name, rabbi, city, or zip code..."
+              className="w-full px-4 py-3 pl-11 pr-36 bg-gray-50 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-transparent"
             />
             <svg className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
+            {/* Find Nearby button - appears when zip code detected */}
+            {isZipCode && !nearbyHouses && (
+              <button
+                onClick={handleZipSearch}
+                disabled={nearbyLoading}
+                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-[#0f172a] text-white text-sm font-medium rounded-md hover:bg-[#1e293b] transition-colors disabled:opacity-50 flex items-center gap-1.5"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                </svg>
+                {nearbyLoading ? 'Searching...' : 'Find Nearby'}
+              </button>
+            )}
           </div>
-
-          {/* Zip Code Search */}
-          <div className="flex gap-2">
-            <div className="relative">
-              <input
-                type="text"
-                value={zipSearch}
-                onChange={(e) => setZipSearch(e.target.value.replace(/\D/g, '').slice(0, 5))}
-                onKeyDown={(e) => e.key === 'Enter' && handleZipSearch()}
-                placeholder="Zip code"
-                className="w-28 px-3 py-3 pl-9 bg-gray-50 border border-gray-200 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-[#d4a853] focus:border-transparent"
-                maxLength={5}
-              />
-              <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          {/* Zip code hints */}
+          {isPartialZip && !nearbyHouses && (
+            <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1">
+              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               </svg>
-            </div>
-            <button
-              onClick={handleZipSearch}
-              disabled={nearbyLoading || zipSearch.length < 5}
-              className="px-4 py-2 bg-[#0f172a] text-white font-medium rounded-lg hover:bg-[#1e293b] transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
-            >
-              {nearbyLoading ? '...' : 'Find Nearby'}
-            </button>
-          </div>
+              Entering a zip code? Finish all 5 digits to search by location
+            </p>
+          )}
+          {isZipCode && !nearbyHouses && !nearbyLoading && (
+            <p className="text-xs text-[#0f172a] mt-1.5 flex items-center gap-1 font-medium">
+              <svg className="w-3.5 h-3.5 text-[#d4a853]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              Zip code ready — click "Find Nearby" or press Enter
+            </p>
+          )}
         </div>
 
         {/* Zip Search Error */}
@@ -263,8 +276,7 @@ export default function DirectoryClient({ houses, filters }: Props) {
         <div className="text-sm text-gray-500">
           {nearbyHouses ? (
             <span>
-              Showing {filteredHouses.length} Chabad House{filteredHouses.length !== 1 ? 's' : ''} within 5 miles of {zipSearch}
-              {search && <span> matching "{search}"</span>}
+              Showing {filteredHouses.length} Chabad House{filteredHouses.length !== 1 ? 's' : ''} within 5 miles of {activeZip}
               {selectedCounty && <span> in {selectedCounty}</span>}
             </span>
           ) : filteredHouses.length === houses.length ? (
