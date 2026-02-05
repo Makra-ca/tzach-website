@@ -3,7 +3,6 @@
 import { useState, useMemo, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import type { HeadquartersProgram } from '@prisma/client'
-import { formatPhone } from '@/lib/formatPhone'
 
 // Category display names and order
 const CATEGORIES = {
@@ -219,27 +218,7 @@ function ProgramCard({ program }: { program: HeadquartersProgram }) {
 
       <div className="p-5">
         {/* Program Name */}
-        <h3 className="font-semibold text-gray-900 mb-2">{program.name}</h3>
-
-        {/* Contact Person */}
-        {program.contactPerson && (
-          <div className="text-sm text-gray-600 flex items-center gap-2 mb-1">
-            <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-            </svg>
-            <span>{program.contactPerson}</span>
-          </div>
-        )}
-
-        {/* Phone */}
-        {program.phone && (
-          <div className="text-sm text-gray-600 flex items-center gap-2">
-            <svg className="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-            </svg>
-            <a href={`tel:${program.phone.replace(/\D/g, '')}`} className="hover:text-[#d4a853] transition-colors">{formatPhone(program.phone)}</a>
-          </div>
-        )}
+        <h3 className="font-semibold text-gray-900">{program.name}</h3>
       </div>
     </div>
   )
