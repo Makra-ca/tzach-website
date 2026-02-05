@@ -12,7 +12,6 @@ const CATEGORIES = {
   VISITS: 'Visits',
   PUBLICATIONS: 'Publications',
   ADDITIONAL_PROGRAMS: 'Additional Programs',
-  STANDALONE: 'Special Programs',
 } as const
 
 const CATEGORY_ORDER = [
@@ -22,7 +21,6 @@ const CATEGORY_ORDER = [
   'VISITS',
   'PUBLICATIONS',
   'ADDITIONAL_PROGRAMS',
-  'STANDALONE',
 ] as const
 
 interface Props {

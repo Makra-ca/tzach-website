@@ -205,7 +205,6 @@ const PROGRAM_CATEGORIES = [
   { value: 'VISITS', label: 'Visits' },
   { value: 'PUBLICATIONS', label: 'Publications' },
   { value: 'ADDITIONAL_PROGRAMS', label: 'Additional Programs' },
-  { value: 'STANDALONE', label: 'Special Programs' },
 ]
 
 const emptyHeadquartersForm: HeadquartersFormData = {
