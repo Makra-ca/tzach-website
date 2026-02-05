@@ -1967,6 +1967,9 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                     Program Name
                   </th>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Category
+                  </th>
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Contact Person
                   </th>
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -2002,6 +2005,16 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                     {/* Name */}
                     <td className="px-3 py-3">
                       <div className="font-medium text-gray-900">{program.name}</div>
+                    </td>
+                    {/* Category */}
+                    <td className="px-3 py-3 text-sm">
+                      {program.category ? (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#d4a853]/10 text-[#0f172a]">
+                          {PROGRAM_CATEGORIES.find(c => c.value === program.category)?.label || program.category}
+                        </span>
+                      ) : (
+                        <span className="text-gray-400">—</span>
+                      )}
                     </td>
                     {/* Contact */}
                     <td className="px-3 py-3 text-sm text-gray-500">
