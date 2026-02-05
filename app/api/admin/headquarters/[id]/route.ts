@@ -20,6 +20,7 @@ export async function PUT(
       where: { id },
       data: {
         name: data.name,
+        category: data.category || null,
         contactPerson: data.contactPerson || null,
         phone: data.phone || null,
         image: data.image || null,

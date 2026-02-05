@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
     const program = await prisma.headquartersProgram.create({
       data: {
         name: data.name,
+        category: data.category || null,
         contactPerson: data.contactPerson || null,
         phone: data.phone || null,
         image: data.image || null,

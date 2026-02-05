@@ -101,6 +101,7 @@ model HeroImage {
 model HeadquartersProgram {
   id            String   @id @default(cuid())
   name          String
+  category      String?  // MIVTZOYIM, GRAND_EVENTS, LEARNING_PROGRAMS, VISITS, PUBLICATIONS, ADDITIONAL_PROGRAMS, STANDALONE
   contactPerson String?
   phone         String?
   image         String?  // Vercel Blob URL

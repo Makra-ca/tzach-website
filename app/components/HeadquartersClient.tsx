@@ -5,6 +5,27 @@ import Image from 'next/image'
 import type { HeadquartersProgram } from '@prisma/client'
 import { formatPhone } from '@/lib/formatPhone'
 
+// Category display names and order
+const CATEGORIES = {
+  MIVTZOYIM: 'Mivtzoyim',
+  GRAND_EVENTS: 'Grand Events',
+  LEARNING_PROGRAMS: 'Learning Programs',
+  VISITS: 'Visits',
+  PUBLICATIONS: 'Publications',
+  ADDITIONAL_PROGRAMS: 'Additional Programs',
+  STANDALONE: 'Special Programs',
+} as const
+
+const CATEGORY_ORDER = [
+  'MIVTZOYIM',
+  'GRAND_EVENTS',
+  'LEARNING_PROGRAMS',
+  'VISITS',
+  'PUBLICATIONS',
+  'ADDITIONAL_PROGRAMS',
+  'STANDALONE',
+] as const
+
 interface Props {
   programs: HeadquartersProgram[]
 }
@@ -71,6 +92,34 @@ export default function HeadquartersClient({ programs }: Props) {
     })
   }, [programs, search])
 
+  // Group programs by category
+  const groupedPrograms = useMemo(() => {
+    const groups: Record<string, HeadquartersProgram[]> = {}
+
+    for (const program of filteredPrograms) {
+      const category = program.category || 'UNCATEGORIZED'
+      if (!groups[category]) groups[category] = []
+      groups[category].push(program)
+    }
+
+    // Sort each group by order
+    for (const category in groups) {
+      groups[category].sort((a, b) => a.order - b.order)
+    }
+
+    return groups
+  }, [filteredPrograms])
+
+  // Get categories in order, only including ones that have programs
+  const orderedCategories = useMemo(() => {
+    const categoriesWithPrograms = CATEGORY_ORDER.filter(cat => groupedPrograms[cat]?.length > 0)
+    // Add uncategorized at the end if it exists
+    if (groupedPrograms['UNCATEGORIZED']?.length > 0) {
+      categoriesWithPrograms.push('UNCATEGORIZED' as typeof CATEGORY_ORDER[number])
+    }
+    return categoriesWithPrograms
+  }, [groupedPrograms])
+
   return (
     <div>
       {/* Supervision Notice */}
@@ -125,11 +174,27 @@ export default function HeadquartersClient({ programs }: Props) {
           <p className="text-gray-400 text-sm mt-1">Try adjusting your search</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filteredPrograms.map((program, index) => (
-            <AnimatedCard key={program.id} delay={index * 30}>
-              <ProgramCard program={program} />
-            </AnimatedCard>
+        <div className="space-y-12">
+          {orderedCategories.map((category) => (
+            <div key={category}>
+              {/* Category Header */}
+              <div className="flex items-center gap-4 mb-6">
+                <h2 className="text-2xl font-bold text-[#0f172a] uppercase tracking-wide">
+                  {CATEGORIES[category as keyof typeof CATEGORIES] || 'Other Programs'}
+                </h2>
+                <div className="flex-1 h-px bg-[#d4a853]"></div>
+                <span className="text-sm text-gray-400">{groupedPrograms[category].length} programs</span>
+              </div>
+
+              {/* Programs Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {groupedPrograms[category].map((program, index) => (
+                  <AnimatedCard key={program.id} delay={index * 30}>
+                    <ProgramCard program={program} />
+                  </AnimatedCard>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       )}

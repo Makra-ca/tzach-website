@@ -191,13 +191,26 @@ const emptyCollegeForm: CollegeFormData = {
 
 type HeadquartersFormData = {
   name: string
+  category: string
   contactPerson: string
   phone: string
   image: string
 }
 
+const PROGRAM_CATEGORIES = [
+  { value: '', label: 'Select a category...' },
+  { value: 'MIVTZOYIM', label: 'Mivtzoyim' },
+  { value: 'GRAND_EVENTS', label: 'Grand Events' },
+  { value: 'LEARNING_PROGRAMS', label: 'Learning Programs' },
+  { value: 'VISITS', label: 'Visits' },
+  { value: 'PUBLICATIONS', label: 'Publications' },
+  { value: 'ADDITIONAL_PROGRAMS', label: 'Additional Programs' },
+  { value: 'STANDALONE', label: 'Special Programs' },
+]
+
 const emptyHeadquartersForm: HeadquartersFormData = {
   name: '',
+  category: '',
   contactPerson: '',
   phone: '',
   image: ''
@@ -523,6 +536,7 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
     setEditingId(program.id)
     setHeadquartersForm({
       name: program.name || '',
+      category: program.category || '',
       contactPerson: program.contactPerson || '',
       phone: program.phone || '',
       image: program.image || ''
@@ -1768,6 +1782,22 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
                     required
                   />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Category *
+                  </label>
+                  <select
+                    value={headquartersForm.category}
+                    onChange={(e) => setHeadquartersForm({ ...headquartersForm, category: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                    required
+                  >
+                    {PROGRAM_CATEGORIES.map(cat => (
+                      <option key={cat.value} value={cat.value}>{cat.label}</option>
+                    ))}
+                  </select>
                 </div>
 
                 <div>
