@@ -44,7 +44,7 @@ export default function HeadquartersPageClient({ programs, heroImages, teamMembe
               Programs & Activities
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              {programs.length} programs and activities serving the community
+              30+ programs and activities serving the community
               through Lubavitch Youth Organization.
             </p>
           </div>

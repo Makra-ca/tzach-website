@@ -137,7 +137,7 @@ export default function HomePageClient({ stats, galleryImages, heroImages, servi
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
               <AnimatedSection delay={0} direction="popIn">
                 <div className="font-display text-5xl font-bold text-[#d4a853] mb-2">
-                  <AnimatedCounter target={stats.houses} suffix="+" delay={300} />
+                  <AnimatedCounter target={200} suffix="+" delay={300} />
                 </div>
                 <div className="text-gray-400 uppercase tracking-wider text-sm">Shluchim Couples</div>
               </AnimatedSection>
@@ -178,7 +178,7 @@ export default function HomePageClient({ stats, galleryImages, heroImages, servi
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed mb-8">
                   The core philosophy of Chabad is to reach every single Jew with unconditional love and acceptance,
-                  regardless of their background or affiliation. Today, with over {stats.houses}+ shluchim couples and 140 centers,
+                  regardless of their background or affiliation. Today, with over 200+ shluchim couples and 140 centers,
                   LYO serves the largest Jewish population center outside of Israel.
                 </p>
                 <blockquote className="border-l-4 border-[#d4a853] pl-6 py-2 mb-8">
@@ -291,7 +291,7 @@ export default function HomePageClient({ stats, galleryImages, heroImages, servi
                 {/* Text Content */}
                 <div>
                   <p className="text-xl text-gray-300 leading-relaxed mb-6">
-                    Today&apos;s LYO, with over {stats.houses}+ shluchim couples and 140 centers, is responsible for the largest
+                    Today&apos;s LYO, with over 200+ shluchim couples and 140 centers, is responsible for the largest
                     Jewish population center outside of Israel. We represent an important part of the vast network
                     of over 3,500 Chabad institutions directed by thousands of full-time emissary families across
                     the globe, dedicated to the welfare and spiritual needs of the Jewish people.

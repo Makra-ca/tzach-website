@@ -122,8 +122,8 @@ export default function HeadquartersClient({ programs }: Props) {
       {/* Supervision Notice */}
       <div className="mb-6 p-4 bg-white border border-gray-200 rounded-xl shadow-sm">
         <p className="text-sm text-gray-600 leading-relaxed">
-          All the programs and activities below are under supervision of Rabbi Kasriel Kastel and Rabbi Shlomo Friedman,
-          unless otherwise noted. Please call{' '}
+          All the programs and activities below are under supervision of Rabbi Kasriel Kastel and Rabbi Shlomo Friedman.
+          Please call{' '}
           <a href="tel:7189531000" className="text-[#0f172a] font-semibold hover:text-blue-600 transition-colors">
             718-953-1000
           </a>{' '}

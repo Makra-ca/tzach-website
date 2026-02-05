@@ -342,7 +342,7 @@ export default function DirectoryClient({ houses, filters }: Props) {
 
 function HouseCard({ house }: { house: ChabadHouse & { distance?: number } }) {
   return (
-    <div className={`card-hover bg-white rounded-xl p-5 relative ${house.distance !== undefined ? 'border-2 border-[#d4a853]' : 'border border-gray-200'}`}>
+    <div className={`card-hover bg-white rounded-xl p-5 relative ${house.distance !== undefined ? 'border-2 border-[#d4a853]' : 'border-2 border-[#d4a853]/30'}`}>
       {/* Distance Badge */}
       {house.distance !== undefined && (
         <div className="absolute -top-2 -right-2 bg-[#d4a853] text-[#0f172a] text-xs font-bold px-2 py-1 rounded-full">
