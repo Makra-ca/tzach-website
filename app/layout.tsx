@@ -67,15 +67,14 @@ export default function RootLayout({
         {/* Site content - hidden until preloader is dismissed */}
         <div className="site-content flex flex-col min-h-screen">
           {/* Celebration Banner */}
-          <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] py-2.5 px-4">
-            <div className="max-w-6xl mx-auto flex items-center justify-between">
-              <span className="font-display text-sm md:text-base font-semibold tracking-wide">Lubavitch Youth Organization</span>
-              <p className="font-display text-sm md:text-base tracking-wide text-center flex-1">
+          <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] py-2 px-4">
+            <div className="max-w-6xl mx-auto relative flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-0">
+              <span className="font-display text-sm font-semibold tracking-wide md:absolute md:left-0">Lubavitch Youth Organization</span>
+              <p className="font-display text-xs md:text-sm tracking-wide text-center">
                 <span className="font-semibold">Celebrating 70 Years</span>
                 <span className="mx-2 opacity-60">|</span>
                 <span className="italic">Serving the Jewish Community Since 1955</span>
               </p>
-              <span className="font-display text-sm md:text-base font-semibold tracking-wide invisible">Lubavitch Youth Organization</span>
             </div>
           </div>
           <Header />
