@@ -1990,6 +1990,9 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                   <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Phone
                   </th>
+                  <th className="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Email
+                  </th>
                   <th className="px-3 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Actions
                   </th>
@@ -2038,6 +2041,10 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                     {/* Phone */}
                     <td className="px-3 py-3 text-sm text-gray-500">
                       {program.phone ? formatPhone(program.phone) : <span className="text-gray-400">—</span>}
+                    </td>
+                    {/* Email */}
+                    <td className="px-3 py-3 text-sm text-gray-500">
+                      {program.email || <span className="text-gray-400">—</span>}
                     </td>
                     {/* Actions */}
                     <td className="px-3 py-3 text-right whitespace-nowrap">
