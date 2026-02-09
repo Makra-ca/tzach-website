@@ -104,6 +104,7 @@ model HeadquartersProgram {
   category      String?  // MIVTZOYIM, GRAND_EVENTS, LEARNING_PROGRAMS, VISITS, PUBLICATIONS, ADDITIONAL_PROGRAMS, STANDALONE
   contactPerson String?
   phone         String?
+  email         String?
   image         String?  // Vercel Blob URL
   order         Int      @default(0)
   createdAt     DateTime @default(now())

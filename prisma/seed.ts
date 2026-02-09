@@ -180,7 +180,7 @@ async function main() {
     { name: 'Rabbi Dovid Polter', role: 'Librarian', order: 3 },
     { name: 'Rabbi Mordy Hirsch', role: 'Mitzvah Tanks', order: 4 },
     { name: 'Rabbi Dovid Friedman', role: 'Assistant Administrator', order: 5 },
-    { name: 'Rabbi Yossi Butman', role: 'Major Event Manager', order: 6 },
+    { name: 'Rabbi Yossi Butman', role: 'Major Event Coordinator', order: 6 },
     { name: 'Nili Gurevitch', role: 'Executive Secretary', order: 7 },
     { name: 'Rabbi Leibel Baumgarten', role: 'Board Member', order: 8, isBoard: true },
     { name: 'Rabbi Tuvia Teldon', role: 'Board Member', order: 9, isBoard: true },

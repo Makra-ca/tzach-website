@@ -194,6 +194,7 @@ type HeadquartersFormData = {
   category: string
   contactPerson: string
   phone: string
+  email: string
   image: string
 }
 
@@ -212,6 +213,7 @@ const emptyHeadquartersForm: HeadquartersFormData = {
   category: '',
   contactPerson: '',
   phone: '',
+  email: '',
   image: ''
 }
 
@@ -538,6 +540,7 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
       category: program.category || '',
       contactPerson: program.contactPerson || '',
       phone: program.phone || '',
+      email: program.email || '',
       image: program.image || ''
     })
     setShowForm(true)
@@ -1822,6 +1825,19 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
                     onChange={(e) => setHeadquartersForm({ ...headquartersForm, phone: formatPhoneInput(e.target.value) })}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
                     placeholder="(555) 123-4567"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Email
+                  </label>
+                  <input
+                    type="email"
+                    value={headquartersForm.email}
+                    onChange={(e) => setHeadquartersForm({ ...headquartersForm, email: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1e3a5f] focus:border-transparent"
+                    placeholder="program@lyony.org"
                   />
                 </div>
 

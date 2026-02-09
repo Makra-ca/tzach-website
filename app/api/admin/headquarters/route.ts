@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
         category: data.category || null,
         contactPerson: data.contactPerson || null,
         phone: data.phone || null,
+        email: data.email || null,
         image: data.image || null,
         order: data.order ? parseInt(data.order) : 0
       }

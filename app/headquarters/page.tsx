@@ -22,22 +22,14 @@ async function getHeroImages() {
   }))
 }
 
-async function getTeamMembers() {
-  return prisma.teamMember.findMany({
-    orderBy: { order: 'asc' }
-  })
-}
-
 export default async function HeadquartersPage() {
   const programs = await getPrograms()
   const heroImages = await getHeroImages()
-  const teamMembers = await getTeamMembers()
 
   return (
     <HeadquartersPageClient
       programs={programs}
       heroImages={heroImages}
-      teamMembers={teamMembers}
     />
   )
 }

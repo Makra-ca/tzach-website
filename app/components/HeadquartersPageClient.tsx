@@ -11,23 +11,27 @@ interface HeroImage {
   position: string
 }
 
-interface TeamMember {
-  id: string
-  name: string
-  role: string | null
-  isBoard: boolean
-  isDeceased: boolean
-}
-
 interface Props {
   programs: HeadquartersProgram[]
   heroImages: HeroImage[]
-  teamMembers: TeamMember[]
 }
 
-export default function HeadquartersPageClient({ programs, heroImages, teamMembers }: Props) {
-  const staff = teamMembers.filter(m => !m.isBoard && !m.isDeceased)
-  const boardMembers = teamMembers.filter(m => m.isBoard && !m.isDeceased)
+// Hardcoded team members - no admin UI needed for rarely-changing data
+const STAFF = [
+  { name: 'Rabbi Dovid Polter', role: 'Librarian' },
+  { name: 'Rabbi Mordy Hirsch', role: 'Mitzvah Tanks' },
+  { name: 'Rabbi Dovid Friedman', role: 'Assistant Administrator' },
+  { name: 'Rabbi Yossi Butman', role: 'Major Event Coordinator' },
+  { name: 'Nili Gurevitch', role: 'Executive Secretary' },
+]
+
+const BOARD_MEMBERS = [
+  'Rabbi Leibel Baumgarten',
+  'Rabbi Tuvia Teldon',
+  'Rabbi Sholom Tenenbaum',
+]
+
+export default function HeadquartersPageClient({ programs, heroImages }: Props) {
 
   return (
     <div className="min-h-screen">
@@ -134,8 +138,8 @@ export default function HeadquartersPageClient({ programs, heroImages, teamMembe
           {/* Staff */}
           <div className="mb-12">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {staff.map((member, index) => (
-                <AnimatedSection key={member.id} delay={index * 100} direction={index % 2 === 0 ? 'slideLeft' : 'slideRight'} skipPreloaderDelay>
+              {STAFF.map((member, index) => (
+                <AnimatedSection key={member.name} delay={index * 100} direction={index % 2 === 0 ? 'slideLeft' : 'slideRight'} skipPreloaderDelay>
                   <div className="bg-white rounded-lg p-6 text-center shadow-md h-full">
                     <div className="w-16 h-16 bg-[#0f172a] rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
                       {member.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
@@ -153,11 +157,11 @@ export default function HeadquartersPageClient({ programs, heroImages, teamMembe
             <AnimatedSection skipPreloaderDelay>
               <h3 className="text-xl font-bold text-gray-700 mb-6 text-center">Board Members</h3>
             </AnimatedSection>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-              {boardMembers.map((member, index) => (
-                <AnimatedSection key={member.id} delay={index * 50} direction={index % 2 === 0 ? 'slideLeft' : 'slideRight'} skipPreloaderDelay>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4 max-w-2xl mx-auto">
+              {BOARD_MEMBERS.map((name, index) => (
+                <AnimatedSection key={name} delay={index * 50} direction={index % 2 === 0 ? 'slideLeft' : 'slideRight'} skipPreloaderDelay>
                   <div className="bg-white rounded-lg p-4 text-center shadow-md">
-                    <h4 className="font-medium text-[#0f172a] text-sm">{member.name}</h4>
+                    <h4 className="font-medium text-[#0f172a] text-sm">{name}</h4>
                   </div>
                 </AnimatedSection>
               ))}
