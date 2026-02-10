@@ -130,7 +130,7 @@ export default function Preloader() {
                 It was over 70 years ago, during a public gathering, when the Lubavitcher Rebbe, Rabbi Menachem Mendel Schneerson, established the Lubavitch Youth Organization. Since then it has grown from humble beginnings to become a dynamic force in Crown Heights and the eight county NYC Metro area.
               </p>
               <p className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed">
-                Today&apos;s LYO, with over 212+ shluchim couples and 140 centers, is responsible for the largest
+                Today&apos;s LYO, with over 200+ shluchim couples and 140 centers, is responsible for the largest
                 Jewish population center outside of Israel.
               </p>
               <p className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed">
