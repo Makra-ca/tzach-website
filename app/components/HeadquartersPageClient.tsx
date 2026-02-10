@@ -26,6 +26,8 @@ const STAFF = [
 ]
 
 const BOARD_MEMBERS = [
+  'Rabbi Kasriel Kastel',
+  'Rabbi Shlomo Friedman',
   'Rabbi Leibel Baumgarten',
   'Rabbi Tuvia Teldon',
   'Rabbi Sholom Tenenbaum',
@@ -180,7 +182,7 @@ export default function HeadquartersPageClient({ programs, heroImages }: Props) 
                     DR
                   </div>
                   <h4 className="font-bold text-[#0f172a]">Rabbi Dovid Raskin a&quot;h</h4>
-                  <p className="text-gray-500 text-sm">Original Director</p>
+                  <p className="text-gray-500 text-sm">Board Chairman</p>
                 </div>
               </AnimatedSection>
               <AnimatedSection delay={100} direction="slideRight" skipPreloaderDelay>
@@ -244,15 +246,13 @@ export default function HeadquartersPageClient({ programs, heroImages }: Props) 
                 718-953-1000
               </a>
               <a
-                href="https://lyony.org"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="mailto:Info@lubavitchyouth.org"
                 className="inline-flex items-center justify-center gap-2 border-2 border-[#0f172a] text-[#0f172a] px-8 py-3 rounded-lg font-medium hover:bg-[#0f172a] hover:text-white transition-colors"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                Visit LYONY.org
+                Info@lubavitchyouth.org
               </a>
             </div>
           </AnimatedSection>

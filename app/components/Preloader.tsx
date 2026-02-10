@@ -75,12 +75,15 @@ export default function Preloader() {
   return (
     <div className="preloader-container fixed inset-0 z-[9999] bg-[#0f172a] flex flex-col">
       {/* Celebration Banner */}
-      <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] text-center py-2.5 px-4 shrink-0">
-        <p className="font-display text-sm sm:text-base md:text-lg tracking-wide">
-          <span className="font-semibold">Celebrating 70 Years</span>
-          <span className="mx-2 opacity-60">|</span>
-          <span className="italic">Serving the Jewish Community Since 1955</span>
-        </p>
+      <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] py-2 px-4 shrink-0">
+        <div className="max-w-6xl mx-auto relative flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-0">
+          <span className="font-display text-sm font-semibold tracking-wide md:absolute md:left-0">Lubavitch Youth Organization</span>
+          <p className="font-display text-xs md:text-sm tracking-wide text-center">
+            <span className="font-semibold">Celebrating 70 Years</span>
+            <span className="mx-2 opacity-60">|</span>
+            <span className="italic">Serving the Jewish Community Since 1955</span>
+          </p>
+        </div>
       </div>
 
       {/* Content Layout */}
@@ -130,7 +133,7 @@ export default function Preloader() {
                 It was over 70 years ago, during a public gathering, when the Lubavitcher Rebbe, Rabbi Menachem Mendel Schneerson, established the Lubavitch Youth Organization. Since then it has grown from humble beginnings to become a dynamic force in Crown Heights and the eight county NYC Metro area.
               </p>
               <p className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed">
-                Today&apos;s LYO, with over 212+ shluchim couples and 140 centers, is responsible for the largest
+                Today&apos;s LYO, with over 200 shluchim couples and 140 centers, is responsible for the largest
                 Jewish population center outside of Israel.
               </p>
               <p className="text-gray-300 text-xs sm:text-sm md:text-base leading-relaxed">

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Colleges - Mockup 1: Mesh Gradient</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; }
+
+    .section {
+      min-height: 100vh;
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* MESH GRADIENT DESIGN */
+    .mesh-gradient {
+      background: linear-gradient(135deg, #fefefe 0%, #f8f9fa 100%);
+    }
+
+    .mesh-gradient::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: -10%;
+      width: 60%;
+      height: 70%;
+      background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.4) 0%, rgba(212, 168, 83, 0.1) 40%, transparent 70%);
+      filter: blur(60px);
+      animation: float1 20s ease-in-out infinite;
+    }
+
+    .mesh-gradient::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      right: -15%;
+      width: 70%;
+      height: 80%;
+      background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.08) 40%, transparent 70%);
+      filter: blur(80px);
+      animation: float2 25s ease-in-out infinite;
+    }
+
+    .blob-1 {
+      position: absolute;
+      top: 40%;
+      right: 10%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.25) 0%, transparent 60%);
+      filter: blur(40px);
+      animation: float3 15s ease-in-out infinite;
+    }
+
+    .blob-2 {
+      position: absolute;
+      bottom: 20%;
+      left: 20%;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.15) 0%, transparent 60%);
+      filter: blur(50px);
+      animation: float1 18s ease-in-out infinite reverse;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(30px, -30px) scale(1.05); }
+      66% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-40px, -20px) scale(1.08); }
+    }
+
+    @keyframes float3 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-30px, 30px); }
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #0f172a;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      color: #64748b;
+      margin-bottom: 2rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .card h3 {
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .card span {
+      color: #64748b;
+      font-size: 0.9rem;
+    }
+
+    .label {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="label">Mockup 1: Mesh Gradient</div>
+
+  <section class="section mesh-gradient">
+    <div class="blob-1"></div>
+    <div class="blob-2"></div>
+
+    <div class="content">
+      <h1>Colleges & Universities</h1>
+      <p>Smooth, animated mesh gradients with floating color blobs. Elegant and modern.</p>
+
+      <div class="card-grid">
+        <div class="card">
+          <h3>Columbia University</h3>
+          <span>Rabbi David Katz</span>
+        </div>
+        <div class="card">
+          <h3>NYU</h3>
+          <span>Rabbi Yehuda Sarna</span>
+        </div>
+        <div class="card">
+          <h3>Baruch College</h3>
+          <span>Rabbi Shmuel Marcus</span>
+        </div>
+        <div class="card">
+          <h3>Brooklyn College</h3>
+          <span>Rabbi Chaim Kaplan</span>
+        </div>
+        <div class="card">
+          <h3>Queens College</h3>
+          <span>Rabbi Moshe Shemtov</span>
+        </div>
+        <div class="card">
+          <h3>Stony Brook University</h3>
+          <span>Rabbi Adam Stein</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

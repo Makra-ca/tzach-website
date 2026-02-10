@@ -40,7 +40,7 @@ export default function DirectoryPageClient({ houses, filters, heroImages }: Pro
               Find Your Local Chabad House
             </h1>
             <p className="text-xl text-gray-300 leading-relaxed">
-              {houses.length} shluchim families serving the NYC Metro area,
+              Over 200 shluchim families serving the NYC Metro area,
               Long Island, and Westchester.
             </p>
           </div>

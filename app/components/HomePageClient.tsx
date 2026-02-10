@@ -72,21 +72,21 @@ export default function HomePageClient({ stats, galleryImages, heroImages, servi
     <>
       <div className="min-h-screen bg-white">
         {/* Hero with Carousel */}
-        <section className="relative h-[85vh] min-h-[600px] overflow-hidden">
+        <section className="relative min-h-[100svh] md:h-[85vh] md:min-h-[600px] overflow-hidden">
           <HeroCarousel images={heroImages} />
 
-          <div className="relative z-10 h-full max-w-6xl mx-auto px-4 flex items-center">
+          <div className="relative z-10 h-full max-w-6xl mx-auto px-4 flex items-center py-8 md:py-0">
             <div className="max-w-2xl text-white hero-animate">
-              <p className="text-[#d4a853] font-semibold mb-4 tracking-[0.2em] text-lg md:text-xl">
+              <p className="text-[#d4a853] font-semibold mb-2 md:mb-4 tracking-[0.15em] md:tracking-[0.2em] text-xs sm:text-sm md:text-lg lg:text-xl">
                 LUBAVITCH YOUTH ORGANIZATION
               </p>
-              <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-semibold mb-6 leading-[1.1]">
+              <h1 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-semibold mb-3 md:mb-6 leading-[1.1]">
                 Bringing Jewish Life to Every Jew
               </h1>
-              <p className="text-xl text-gray-300 mb-6 leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 mb-3 md:mb-6 leading-relaxed">
                 It was over 70 years ago, during a public gathering, when the Lubavitcher Rebbe, Rabbi Menachem Mendel Schneerson, established the Lubavitch Youth Organization. Since then it has grown from humble beginnings to become a dynamic force in Crown Heights and the eight county NYC Metro area.
               </p>
-              <p className="text-xl text-gray-300 mb-10 leading-relaxed">
+              <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-300 mb-6 md:mb-10 leading-relaxed">
                 For 70 years, LYO has connected thousands of families across the NYC Metro area
                 with vibrant Jewish community, education, and celebration.
               </p>

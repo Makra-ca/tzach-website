@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>V2: Light Modern</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+
+    .section {
+      min-height: 100vh;
+      padding: 80px 40px;
+      position: relative;
+      overflow: hidden;
+      background: #fafafa;
+    }
+
+    /* Animated gradient mesh */
+    .mesh {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(at 20% 20%, rgba(212, 168, 83, 0.25) 0%, transparent 50%),
+        radial-gradient(at 80% 80%, rgba(15, 23, 42, 0.15) 0%, transparent 50%),
+        radial-gradient(at 60% 30%, rgba(212, 168, 83, 0.2) 0%, transparent 40%),
+        radial-gradient(at 30% 70%, rgba(99, 102, 241, 0.1) 0%, transparent 40%);
+      filter: blur(60px);
+      animation: meshMove 20s ease-in-out infinite;
+    }
+
+    @keyframes meshMove {
+      0%, 100% { transform: scale(1) translate(0, 0); }
+      25% { transform: scale(1.1) translate(2%, 2%); }
+      50% { transform: scale(1) translate(-2%, 2%); }
+      75% { transform: scale(1.05) translate(2%, -2%); }
+    }
+
+    /* Floating shapes */
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      animation: floatShape 15s ease-in-out infinite;
+    }
+
+    .shape-1 {
+      top: 15%;
+      right: 15%;
+      width: 300px;
+      height: 300px;
+      border: 2px solid rgba(212, 168, 83, 0.3);
+      animation-delay: 0s;
+    }
+
+    .shape-2 {
+      bottom: 20%;
+      left: 10%;
+      width: 200px;
+      height: 200px;
+      border: 2px solid rgba(15, 23, 42, 0.15);
+      animation-delay: -5s;
+    }
+
+    .shape-3 {
+      top: 50%;
+      left: 50%;
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, rgba(212, 168, 83, 0.1) 0%, rgba(212, 168, 83, 0.05) 100%);
+      animation-delay: -10s;
+    }
+
+    @keyframes floatShape {
+      0%, 100% { transform: translate(0, 0) rotate(0deg); }
+      33% { transform: translate(20px, -20px) rotate(5deg); }
+      66% { transform: translate(-10px, 10px) rotate(-3deg); }
+    }
+
+    /* Dot grid */
+    .dots {
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(15, 23, 42, 0.15) 1.5px, transparent 1.5px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    /* Accent lines */
+    .line {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, rgba(212, 168, 83, 0.5), transparent);
+      height: 2px;
+    }
+
+    .line-1 {
+      top: 25%;
+      left: 0;
+      width: 40%;
+      animation: lineGlow 4s ease-in-out infinite;
+    }
+
+    .line-2 {
+      bottom: 35%;
+      right: 0;
+      width: 35%;
+      animation: lineGlow 4s ease-in-out infinite 2s;
+    }
+
+    @keyframes lineGlow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 4rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #d4a853;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 40px;
+      height: 2px;
+      background: #d4a853;
+    }
+
+    h1 {
+      font-size: 4.5rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+
+    h1 .highlight {
+      background: linear-gradient(135deg, #d4a853 0%, #b8860b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    p.desc {
+      color: #64748b;
+      font-size: 1.2rem;
+      max-width: 500px;
+      line-height: 1.7;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 36px;
+      position: relative;
+      box-shadow:
+        0 4px 6px rgba(0, 0, 0, 0.02),
+        0 12px 24px rgba(0, 0, 0, 0.04);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, #d4a853, #f4d03f, #d4a853);
+      background-size: 200% 100%;
+      animation: gradientMove 3s linear infinite;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 0% 0%; }
+      100% { background-position: 200% 0%; }
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(212, 168, 83, 0.2);
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      color: #0f172a;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .card .county {
+      padding: 6px 14px;
+      background: linear-gradient(135deg, #f8f4ec 0%, #f0e8d8 100%);
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #92702d;
+    }
+
+    .card p {
+      color: #64748b;
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .card .contact {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .card .avatar {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .card .contact-info {
+      flex: 1;
+    }
+
+    .card .name {
+      color: #0f172a;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .card .phone {
+      color: #d4a853;
+      font-size: 0.85rem;
+    }
+
+    .label {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: white;
+      color: #0f172a;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <div class="label">V2: Light Modern</div>
+
+  <section class="section">
+    <div class="mesh"></div>
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+    <div class="dots"></div>
+    <div class="line line-1"></div>
+    <div class="line line-2"></div>
+
+    <div class="content">
+      <div class="header">
+        <div class="eyebrow">Campus Outreach</div>
+        <h1>Colleges &<br><span class="highlight">Universities</span></h1>
+        <p class="desc">Clean, modern light theme with animated gradient mesh, floating shapes, and dot grid pattern.</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3>Columbia University</h3>
+            <span class="county">Manhattan</span>
+          </div>
+          <p>Chabad serving the Columbia community with warmth, Jewish pride, and meaningful connections.</p>
+          <div class="contact">
+            <div class="avatar">DK</div>
+            <div class="contact-info">
+              <div class="name">Rabbi David Katz</div>
+              <div class="phone">212-555-0123</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>NYU</h3>
+            <span class="county">Manhattan</span>
+          </div>
+          <p>A home away from home for Jewish students in the heart of Greenwich Village.</p>
+          <div class="contact">
+            <div class="avatar">YS</div>
+            <div class="contact-info">
+              <div class="name">Rabbi Yehuda Sarna</div>
+              <div class="phone">212-555-0124</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Stony Brook University</h3>
+            <span class="county">Suffolk</span>
+          </div>
+          <p>Vibrant Jewish community on Long Island's premier research university campus.</p>
+          <div class="contact">
+            <div class="avatar">AS</div>
+            <div class="contact-info">
+              <div class="name">Rabbi Adam Stein</div>
+              <div class="phone">631-555-0125</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Brooklyn College</h3>
+            <span class="county">Brooklyn</span>
+          </div>
+          <p>Engaging Jewish life and learning for students in the heart of Brooklyn.</p>
+          <div class="contact">
+            <div class="avatar">CK</div>
+            <div class="contact-info">
+              <div class="name">Rabbi Chaim Kaplan</div>
+              <div class="phone">718-555-0126</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

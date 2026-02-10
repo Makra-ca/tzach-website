@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Headquarters - Mockup 1: Mesh Gradient</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; }
+
+    .section {
+      min-height: 100vh;
+      padding: 60px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* MESH GRADIENT - Warmer tones for HQ */
+    .mesh-gradient {
+      background: linear-gradient(135deg, #fffcf7 0%, #fef9f3 100%);
+    }
+
+    .mesh-gradient::before {
+      content: '';
+      position: absolute;
+      top: -15%;
+      left: -15%;
+      width: 65%;
+      height: 75%;
+      background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.45) 0%, rgba(212, 168, 83, 0.15) 40%, transparent 70%);
+      filter: blur(70px);
+      animation: float1 18s ease-in-out infinite;
+    }
+
+    .mesh-gradient::after {
+      content: '';
+      position: absolute;
+      bottom: -25%;
+      right: -10%;
+      width: 60%;
+      height: 70%;
+      background: radial-gradient(ellipse at center, rgba(15, 23, 42, 0.25) 0%, rgba(15, 23, 42, 0.06) 40%, transparent 70%);
+      filter: blur(80px);
+      animation: float2 22s ease-in-out infinite;
+    }
+
+    .blob-1 {
+      position: absolute;
+      top: 50%;
+      right: 5%;
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(ellipse at center, rgba(212, 168, 83, 0.3) 0%, transparent 60%);
+      filter: blur(50px);
+      animation: float3 14s ease-in-out infinite;
+    }
+
+    .blob-2 {
+      position: absolute;
+      bottom: 30%;
+      left: 25%;
+      width: 350px;
+      height: 350px;
+      background: radial-gradient(ellipse at center, rgba(180, 140, 60, 0.2) 0%, transparent 60%);
+      filter: blur(60px);
+      animation: float1 16s ease-in-out infinite reverse;
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(40px, -40px) scale(1.05); }
+      66% { transform: translate(-25px, 25px) scale(0.95); }
+    }
+
+    @keyframes float2 {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(-50px, -30px) scale(1.1); }
+    }
+
+    @keyframes float3 {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-35px, 35px); }
+    }
+
+    .content {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #0f172a;
+      margin-bottom: 1rem;
+    }
+
+    p.desc {
+      color: #64748b;
+      margin-bottom: 2rem;
+    }
+
+    .notice {
+      background: rgba(15, 23, 42, 0.05);
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      border-radius: 12px;
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+      color: #374151;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 20px;
+      padding: 28px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06);
+    }
+
+    .card h3 {
+      color: #0f172a;
+      margin-bottom: 12px;
+      font-size: 1.15rem;
+    }
+
+    .card p {
+      color: #64748b;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .card .contact {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(0, 0, 0, 0.06);
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    .label {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #0f172a;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 600;
+      z-index: 100;
+    }
+  </style>
+</head>
+<body>
+  <div class="label">HQ Mockup 1: Mesh Gradient</div>
+
+  <section class="section mesh-gradient">
+    <div class="blob-1"></div>
+    <div class="blob-2"></div>
+
+    <div class="content">
+      <h1>Programs & Activities</h1>
+      <p class="desc">Smooth, animated mesh gradients with warmer gold tones. Elegant and established.</p>
+
+      <div class="notice">
+        All programs are under supervision of Rabbi Kasriel and Rabbi Shlomo Friedman. Call 718-953-1000 for info.
+      </div>
+
+      <div class="card-grid">
+        <div class="card">
+          <h3>Ufaratzta</h3>
+          <p>Community outreach and education programs</p>
+          <div class="contact">Rabbi Moshe Klein</div>
+        </div>
+        <div class="card">
+          <h3>Youth Programs</h3>
+          <p>Engaging activities for young community members</p>
+          <div class="contact">Rabbi Yossi Jacobson</div>
+        </div>
+        <div class="card">
+          <h3>Holiday Events</h3>
+          <p>Celebrations and gatherings throughout the year</p>
+          <div class="contact">Rabbi Mendel Shemtov</div>
+        </div>
+        <div class="card">
+          <h3>Educational Seminars</h3>
+          <p>Torah classes and learning opportunities</p>
+          <div class="contact">Rabbi Chaim Fogelman</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>

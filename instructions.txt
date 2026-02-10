@@ -43,3 +43,14 @@ CHabad house activities will remain in /directory, Crown height based programmin
 at top put 
 change phone number from 718-774-4270 to 718 953 1000
 option to add pictures if admin decides so
+
+in the preloader:
+have banner celeberating 70 years 
+and logo 
+brookly, bronx, manhattan, nassau, queens, staten isalne, saffolk and westchester
+
+
+
+have differnt carousel fore ach public page, and make sure to have it to have admin be able to change it
+
+

@@ -29,6 +29,9 @@ export default function Footer() {
               <li>
                 <a href="tel:718-953-1000" className="hover:text-white transition">718-953-1000</a>
               </li>
+              <li>
+                <a href="mailto:Info@lubavitchyouth.org" className="hover:text-white transition">Info@lubavitchyouth.org</a>
+              </li>
             </ul>
           </div>
         </div>
