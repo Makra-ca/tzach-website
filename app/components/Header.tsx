@@ -40,7 +40,7 @@ export default function Header() {
           <span className="font-semibold text-lg hidden sm:block">LYO Directory</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-1 text-sm">
+        <nav className="hidden lg:flex items-center gap-1 text-sm">
           <Link
             href="/"
             className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
@@ -104,7 +104,7 @@ export default function Header() {
 
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2"
+          className="lg:hidden p-2"
           aria-label="Toggle menu"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +115,7 @@ export default function Header() {
 
       {/* Full-Screen Mobile Menu */}
       <nav
-        className={`fixed inset-0 bg-[#0f172a] z-50 md:hidden flex flex-col transition-all duration-300 ease-out ${
+        className={`fixed inset-0 bg-[#0f172a] z-50 lg:hidden flex flex-col transition-all duration-300 ease-out ${
           mobileMenuOpen
             ? 'opacity-100 visible scale-100'
             : 'opacity-0 invisible scale-95'
