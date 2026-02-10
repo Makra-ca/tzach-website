@@ -76,7 +76,8 @@ export default function Preloader() {
     <div className="preloader-container fixed inset-0 z-[9999] bg-[#0f172a] flex flex-col">
       {/* Celebration Banner */}
       <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] text-center py-2.5 px-4 shrink-0">
-        <p className="font-display text-sm sm:text-base md:text-lg tracking-wide">
+        <p className="font-display text-sm sm:text-base md:text-lg font-semibold tracking-wide">Lubavitch Youth Organization</p>
+        <p className="font-display text-xs sm:text-sm md:text-base tracking-wide">
           <span className="font-semibold">Celebrating 70 Years</span>
           <span className="mx-2 opacity-60">|</span>
           <span className="italic">Serving the Jewish Community Since 1955</span>
