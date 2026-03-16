@@ -350,15 +350,15 @@ function HouseCard({ house }: { house: ChabadHouse & { distance?: number } }) {
         </div>
       )}
 
+      {/* Chabad House Name */}
+      <h3 className="font-semibold text-gray-900 mb-1">{house.name}</h3>
+
       {/* Rabbi Name */}
       {house.rabbiName && (
-        <p className="font-semibold text-gray-900 mb-1">
+        <p className="text-gray-600 text-sm mb-3">
           {house.rabbiName}
         </p>
       )}
-
-      {/* Chabad House Name */}
-      <h3 className="text-gray-600 text-sm mb-3">{house.name}</h3>
 
       {/* Location */}
       {(house.city || house.county) && (
