@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { put } from '@vercel/blob'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 
@@ -17,7 +16,7 @@ export async function GET() {
   return NextResponse.json(images)
 }
 
-// POST upload new hero image
+// POST create hero image record (blob already uploaded client-side)
 export async function POST(request: NextRequest) {
   const isAuthenticated = await verifySession()
   if (!isAuthenticated) {
@@ -25,42 +24,34 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const formData = await request.formData()
-    const file = formData.get('file') as File
-    const alt = formData.get('alt') as string || ''
-    const position = formData.get('position') as string || 'center'
-    const page = formData.get('page') as string || 'homepage'
+    const { url, alt, position, page } = await request.json()
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 })
+    if (!url) {
+      return NextResponse.json({ error: 'No URL provided' }, { status: 400 })
     }
 
     // Get the highest order number for this page
+    const pageFilter = page || 'homepage'
     const lastImage = await prisma.heroImage.findFirst({
-      where: { page },
+      where: { page: pageFilter },
       orderBy: { order: 'desc' }
     })
     const nextOrder = (lastImage?.order ?? -1) + 1
 
-    // Upload to Vercel Blob
-    const blob = await put(`hero/${Date.now()}-${file.name}`, file, {
-      access: 'public',
-    })
-
     // Save to database
     const image = await prisma.heroImage.create({
       data: {
-        url: blob.url,
-        alt,
-        position,
+        url,
+        alt: alt || '',
+        position: position || 'center',
         order: nextOrder,
-        page
+        page: pageFilter
       }
     })
 
     return NextResponse.json(image)
   } catch (error) {
-    console.error('Hero upload error:', error)
-    return NextResponse.json({ error: 'Failed to upload' }, { status: 500 })
+    console.error('Hero create error:', error)
+    return NextResponse.json({ error: 'Failed to create hero image' }, { status: 500 })
   }
 }

@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { put } from '@vercel/blob'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 
@@ -17,7 +16,7 @@ export async function GET() {
   return NextResponse.json(images)
 }
 
-// POST upload new image
+// POST create gallery image record (blob already uploaded client-side)
 export async function POST(request: NextRequest) {
   const isAuthenticated = await verifySession()
   if (!isAuthenticated) {
@@ -25,12 +24,10 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const formData = await request.formData()
-    const file = formData.get('file') as File
-    const alt = formData.get('alt') as string || ''
+    const { url, alt } = await request.json()
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 })
+    if (!url) {
+      return NextResponse.json({ error: 'No URL provided' }, { status: 400 })
     }
 
     // Get the highest order number
@@ -39,23 +36,18 @@ export async function POST(request: NextRequest) {
     })
     const nextOrder = (lastImage?.order ?? -1) + 1
 
-    // Upload to Vercel Blob
-    const blob = await put(`gallery/${Date.now()}-${file.name}`, file, {
-      access: 'public',
-    })
-
     // Save to database
     const image = await prisma.galleryImage.create({
       data: {
-        url: blob.url,
-        alt,
+        url,
+        alt: alt || '',
         order: nextOrder
       }
     })
 
     return NextResponse.json(image)
   } catch (error) {
-    console.error('Upload error:', error)
-    return NextResponse.json({ error: 'Failed to upload' }, { status: 500 })
+    console.error('Gallery create error:', error)
+    return NextResponse.json({ error: 'Failed to create gallery image' }, { status: 500 })
   }
 }

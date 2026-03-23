@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 import type { ChabadHouse, College, GalleryImage, HeroImage, HeadquartersProgram } from '@prisma/client'
 import { formatPhone, formatPhoneInput } from '@/lib/formatPhone'
+import { upload } from '@vercel/blob/client'
 
 // Confirmation Modal Component
 function ConfirmModal({
@@ -426,20 +427,12 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
     setError('')
 
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const res = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData
+      const blob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/admin/upload',
       })
 
-      if (!res.ok) {
-        throw new Error('Failed to upload image')
-      }
-
-      const { url } = await res.json()
-      setCollegeForm(prev => ({ ...prev, imageUrl: url }))
+      setCollegeForm(prev => ({ ...prev, imageUrl: blob.url }))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to upload image')
     } finally {
@@ -555,20 +548,12 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
     setError('')
 
     try {
-      const formData = new FormData()
-      formData.append('file', file)
-
-      const res = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData
+      const blob = await upload(file.name, file, {
+        access: 'public',
+        handleUploadUrl: '/api/admin/upload',
       })
 
-      if (!res.ok) {
-        throw new Error('Failed to upload image')
-      }
-
-      const { url } = await res.json()
-      setHeadquartersForm(prev => ({ ...prev, image: url }))
+      setHeadquartersForm(prev => ({ ...prev, image: blob.url }))
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to upload image')
     } finally {
@@ -690,17 +675,22 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
 
     try {
       for (const file of files) {
-        const formData = new FormData()
-        formData.append('file', file)
-        formData.append('alt', file.name.replace(/\.[^/.]+$/, ''))
+        const blob = await upload(file.name, file, {
+          access: 'public',
+          handleUploadUrl: '/api/admin/upload',
+        })
 
         const res = await fetch('/api/admin/gallery', {
           method: 'POST',
-          body: formData
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: blob.url,
+            alt: file.name.replace(/\.[^/.]+$/, ''),
+          })
         })
 
         if (!res.ok) {
-          throw new Error('Failed to upload image')
+          throw new Error('Failed to save gallery image')
         }
 
         const newImage = await res.json()
@@ -783,19 +773,24 @@ export default function AdminDashboard({ initialHouses, initialColleges, initial
 
     try {
       for (const file of files) {
-        const formData = new FormData()
-        formData.append('file', file)
-        formData.append('alt', file.name.replace(/\.[^/.]+$/, ''))
-        formData.append('position', 'center')
-        formData.append('page', heroPage)
+        const blob = await upload(file.name, file, {
+          access: 'public',
+          handleUploadUrl: '/api/admin/upload',
+        })
 
         const res = await fetch('/api/admin/hero', {
           method: 'POST',
-          body: formData
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: blob.url,
+            alt: file.name.replace(/\.[^/.]+$/, ''),
+            position: 'center',
+            page: heroPage,
+          })
         })
 
         if (!res.ok) {
-          throw new Error('Failed to upload hero image')
+          throw new Error('Failed to save hero image')
         }
 
         const newImage = await res.json()

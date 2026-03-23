@@ -1,30 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { put } from '@vercel/blob'
+import { handleUpload, type HandleUploadBody } from '@vercel/blob/client'
 import { verifySession } from '@/lib/auth'
 
-// POST upload image (just blob, no database record)
+// Client-side upload token handler
 export async function POST(request: NextRequest) {
-  const isAuthenticated = await verifySession()
-  if (!isAuthenticated) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
+  const body = (await request.json()) as HandleUploadBody
 
   try {
-    const formData = await request.formData()
-    const file = formData.get('file') as File
+    const jsonResponse = await handleUpload({
+      body,
+      request,
+      onBeforeGenerateToken: async () => {
+        const isAuthenticated = await verifySession()
+        if (!isAuthenticated) {
+          throw new Error('Unauthorized')
+        }
 
-    if (!file) {
-      return NextResponse.json({ error: 'No file provided' }, { status: 400 })
-    }
-
-    // Upload to Vercel Blob
-    const blob = await put(`uploads/${Date.now()}-${file.name}`, file, {
-      access: 'public',
+        return {
+          allowedContentTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/bmp'],
+          maximumSizeInBytes: 50 * 1024 * 1024, // 50MB
+        }
+      },
+      onUploadCompleted: async () => {
+        // No-op - DB records are created by the specific endpoints
+      },
     })
 
-    return NextResponse.json({ url: blob.url })
+    return NextResponse.json(jsonResponse)
   } catch (error) {
-    console.error('Upload error:', error)
-    return NextResponse.json({ error: 'Failed to upload' }, { status: 500 })
+    const message = error instanceof Error ? error.message : 'Upload failed'
+    const status = message === 'Unauthorized' ? 401 : 500
+    return NextResponse.json({ error: message }, { status })
   }
 }
