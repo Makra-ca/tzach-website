@@ -19,17 +19,17 @@ html, body {
   --color-navy-light: var(--navy-light);
   --color-gold: var(--gold);
   --color-cream: var(--cream);
-  --font-sans: "Urbanist", system-ui, sans-serif;
+  --font-sans: "Roboto", system-ui, sans-serif;
 }
 
 body {
   background: white;
   color: #1a1a1a;
-  font-family: "Urbanist", system-ui, sans-serif;
+  font-family: "Roboto", system-ui, sans-serif;
 }
 
 .font-display {
-  font-family: "Montserrat", system-ui, sans-serif;
+  font-family: "Roboto", system-ui, sans-serif;
 }
 
 /* Elegant scrollbar */
