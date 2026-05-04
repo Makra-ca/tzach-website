@@ -7,7 +7,6 @@ import { useState, useEffect } from 'react'
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-  // Handle escape key and body scroll lock
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') setMobileMenuOpen(false)
@@ -26,80 +25,72 @@ export default function Header() {
 
   const closeMenu = () => setMobileMenuOpen(false)
 
+  const navLink = 'relative px-2.5 py-2 text-gray-300 hover:text-white transition-colors duration-300 group'
+  const underline = 'absolute inset-x-1 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full'
+
   return (
     <header className="bg-[#0f172a] text-white">
-      <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-        <Link href="/" className="flex items-center gap-3">
+      <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <Link href="/" className="flex items-center gap-3 shrink-0">
           <Image
             src="/tzach logo.bmp"
             alt="LYO Logo"
-            width={72}
-            height={72}
+            width={60}
+            height={60}
             className="rounded invert"
           />
           <span className="font-semibold text-lg hidden sm:block">LYO Directory</span>
         </Link>
 
-        <nav className="hidden xl:flex items-center gap-1 text-sm">
-          <Link
-            href="/"
-            className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
-          >
+        {/* Desktop nav — shown at xl+ */}
+        <nav className="hidden xl:flex items-center gap-0 text-sm">
+          <Link href="/" className={navLink}>
             <span className="relative z-10">Home</span>
-            <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
+            <span className={underline} />
           </Link>
-          <Link
-            href="/directory"
-            className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
-          >
+          <Link href="/directory" className={navLink}>
             <span className="relative z-10">Chabad Houses</span>
-            <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
+            <span className={underline} />
           </Link>
-          <Link
-            href="/colleges"
-            className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
-          >
+          <Link href="/colleges" className={navLink}>
             <span className="relative z-10">Colleges</span>
-            <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
+            <span className={underline} />
           </Link>
-          {/* Services link commented out - content moved to homepage
-          <Link
-            href="/services"
-            className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
-          >
-            <span className="relative z-10">Services</span>
-            <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
-          </Link>
-          */}
-          <Link
-            href="/headquarters"
-            className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
-          >
+          <Link href="/headquarters" className={navLink}>
             <span className="relative z-10">Headquarters</span>
-            <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
+            <span className={underline} />
           </Link>
-          <Link
-            href="/headquarters#team"
-            className="relative px-4 py-2 text-gray-300 hover:text-white transition-colors duration-300 group"
-          >
+          <Link href="/headquarters#team" className={navLink}>
             <span className="relative z-10">Who We Are</span>
-            <span className="absolute inset-x-2 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full" />
+            <span className={underline} />
           </Link>
+          <Link href="/history" className={navLink}>
+            <span className="relative z-10">History</span>
+            <span className={underline} />
+          </Link>
+          <Link href="/videos" className={navLink}>
+            <span className="relative z-10">Videos</span>
+            <span className={underline} />
+          </Link>
+
+          {/* Email — icon only at xl, full address at 2xl */}
           <a
             href="mailto:Info@lubavitchyouth.org"
-            className="ml-4 px-3 py-2 text-sm text-gray-300 hover:text-[#d4a853] transition-colors duration-300 flex items-center gap-1.5"
+            className="ml-2 px-2.5 py-2 text-gray-300 hover:text-[#d4a853] transition-colors duration-300 flex items-center gap-1.5"
+            title="Info@lubavitchyouth.org"
           >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-            Info@lubavitchyouth.org
+            <span className="hidden 2xl:inline">Info@lubavitchyouth.org</span>
           </a>
-          <Link
+
+          <a
             href="tel:718-953-1000"
-            className="px-5 py-2 bg-[#d4a853] text-[#0f172a] font-medium rounded-full hover:bg-[#e5c778] transition-all duration-300 hover:shadow-lg hover:shadow-[#d4a853]/20 hover:-translate-y-0.5"
+            className="ml-1 px-4 py-2 bg-[#d4a853] text-[#0f172a] font-medium rounded-full hover:bg-[#e5c778] transition-all duration-300 hover:shadow-lg hover:shadow-[#d4a853]/20 hover:-translate-y-0.5 whitespace-nowrap"
           >
             718-953-1000
-          </Link>
+          </a>
         </nav>
 
         <button
@@ -116,15 +107,12 @@ export default function Header() {
       {/* Full-Screen Mobile Menu */}
       <nav
         className={`fixed inset-0 bg-[#0f172a] z-50 xl:hidden flex flex-col transition-all duration-300 ease-out ${
-          mobileMenuOpen
-            ? 'opacity-100 visible scale-100'
-            : 'opacity-0 invisible scale-95'
+          mobileMenuOpen ? 'opacity-100 visible scale-100' : 'opacity-0 invisible scale-95'
         }`}
         style={{ transformOrigin: 'top right' }}
       >
-        {/* Header - X on left, Logo centered */}
-        <div className="relative flex items-center justify-center p-5">
-          {/* X button - absolute left */}
+        {/* Header row */}
+        <div className="relative flex items-center justify-center py-4 px-5 shrink-0">
           <button
             onClick={closeMenu}
             className={`absolute left-5 p-2 text-white/80 hover:text-white transition-all duration-300 ${
@@ -132,12 +120,11 @@ export default function Header() {
             }`}
             aria-label="Close menu"
           >
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
 
-          {/* Centered Logo */}
           <Link
             href="/"
             onClick={closeMenu}
@@ -149,99 +136,52 @@ export default function Header() {
             <Image
               src="/tzach logo.bmp"
               alt="LYO Logo"
-              width={72}
-              height={72}
+              width={52}
+              height={52}
               className="rounded invert"
             />
-            <span className="text-sm font-medium text-white/80">LYO Directory</span>
+            <span className="text-xs font-medium text-white/80">LYO Directory</span>
           </Link>
         </div>
 
-        {/* Centered Nav Links with staggered animation */}
-        <div className="flex-1 flex flex-col items-center justify-center gap-2 -mt-8">
-          <Link
-            href="/"
-            onClick={closeMenu}
-            className={`text-3xl font-semibold text-white hover:text-[#d4a853] transition-all duration-500 py-3 ${
-              mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ transitionDelay: '150ms' }}
-          >
-            Home
-          </Link>
+        {/* Nav links — scrollable so small phones never clip */}
+        <div className="flex-1 overflow-y-auto flex flex-col items-center justify-center gap-0 py-2">
+          {[
+            { href: '/', label: 'Home', delay: '150ms' },
+            { href: '/directory', label: 'Chabad Houses', delay: '190ms' },
+            { href: '/colleges', label: 'Colleges', delay: '230ms' },
+            { href: '/headquarters', label: 'Headquarters', delay: '270ms' },
+            { href: '/headquarters#team', label: 'Who We Are', delay: '310ms' },
+            { href: '/history', label: 'History', delay: '350ms' },
+            { href: '/videos', label: 'Videos', delay: '390ms' },
+          ].map(({ href, label, delay }) => (
+            <Link
+              key={href + label}
+              href={href}
+              onClick={closeMenu}
+              className={`text-2xl font-semibold text-white hover:text-[#d4a853] transition-all duration-500 py-2.5 ${
+                mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+              }`}
+              style={{ transitionDelay: delay }}
+            >
+              {label}
+            </Link>
+          ))}
 
-          <Link
-            href="/directory"
-            onClick={closeMenu}
-            className={`text-3xl font-semibold text-white hover:text-[#d4a853] transition-all duration-500 py-3 ${
-              mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ transitionDelay: '200ms' }}
-          >
-            Chabad Houses
-          </Link>
-
-          <Link
-            href="/colleges"
-            onClick={closeMenu}
-            className={`text-3xl font-semibold text-white hover:text-[#d4a853] transition-all duration-500 py-3 ${
-              mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ transitionDelay: '250ms' }}
-          >
-            Colleges
-          </Link>
-
-          {/* Services link commented out - content moved to homepage
-          <Link
-            href="/services"
-            onClick={closeMenu}
-            className={`text-3xl font-semibold text-white hover:text-[#d4a853] transition-all duration-500 py-3 ${
-              mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ transitionDelay: '300ms' }}
-          >
-            Services
-          </Link>
-          */}
-
-          <Link
-            href="/headquarters"
-            onClick={closeMenu}
-            className={`text-3xl font-semibold text-white hover:text-[#d4a853] transition-all duration-500 py-3 ${
-              mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ transitionDelay: '300ms' }}
-          >
-            Headquarters
-          </Link>
-
-          <Link
-            href="/headquarters#team"
-            onClick={closeMenu}
-            className={`text-3xl font-semibold text-white hover:text-[#d4a853] transition-all duration-500 py-3 ${
-              mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
-            style={{ transitionDelay: '350ms' }}
-          >
-            Who We Are
-          </Link>
-
-          {/* Divider */}
           <div
-            className={`w-16 h-px bg-[#d4a853] my-4 transition-all duration-500 ${
+            className={`w-14 h-px bg-[#d4a853] my-3 transition-all duration-500 ${
               mobileMenuOpen ? 'opacity-100 scale-x-100' : 'opacity-0 scale-x-0'
             }`}
-            style={{ transitionDelay: '450ms' }}
+            style={{ transitionDelay: '430ms' }}
           />
 
           <Link
             href="/#about"
             onClick={closeMenu}
-            className={`text-xl text-gray-400 hover:text-white transition-all duration-500 py-2 ${
+            className={`text-lg text-gray-400 hover:text-white transition-all duration-500 py-1.5 ${
               mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
             }`}
-            style={{ transitionDelay: '500ms' }}
+            style={{ transitionDelay: '460ms' }}
           >
             About Us
           </Link>
@@ -249,14 +189,14 @@ export default function Header() {
 
         {/* Contact CTA Buttons */}
         <div
-          className={`p-6 space-y-3 transition-all duration-500 ${
+          className={`p-5 space-y-3 shrink-0 transition-all duration-500 ${
             mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
-          style={{ transitionDelay: '550ms' }}
+          style={{ transitionDelay: '490ms' }}
         >
           <a
             href="tel:718-953-1000"
-            className="flex items-center justify-center gap-3 w-full py-4 bg-[#d4a853] text-[#0f172a] rounded-full font-semibold text-lg hover:bg-[#c49943] transition-colors"
+            className="flex items-center justify-center gap-3 w-full py-3.5 bg-[#d4a853] text-[#0f172a] rounded-full font-semibold text-base hover:bg-[#c49943] transition-colors"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
@@ -265,7 +205,7 @@ export default function Header() {
           </a>
           <a
             href="mailto:Info@lubavitchyouth.org"
-            className="flex items-center justify-center gap-3 w-full py-4 bg-white/10 text-white rounded-full font-semibold text-base hover:bg-white/20 transition-colors border border-white/20"
+            className="flex items-center justify-center gap-3 w-full py-3.5 bg-white/10 text-white rounded-full font-semibold text-sm hover:bg-white/20 transition-colors border border-white/20"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
