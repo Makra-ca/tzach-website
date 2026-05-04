@@ -178,7 +178,7 @@ export default function AdminDashboard({
 
       {/* Tab Content */}
       {activeTab === 'houses' && (
-        <HousesTab houses={houses} setHouses={setHouses} counties={counties} {...tabCommonProps} />
+        <HousesTab houses={houses} setHouses={setHouses} {...tabCommonProps} />
       )}
       {activeTab === 'colleges' && (
         <CollegesTab colleges={colleges} setColleges={setColleges} houses={houses} {...tabCommonProps} />
