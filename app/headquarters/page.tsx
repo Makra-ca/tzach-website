@@ -1,7 +1,6 @@
 import { prisma } from '@/lib/db'
 import HeadquartersPageClient from '../components/HeadquartersPageClient'
 
-export const dynamic = 'force-dynamic'
 
 async function getPrograms() {
   const programs = await prisma.headquartersProgram.findMany({

@@ -1,7 +1,6 @@
 import { prisma } from '@/lib/db'
 import ServicesPageClient from '../components/ServicesPageClient'
 
-export const dynamic = 'force-dynamic'
 
 async function getServices() {
   return prisma.service.findMany({

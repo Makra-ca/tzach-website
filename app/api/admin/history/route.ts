@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 
@@ -38,6 +39,7 @@ export async function POST(request: NextRequest) {
       data: { title: title.trim(), fileUrl, fileType }
     })
 
+    revalidatePath('/', 'layout')
     return NextResponse.json(item)
   } catch (error) {
     console.error('History create error:', error)

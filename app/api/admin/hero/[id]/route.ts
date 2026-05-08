@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { del } from '@vercel/blob'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
@@ -38,6 +39,7 @@ export async function DELETE(
       where: { id }
     })
 
+    revalidatePath('/', 'layout')
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Hero delete error:', error)
@@ -68,6 +70,7 @@ export async function PATCH(
       }
     })
 
+    revalidatePath('/', 'layout')
     return NextResponse.json(image)
   } catch (error) {
     console.error('Hero update error:', error)

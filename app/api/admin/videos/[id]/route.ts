@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 import { getEmbedUrl } from '@/lib/videoEmbed'
@@ -35,6 +36,7 @@ export async function PUT(
       }
     })
 
+    revalidatePath('/', 'layout')
     return NextResponse.json(video)
   } catch (error) {
     console.error('Video update error:', error)
@@ -61,6 +63,7 @@ export async function DELETE(
 
     await prisma.video.delete({ where: { id } })
 
+    revalidatePath('/', 'layout')
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Video delete error:', error)

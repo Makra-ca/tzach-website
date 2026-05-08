@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 
@@ -36,6 +37,7 @@ export async function PUT(
       }
     })
 
+    revalidatePath('/', 'layout')
     return NextResponse.json(house)
   } catch (error) {
     console.error('Update error:', error)
@@ -60,6 +62,7 @@ export async function DELETE(
       where: { id }
     })
 
+    revalidatePath('/', 'layout')
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Delete error:', error)

@@ -1,7 +1,6 @@
 import { prisma } from '@/lib/db'
 import HomePageClient from './components/HomePageClient'
 
-export const dynamic = 'force-dynamic'
 
 async function getStats() {
   const houseCount = await prisma.chabadHouse.count()

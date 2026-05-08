@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 
@@ -26,6 +27,7 @@ export async function PUT(request: NextRequest) {
       )
     )
 
+    revalidatePath('/', 'layout')
     return NextResponse.json({ success: true })
   } catch (error) {
     console.error('Reorder error:', error)

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 
@@ -45,6 +46,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    revalidatePath('/', 'layout')
     return NextResponse.json(house)
   } catch (error) {
     console.error('Create error:', error)

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { revalidatePath } from 'next/cache'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 import { getEmbedUrl } from '@/lib/videoEmbed'
@@ -43,6 +44,7 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    revalidatePath('/', 'layout')
     return NextResponse.json(video)
   } catch (error) {
     console.error('Video create error:', error)

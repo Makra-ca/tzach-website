@@ -1,7 +1,6 @@
 import { prisma } from '@/lib/db'
 import DirectoryPageClient from '../components/DirectoryPageClient'
 
-export const dynamic = 'force-dynamic'
 
 async function getChabadHouses() {
   const houses = await prisma.chabadHouse.findMany({

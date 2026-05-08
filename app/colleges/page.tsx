@@ -1,7 +1,6 @@
 import { prisma } from '@/lib/db'
 import CollegesPageClient from '../components/CollegesPageClient'
 
-export const dynamic = 'force-dynamic'
 
 async function getColleges() {
   const colleges = await prisma.college.findMany({
