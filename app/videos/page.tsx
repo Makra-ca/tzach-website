@@ -12,8 +12,14 @@ export default async function VideosPage() {
         { muxPlaybackId: { not: null } },
       ],
     },
+    include: { categories: true },
     orderBy: { createdAt: 'desc' }
   })
 
-  return <VideosPageClient videos={videos} />
+  const categories = await prisma.category.findMany({
+    orderBy: { order: 'asc' },
+    select: { id: true, name: true },
+  })
+
+  return <VideosPageClient videos={videos} categories={categories} />
 }
