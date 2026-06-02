@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
+import { del } from '@vercel/blob'
 import mux from '@/lib/mux'
 import type { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/db'
@@ -74,6 +75,15 @@ export async function DELETE(
         }
       } catch (err) {
         console.error('Failed to delete Mux asset (continuing):', err)
+      }
+    }
+
+    // Audio files live in Vercel Blob; remove the blob so it doesn't orphan.
+    if (video.mediaType === 'audio' && video.videoUrl) {
+      try {
+        await del(video.videoUrl)
+      } catch (err) {
+        console.error('Failed to delete audio blob (continuing):', err)
       }
     }
 

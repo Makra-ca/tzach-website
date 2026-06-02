@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
+import { del } from '@vercel/blob'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 
@@ -16,6 +17,13 @@ export async function PUT(
   try {
     const { id } = await params
     const data = await request.json()
+    const newImage = data.image || null
+
+    // If the image is being replaced or cleared, remove the old blob.
+    const existing = await prisma.headquartersProgram.findUnique({ where: { id } })
+    if (existing?.image && existing.image !== newImage) {
+      try { await del(existing.image) } catch { /* ignore if blob already gone */ }
+    }
 
     const program = await prisma.headquartersProgram.update({
       where: { id },
@@ -25,7 +33,7 @@ export async function PUT(
         contactPerson: data.contactPerson || null,
         phone: data.phone || null,
         email: data.email || null,
-        image: data.image || null,
+        image: newImage,
         order: data.order ? parseInt(data.order) : 0
       }
     })
@@ -50,6 +58,17 @@ export async function DELETE(
 
   try {
     const { id } = await params
+
+    const program = await prisma.headquartersProgram.findUnique({ where: { id } })
+    if (!program) {
+      return NextResponse.json({ error: 'Program not found' }, { status: 404 })
+    }
+
+    if (program.image) {
+      try { await del(program.image) } catch (blobError) {
+        console.error('Blob delete error:', blobError)
+      }
+    }
 
     await prisma.headquartersProgram.delete({
       where: { id }

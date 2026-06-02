@@ -26,6 +26,9 @@ export async function POST(request: NextRequest) {
             'audio/ogg',
             'audio/aac',
           ],
+          // v2 defaults this to false, which errors when two files share a name.
+          // A random suffix keeps every upload's pathname unique.
+          addRandomSuffix: true,
           maximumSizeInBytes: 200 * 1024 * 1024, // 200MB
         }
       },
