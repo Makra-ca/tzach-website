@@ -3,10 +3,6 @@
 import { useState } from 'react'
 import MuxPlayer from '@mux/mux-player-react'
 
-type Filter = 'all' | 'video' | 'audio'
-
-const isAudio = (v: VideoItem) => v.mediaType === 'audio'
-
 interface VideoItem {
   id: string
   title: string
@@ -15,10 +11,12 @@ interface VideoItem {
   embedUrl: string | null
   videoUrl: string | null
   muxPlaybackId: string | null
+  categories: { id: string; name: string }[]
 }
 
 interface Props {
   videos: VideoItem[]
+  categories: { id: string; name: string }[]
 }
 
 function MediaRenderer({ video }: { video: VideoItem }) {
@@ -77,26 +75,21 @@ function MediaRenderer({ video }: { video: VideoItem }) {
   )
 }
 
-export default function VideosPageClient({ videos }: Props) {
-  const [filter, setFilter] = useState<Filter>('all')
+export default function VideosPageClient({ videos, categories }: Props) {
+  const [activeCategory, setActiveCategory] = useState<string>('all')
 
-  const audioCount = videos.filter(isAudio).length
-  const videoCount = videos.length - audioCount
+  const countFor = (id: string) => videos.filter((v) => v.categories.some((c) => c.id === id)).length
 
-  const visible = videos.filter((v) => {
-    if (filter === 'audio') return isAudio(v)
-    if (filter === 'video') return !isAudio(v)
-    return true
-  })
+  // Server already sorted `categories` by admin order; keep only those with ≥1 ready video.
+  const visibleCategories = categories.filter((c) => countFor(c.id) > 0)
 
-  // Only worth showing the filter when there's a mix of both kinds.
-  const showFilter = audioCount > 0 && videoCount > 0
+  // Guard: if the active category disappeared after a revalidation, fall back to All.
+  const activeExists = activeCategory === 'all' || visibleCategories.some((c) => c.id === activeCategory)
+  const effectiveActive = activeExists ? activeCategory : 'all'
 
-  const tabs: { key: Filter; label: string; count: number }[] = [
-    { key: 'all', label: 'All', count: videos.length },
-    { key: 'video', label: 'Videos', count: videoCount },
-    { key: 'audio', label: 'Audio', count: audioCount },
-  ]
+  const visible = effectiveActive === 'all'
+    ? videos
+    : videos.filter((v) => v.categories.some((c) => c.id === effectiveActive))
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -110,20 +103,20 @@ export default function VideosPageClient({ videos }: Props) {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-16">
-        {showFilter && (
-          <div className="flex justify-center gap-2 mb-12">
-            {tabs.map((tab) => (
+        {visibleCategories.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-2 mb-12">
+            {[{ id: 'all', name: 'All', count: videos.length }, ...visibleCategories.map((c) => ({ ...c, count: countFor(c.id) }))].map((c) => (
               <button
-                key={tab.key}
-                onClick={() => setFilter(tab.key)}
+                key={c.id}
+                onClick={() => setActiveCategory(c.id)}
                 className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
-                  filter === tab.key
+                  effectiveActive === c.id
                     ? 'bg-[#0f172a] text-white'
                     : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                 }`}
               >
-                {tab.label}
-                <span className={`ml-1.5 ${filter === tab.key ? 'text-[#d4a853]' : 'text-gray-400'}`}>{tab.count}</span>
+                {c.name}
+                <span className={`ml-1.5 ${effectiveActive === c.id ? 'text-[#d4a853]' : 'text-gray-400'}`}>{c.count}</span>
               </button>
             ))}
           </div>
