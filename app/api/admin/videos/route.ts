@@ -11,7 +11,8 @@ export async function GET() {
   }
 
   const videos = await prisma.video.findMany({
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' },
+    include: { categories: true },
   })
 
   return NextResponse.json(videos)
@@ -26,6 +27,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { title, description, mediaType } = body
+    const categoryIds: string[] = Array.isArray(body.categoryIds) ? body.categoryIds : []
 
     if (!title?.trim()) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
@@ -47,7 +49,8 @@ export async function POST(request: NextRequest) {
       }
       const embedUrl = getEmbedUrl(videoUrl.trim())
       const video = await prisma.video.create({
-        data: { ...base, videoUrl: videoUrl.trim(), embedUrl },
+        data: { ...base, videoUrl: videoUrl.trim(), embedUrl, categories: { connect: categoryIds.map((id) => ({ id })) } },
+        include: { categories: true },
       })
       revalidatePath('/', 'layout')
       return NextResponse.json(video)
@@ -59,7 +62,8 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Mux upload ID is required' }, { status: 400 })
       }
       const video = await prisma.video.create({
-        data: { ...base, muxUploadId: muxUploadId.trim() },
+        data: { ...base, muxUploadId: muxUploadId.trim(), categories: { connect: categoryIds.map((id) => ({ id })) } },
+        include: { categories: true },
       })
       revalidatePath('/', 'layout')
       return NextResponse.json(video)
@@ -71,7 +75,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Audio URL is required' }, { status: 400 })
     }
     const video = await prisma.video.create({
-      data: { ...base, videoUrl: videoUrl.trim() },
+      data: { ...base, videoUrl: videoUrl.trim(), categories: { connect: categoryIds.map((id) => ({ id })) } },
+      include: { categories: true },
     })
     revalidatePath('/', 'layout')
     return NextResponse.json(video)

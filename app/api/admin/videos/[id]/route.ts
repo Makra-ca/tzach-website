@@ -37,9 +37,14 @@ export async function PUT(
       }
     }
 
+    if (Array.isArray(body.categoryIds)) {
+      data.categories = { set: body.categoryIds.map((id: string) => ({ id })) }
+    }
+
     const video = await prisma.video.update({
       where: { id },
       data,
+      include: { categories: true },
     })
 
     revalidatePath('/', 'layout')
