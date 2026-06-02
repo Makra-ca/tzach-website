@@ -40,6 +40,7 @@ export default function VideosTab({ videoItems, setVideoItems, categories, setCa
           categories={categories}
           setCategories={setCategories}
           videoItems={videoItems}
+          setVideoItems={setVideoItems}
           {...common}
         />
       )}

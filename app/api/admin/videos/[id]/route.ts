@@ -38,7 +38,14 @@ export async function PUT(
     }
 
     if (Array.isArray(body.categoryIds)) {
-      data.categories = { set: body.categoryIds.map((id: string) => ({ id })) }
+      // Sync only to categories that still exist — a stale id would throw on `set`.
+      const validIds = body.categoryIds.length
+        ? (await prisma.category.findMany({
+            where: { id: { in: body.categoryIds } },
+            select: { id: true },
+          })).map((c) => c.id)
+        : []
+      data.categories = { set: validIds.map((id) => ({ id })) }
     }
 
     const video = await prisma.video.update({

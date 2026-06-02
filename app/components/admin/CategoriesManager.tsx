@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import type { Dispatch, SetStateAction } from 'react'
 import type { Category } from '@prisma/client'
@@ -10,22 +10,27 @@ interface Props extends CommonTabProps {
   categories: Category[]
   setCategories: Dispatch<SetStateAction<Category[]>>
   videoItems: VideoWithCategories[]
+  setVideoItems: Dispatch<SetStateAction<VideoWithCategories[]>>
 }
 
 export default function CategoriesManager({
-  categories, setCategories, videoItems, showToast, setConfirmModal, setConfirmLoading, closeConfirmModal,
+  categories, setCategories, videoItems, setVideoItems, showToast, setConfirmModal, setConfirmLoading, closeConfirmModal,
 }: Props) {
   const [newName, setNewName] = useState('')
   const [adding, setAdding] = useState(false)
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editName, setEditName] = useState('')
+  const [reordering, setReordering] = useState(false)
+  // When a rename is committed/cancelled via a key, suppress the blur that fires
+  // as the input unmounts — otherwise blur re-submits (or saves an Escape-cancel).
+  const skipBlur = useRef(false)
   const router = useRouter()
 
   const countFor = (categoryId: string) =>
     videoItems.filter((v) => v.categories.some((c) => c.id === categoryId)).length
 
   const handleAdd = async () => {
-    if (!newName.trim()) return
+    if (adding || !newName.trim()) return
     setAdding(true)
     try {
       const res = await fetch('/api/admin/categories', {
@@ -47,17 +52,19 @@ export default function CategoriesManager({
   }
 
   const handleRename = async (id: string) => {
-    if (!editName.trim()) { setEditingId(null); return }
+    const name = editName.trim()
+    setEditingId(null)
+    const current = categories.find((c) => c.id === id)
+    if (!name || name === current?.name) return // nothing to save
     try {
       const res = await fetch(`/api/admin/categories/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: editName.trim() }),
+        body: JSON.stringify({ name }),
       })
       if (!res.ok) throw new Error('Failed')
       const updated = await res.json()
       setCategories((prev) => prev.map((c) => (c.id === id ? updated : c)))
-      setEditingId(null)
       router.refresh()
       showToast('Category renamed', 'success')
     } catch {
@@ -65,21 +72,37 @@ export default function CategoriesManager({
     }
   }
 
+  const cancelRename = () => {
+    skipBlur.current = true
+    setEditingId(null)
+  }
+
+  const commitRename = (id: string) => {
+    skipBlur.current = true
+    handleRename(id)
+  }
+
   const move = async (from: number, to: number) => {
-    if (to < 0 || to >= categories.length) return
+    if (reordering || to < 0 || to >= categories.length) return
+    const snapshot = categories
     const next = [...categories]
     const [moved] = next.splice(from, 1)
     next.splice(to, 0, moved)
+    setReordering(true)
     setCategories(next)
     try {
-      await fetch('/api/admin/categories/reorder', {
+      const res = await fetch('/api/admin/categories/reorder', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ categoryIds: next.map((c) => c.id) }),
       })
+      if (!res.ok) throw new Error('Failed')
       router.refresh()
     } catch {
-      setCategories(categories)
+      setCategories(snapshot)
+      showToast('Failed to reorder', 'error')
+    } finally {
+      setReordering(false)
     }
   }
 
@@ -95,6 +118,9 @@ export default function CategoriesManager({
           const res = await fetch(`/api/admin/categories/${id}`, { method: 'DELETE' })
           if (!res.ok) throw new Error('Failed')
           setCategories((prev) => prev.filter((c) => c.id !== id))
+          // Strip the deleted category from videos in state so stale ids can't be
+          // resubmitted when a video is later edited.
+          setVideoItems((prev) => prev.map((v) => ({ ...v, categories: v.categories.filter((c) => c.id !== id) })))
           router.refresh()
           closeConfirmModal()
           showToast('Category deleted', 'success')
@@ -135,22 +161,22 @@ export default function CategoriesManager({
           {categories.map((cat, index) => (
             <div key={cat.id} className="flex items-center gap-3 py-3">
               <div className="flex flex-col text-gray-300">
-                <button onClick={() => move(index, index - 1)} disabled={index === 0} className="hover:text-[#1e3a5f] disabled:opacity-30 leading-none text-xs">▲</button>
-                <button onClick={() => move(index, index + 1)} disabled={index === categories.length - 1} className="hover:text-[#1e3a5f] disabled:opacity-30 leading-none text-xs">▼</button>
+                <button onClick={() => move(index, index - 1)} disabled={index === 0 || reordering} className="hover:text-[#1e3a5f] disabled:opacity-30 leading-none text-xs">▲</button>
+                <button onClick={() => move(index, index + 1)} disabled={index === categories.length - 1 || reordering} className="hover:text-[#1e3a5f] disabled:opacity-30 leading-none text-xs">▼</button>
               </div>
               {editingId === cat.id ? (
                 <input
                   autoFocus
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  onBlur={() => handleRename(cat.id)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') handleRename(cat.id); if (e.key === 'Escape') setEditingId(null) }}
+                  onBlur={() => { if (skipBlur.current) { skipBlur.current = false; return } handleRename(cat.id) }}
+                  onKeyDown={(e) => { if (e.key === 'Enter') commitRename(cat.id); if (e.key === 'Escape') cancelRename() }}
                   className="flex-1 px-2 py-1 border border-gray-300 rounded"
                 />
               ) : (
                 <span className="flex-1 font-medium text-gray-900">{cat.name}</span>
               )}
-              <span className="text-xs px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700">{countFor(cat.id)} videos</span>
+              <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#1e3a5f]/10 text-[#1e3a5f]">{countFor(cat.id)} videos</span>
               <button onClick={() => { setEditingId(cat.id); setEditName(cat.name) }} className="p-2 text-gray-400 hover:text-[#1e3a5f]" title="Rename">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
               </button>

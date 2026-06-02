@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { title, description, mediaType } = body
-    const categoryIds: string[] = Array.isArray(body.categoryIds) ? body.categoryIds : []
+    const requestedCategoryIds: string[] = Array.isArray(body.categoryIds) ? body.categoryIds : []
 
     if (!title?.trim()) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
@@ -35,6 +35,15 @@ export async function POST(request: NextRequest) {
     if (!['url', 'mux', 'audio'].includes(mediaType)) {
       return NextResponse.json({ error: 'Invalid media type' }, { status: 400 })
     }
+
+    // Connect only to categories that still exist — a stale id (deleted elsewhere)
+    // would otherwise throw and fail the whole create.
+    const categoryIds = requestedCategoryIds.length
+      ? (await prisma.category.findMany({
+          where: { id: { in: requestedCategoryIds } },
+          select: { id: true },
+        })).map((c) => c.id)
+      : []
 
     const base = {
       title: title.trim(),

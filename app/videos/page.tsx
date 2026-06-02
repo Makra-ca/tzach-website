@@ -17,7 +17,7 @@ export default async function VideosPage() {
   })
 
   const categories = await prisma.category.findMany({
-    orderBy: { order: 'asc' },
+    orderBy: [{ order: 'asc' }, { createdAt: 'asc' }],
     select: { id: true, name: true },
   })
 
