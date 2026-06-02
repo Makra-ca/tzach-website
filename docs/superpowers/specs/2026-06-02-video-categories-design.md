@@ -19,7 +19,7 @@ Add admin-managed **categories** for videos. Videos can belong to **multiple** c
 - Per-category description, color, or image (name + order only)
 - Category detail pages / dedicated routes per category (filtering is client-side on one page)
 - Nested / hierarchical categories
-- Retaining the All/Videos/Audio media toggle (removed; an "Audio" category covers the need if desired)
+- Retaining the All/Videos/Audio media toggle (removed). Note: separating audio from video on the public page is now a **manual content step** — the admin would create an "Audio" category and assign it; there is no automatic media-type grouping anymore. Confirmed acceptable with the user.
 
 ## Data Model
 
@@ -41,9 +41,10 @@ model Video {
 }
 ```
 
-- Prisma's implicit m-n creates and manages the join table automatically.
+- Prisma's implicit m-n creates and manages the join table automatically. No `onDelete` config is needed — deleting a `Category` (or `Video`) removes the relevant join rows automatically.
 - `order` drives both the admin list order and the public pill order.
 - Deleting a `Category` removes its join rows only; videos are never deleted.
+- **Name validation:** create and rename trim the name and reject empty. Duplicate names are allowed (no unique constraint) — not worth the error-handling for this small admin.
 
 ## Admin
 
@@ -57,6 +58,7 @@ model Video {
 - Header: "Categories (N)"
 - Add row: text input + "+ Add" button
 - List rows, each: ▲▼ reorder arrows, name, live video-count badge, edit (✎), delete (🗑)
+- **Video counts are derived client-side from `videoItems`** (count how many videos include each category), NOT from a server `_count`. Because CategoriesManager and VideosManager are siblings sharing the parent's `videoItems` state, deriving keeps the badge in sync instantly when a video's categories change in the other sub-tab — no refetch, no stale count. (This requires `videoItems` to carry their `categories` — see API changes below.)
 - Delete shows a confirm modal (reuses the shared `setConfirmModal` pattern); on confirm it unlinks and removes the category
 - Edit is inline or a small modal to rename
 
@@ -65,23 +67,26 @@ model Video {
 - On submit, the form sends `categoryIds: string[]` alongside the existing fields
 
 ### API routes (new)
-- `GET /api/admin/categories` — list categories ordered by `order`, each with `_count.videos`
+- `GET /api/admin/categories` — list categories ordered by `order` (counts are derived client-side from `videoItems`, so no `_count` needed)
 - `POST /api/admin/categories` — create `{ name }` (order = max+1)
 - `PUT /api/admin/categories/[id]` — rename `{ name }`
 - `DELETE /api/admin/categories/[id]` — delete (Prisma disconnects join rows automatically)
 - `PUT /api/admin/categories/reorder` — `{ categoryIds: string[] }`, assigns sequential `order`
 
 ### API routes (modified)
-- `POST /api/admin/videos` and `PUT /api/admin/videos/[id]` accept `categoryIds: string[]` and use Prisma `connect` / `set` to sync the relation. Validation: ignore unknown IDs; empty array is allowed.
+- `POST /api/admin/videos` and `PUT /api/admin/videos/[id]` accept `categoryIds: string[]` and use Prisma `set` to sync the relation (replace semantics, so removing a chip removes the link). Validation: ignore unknown IDs; empty array is allowed.
+- **All video reads and writes that feed the admin list must `include: { categories: true }`** so the response carries the linked categories. This means: `POST` and `PUT` responses, `GET /api/admin/videos`, and the server-side fetch in `app/admin/dashboard/page.tsx`. Without this, category chips would vanish from a row after add/edit until the next full refresh, and the derived count badges would be wrong.
 
 All routes verify the session via `verifySession()` and call `revalidatePath('/', 'layout')` after mutations, consistent with existing handlers.
 
 ## Public `/videos`
 
 ### Data
-The page server component fetches:
-- Videos (matching the existing "ready" filter — Mux processing videos still hidden) **including their `categories`**
+The page server component (`app/videos/page.tsx`) fetches:
+- Videos (matching the existing "ready" filter — Mux processing videos still hidden) with `include: { categories: true }`
 - All categories ordered by `order`
+
+`VideosPageClient`'s hand-maintained local `VideoItem` interface must gain `categories: { id: string; name: string }[]` to match.
 
 ### UI
 - A centered **filter pill row**: `[All]` + one pill per category (in `order`)
@@ -89,6 +94,7 @@ The page server component fetches:
 - The All/Videos/Audio media toggle is **removed**
 - Client-side filtering: selecting a category shows only videos linked to it; "All" shows everything
 - Empty-per-filter state is unreachable as long as pills only render for categories that have ≥1 ready video (compute counts from the fetched videos and only show non-empty pills, plus All)
+- **With no categories at all (or none with ready videos), only the `[All]` pill renders** — effectively the same single grid as today, minus the media toggle
 
 ### Rendering / caching
 No change to strategy — page stays static with on-demand revalidation. Admin category and video mutations call `revalidatePath('/', 'layout')`.
@@ -122,6 +128,7 @@ No change to strategy — page stays static with on-demand revalidation. Admin c
 
 ## Testing / Verification
 
+- After the schema change: `npx prisma db push` then `npx prisma generate` (new model + relation)
 - Create/rename/reorder/delete categories in admin; confirm counts update
 - Assign multiple categories to a video; confirm chips persist on reload
 - Public page: pills filter correctly; deleting a category removes its pill after revalidation
