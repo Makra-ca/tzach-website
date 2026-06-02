@@ -20,8 +20,13 @@ export async function POST(request: NextRequest) {
           allowedContentTypes: [
             'image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/bmp',
             'application/pdf',
+            'audio/mpeg',
+            'audio/mp4',
+            'audio/wav',
+            'audio/ogg',
+            'audio/aac',
           ],
-          maximumSizeInBytes: 50 * 1024 * 1024, // 50MB
+          maximumSizeInBytes: 200 * 1024 * 1024, // 200MB
         }
       },
       onUploadCompleted: async () => {

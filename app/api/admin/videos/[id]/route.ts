@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
+import mux from '@/lib/mux'
+import type { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 import { getEmbedUrl } from '@/lib/videoEmbed'
@@ -15,25 +17,28 @@ export async function PUT(
 
   try {
     const { id } = await params
-    const { title, description, videoUrl } = await request.json()
+    const body = await request.json()
+    const { title, description } = body
 
     if (!title?.trim()) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
     }
-    if (!videoUrl?.trim()) {
-      return NextResponse.json({ error: 'Video URL is required' }, { status: 400 })
+
+    const data: Prisma.VideoUpdateInput = {
+      title: title.trim(),
+      description: description?.trim() || null,
     }
 
-    const embedUrl = getEmbedUrl(videoUrl.trim())
+    if (body.videoUrl !== undefined) {
+      data.videoUrl = body.videoUrl?.trim() || null
+      if (body.videoUrl?.trim()) {
+        data.embedUrl = getEmbedUrl(body.videoUrl.trim())
+      }
+    }
 
     const video = await prisma.video.update({
       where: { id },
-      data: {
-        title: title.trim(),
-        description: description?.trim() || null,
-        videoUrl: videoUrl.trim(),
-        embedUrl,
-      }
+      data,
     })
 
     revalidatePath('/', 'layout')
@@ -59,6 +64,17 @@ export async function DELETE(
     const video = await prisma.video.findUnique({ where: { id } })
     if (!video) {
       return NextResponse.json({ error: 'Video not found' }, { status: 404 })
+    }
+
+    if (video.muxUploadId) {
+      try {
+        const upload = await mux.video.uploads.retrieve(video.muxUploadId)
+        if (upload.asset_id) {
+          await mux.video.assets.delete(upload.asset_id)
+        }
+      } catch (err) {
+        console.error('Failed to delete Mux asset (continuing):', err)
+      }
     }
 
     await prisma.video.delete({ where: { id } })
