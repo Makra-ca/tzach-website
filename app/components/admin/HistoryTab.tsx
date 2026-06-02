@@ -22,16 +22,21 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
   const [historyEditNewFileUrl, setHistoryEditNewFileUrl] = useState<string | null>(null)
   const [historyEditNewFileType, setHistoryEditNewFileType] = useState<string | null>(null)
   const [historyEditUploadProgress, setHistoryEditUploadProgress] = useState(false)
+  const [isDraggingAdd, setIsDraggingAdd] = useState(false)
+  const [isDraggingEdit, setIsDraggingEdit] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
 
-  const handleHistoryFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+  const isAcceptedFile = (file: File) => file.type.startsWith('image/') || file.type === 'application/pdf'
+
+  const uploadHistoryFile = async (file: File) => {
+    if (!isAcceptedFile(file)) {
+      setError('Please drop an image or PDF file')
+      return
+    }
     if (!historyTitle.trim()) {
       setError('Please enter a title first')
-      e.target.value = ''
       return
     }
     setHistoryUploadProgress(true)
@@ -55,8 +60,22 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
       setError(err instanceof Error ? err.message : 'Upload failed')
     } finally {
       setHistoryUploadProgress(false)
-      e.target.value = ''
     }
+  }
+
+  const handleHistoryFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    await uploadHistoryFile(file)
+    e.target.value = ''
+  }
+
+  const handleHistoryDrop = async (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDraggingAdd(false)
+    if (historyUploadProgress) return
+    const file = e.dataTransfer.files?.[0]
+    if (file) await uploadHistoryFile(file)
   }
 
   const handleOpenHistoryEdit = (item: HistoryItem) => {
@@ -68,9 +87,11 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
     setError('')
   }
 
-  const handleHistoryEditFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
+  const uploadHistoryEditFile = async (file: File) => {
+    if (!isAcceptedFile(file)) {
+      setError('Please drop an image or PDF file')
+      return
+    }
     setHistoryEditUploadProgress(true)
     setError('')
     try {
@@ -81,8 +102,22 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
       setError(err instanceof Error ? err.message : 'Upload failed')
     } finally {
       setHistoryEditUploadProgress(false)
-      e.target.value = ''
     }
+  }
+
+  const handleHistoryEditFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    await uploadHistoryEditFile(file)
+    e.target.value = ''
+  }
+
+  const handleHistoryEditDrop = async (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDraggingEdit(false)
+    if (historyEditUploadProgress || loading) return
+    const file = e.dataTransfer.files?.[0]
+    if (file) await uploadHistoryEditFile(file)
   }
 
   const handleSubmitHistoryEdit = async (e: React.FormEvent) => {
@@ -224,8 +259,14 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">File (image or PDF) *</label>
-                <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 cursor-pointer transition-colors ${
-                  historyUploadProgress ? 'border-gray-200 bg-gray-50 cursor-not-allowed' : 'border-gray-300 hover:border-[#1e3a5f]'
+                <label
+                  onDragOver={(e) => { e.preventDefault(); if (!historyUploadProgress) setIsDraggingAdd(true) }}
+                  onDragLeave={(e) => { e.preventDefault(); setIsDraggingAdd(false) }}
+                  onDrop={handleHistoryDrop}
+                  className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-8 cursor-pointer transition-colors ${
+                  historyUploadProgress ? 'border-gray-200 bg-gray-50 cursor-not-allowed'
+                  : isDraggingAdd ? 'border-[#1e3a5f] bg-[#1e3a5f]/5'
+                  : 'border-gray-300 hover:border-[#1e3a5f]'
                 }`}>
                   <input type="file" accept="image/*,application/pdf" onChange={handleHistoryFileSelect} className="hidden" disabled={historyUploadProgress} />
                   {historyUploadProgress ? (
@@ -238,7 +279,7 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
                       <svg className="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                       </svg>
-                      <span className="text-sm font-medium">Click to select file</span>
+                      <span className="text-sm font-medium">{isDraggingAdd ? 'Drop file here' : 'Click to select or drag a file here'}</span>
                       <span className="text-xs text-gray-400">Images or PDF, up to 50MB</span>
                     </div>
                   )}
@@ -283,8 +324,13 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Replace File <span className="text-gray-400 font-normal">(optional)</span>
                   </label>
-                  <label className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 cursor-pointer transition-colors ${
+                  <label
+                    onDragOver={(e) => { e.preventDefault(); if (!historyEditUploadProgress && !loading) setIsDraggingEdit(true) }}
+                    onDragLeave={(e) => { e.preventDefault(); setIsDraggingEdit(false) }}
+                    onDrop={handleHistoryEditDrop}
+                    className={`flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 cursor-pointer transition-colors ${
                     historyEditUploadProgress ? 'border-gray-200 bg-gray-50 cursor-not-allowed'
+                    : isDraggingEdit ? 'border-[#1e3a5f] bg-[#1e3a5f]/5'
                     : historyEditNewFileUrl ? 'border-green-400 bg-green-50'
                     : 'border-gray-300 hover:border-[#1e3a5f]'
                   }`}>
@@ -293,6 +339,13 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
                       <div className="flex items-center gap-2 text-gray-500">
                         <div className="w-5 h-5 border-2 border-[#1e3a5f] border-t-transparent rounded-full animate-spin" />
                         <span className="text-sm">Uploading...</span>
+                      </div>
+                    ) : isDraggingEdit ? (
+                      <div className="flex items-center gap-2 text-[#1e3a5f]">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                        </svg>
+                        <span className="text-sm font-medium">Drop file here</span>
                       </div>
                     ) : historyEditNewFileUrl ? (
                       <div className="flex items-center gap-2 text-green-700">
@@ -306,7 +359,7 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                         </svg>
-                        <span className="text-sm">Click to upload a new image or PDF</span>
+                        <span className="text-sm">Click or drag a new image or PDF</span>
                       </div>
                     )}
                   </label>
