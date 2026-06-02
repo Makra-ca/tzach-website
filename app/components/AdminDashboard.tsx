@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { ChabadHouse, College, GalleryImage, HeroImage, HeadquartersProgram, HistoryItem, Video } from '@prisma/client'
-import type { ConfirmState } from './admin/types'
+import type { ChabadHouse, College, GalleryImage, HeroImage, HeadquartersProgram, HistoryItem, Category } from '@prisma/client'
+import type { ConfirmState, VideoWithCategories } from './admin/types'
 import HousesTab from './admin/HousesTab'
 import CollegesTab from './admin/CollegesTab'
 import HeadquartersTab from './admin/HeadquartersTab'
@@ -86,7 +86,8 @@ interface Props {
   initialHeroImages: HeroImage[]
   initialHeadquarters: HeadquartersProgram[]
   initialHistory: HistoryItem[]
-  initialVideos: Video[]
+  initialVideos: VideoWithCategories[]
+  initialCategories: Category[]
   counties: string[]
 }
 
@@ -94,7 +95,7 @@ type ActiveTab = 'houses' | 'colleges' | 'headquarters' | 'gallery' | 'hero' | '
 
 export default function AdminDashboard({
   initialHouses, initialColleges, initialGalleryImages, initialHeroImages,
-  initialHeadquarters, initialHistory, initialVideos, counties
+  initialHeadquarters, initialHistory, initialVideos, initialCategories, counties
 }: Props) {
   const [activeTab, setActiveTab] = useState<ActiveTab>('houses')
 
@@ -106,6 +107,7 @@ export default function AdminDashboard({
   const [heroImages, setHeroImages] = useState(initialHeroImages)
   const [historyItems, setHistoryItems] = useState(initialHistory)
   const [videoItems, setVideoItems] = useState(initialVideos)
+  const [categories, setCategories] = useState(initialCategories)
 
   // Shared confirm modal + toast
   const [confirmModal, setConfirmModal] = useState<ConfirmState>({
@@ -196,7 +198,13 @@ export default function AdminDashboard({
         <HistoryTab historyItems={historyItems} setHistoryItems={setHistoryItems} {...tabCommonProps} />
       )}
       {activeTab === 'videos' && (
-        <VideosTab videoItems={videoItems} setVideoItems={setVideoItems} {...tabCommonProps} />
+        <VideosTab
+          videoItems={videoItems}
+          setVideoItems={setVideoItems}
+          categories={categories}
+          setCategories={setCategories}
+          {...tabCommonProps}
+        />
       )}
 
       {/* Shared Confirmation Modal */}
