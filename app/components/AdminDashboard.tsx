@@ -21,7 +21,7 @@ function ConfirmModal({
   if (!isOpen) return null
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-[60]">
-      <div className="bg-white rounded-xl shadow-xl max-w-md w-full overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+      <div className="bg-white rounded-xl shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-in fade-in zoom-in-95 duration-200">
         <div className="p-6">
           <div className="flex items-start gap-4">
             <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 ${variant === 'danger' ? 'bg-red-100' : 'bg-yellow-100'}`}>

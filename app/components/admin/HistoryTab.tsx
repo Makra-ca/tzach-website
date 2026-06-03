@@ -242,11 +242,11 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
       {/* Upload Modal */}
       {showHistoryForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full overflow-hidden">
-            <div className="p-6 border-b">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="p-6 border-b shrink-0">
               <h2 className="text-xl font-bold text-[#1e3a5f]">Add History Item</h2>
             </div>
-            <div className="p-6 space-y-4">
+            <div className="p-6 space-y-4 overflow-y-auto flex-1">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
                 <input
@@ -287,7 +287,7 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
               </div>
               {error && <p className="text-sm text-red-600">{error}</p>}
             </div>
-            <div className="flex gap-3 px-6 py-4 bg-gray-50">
+            <div className="flex gap-3 px-6 py-4 bg-gray-50 shrink-0">
               <button
                 type="button"
                 onClick={() => { setShowHistoryForm(false); setHistoryTitle(''); setError('') }}
@@ -304,12 +304,12 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
       {/* Edit Modal */}
       {showHistoryEditForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full overflow-hidden">
-            <div className="p-6 border-b">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="p-6 border-b shrink-0">
               <h2 className="text-xl font-bold text-[#1e3a5f]">Edit History Item</h2>
             </div>
-            <form onSubmit={handleSubmitHistoryEdit}>
-              <div className="p-6 space-y-4">
+            <form onSubmit={handleSubmitHistoryEdit} className="flex flex-col overflow-hidden flex-1">
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Title *</label>
                   <input
@@ -366,7 +366,7 @@ export default function HistoryTab({ historyItems, setHistoryItems, showToast, s
                 </div>
                 {error && <p className="text-sm text-red-600">{error}</p>}
               </div>
-              <div className="flex gap-3 px-6 py-4 bg-gray-50">
+              <div className="flex gap-3 px-6 py-4 bg-gray-50 shrink-0">
                 <button
                   type="button"
                   onClick={() => {
