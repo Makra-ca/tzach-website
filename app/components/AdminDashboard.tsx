@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import type { ChabadHouse, College, GalleryImage, HeroImage, HeadquartersProgram, HistoryItem, Category } from '@prisma/client'
-import type { ConfirmState, VideoWithCategories } from './admin/types'
+import type { ChabadHouse, College, GalleryImage, HeroImage, HeadquartersProgram, HistoryCategory, Category } from '@prisma/client'
+import type { ConfirmState, VideoWithCategories, HistoryItemWithCategories } from './admin/types'
 import HousesTab from './admin/HousesTab'
 import CollegesTab from './admin/CollegesTab'
 import HeadquartersTab from './admin/HeadquartersTab'
@@ -85,7 +85,8 @@ interface Props {
   initialGalleryImages: GalleryImage[]
   initialHeroImages: HeroImage[]
   initialHeadquarters: HeadquartersProgram[]
-  initialHistory: HistoryItem[]
+  initialHistory: HistoryItemWithCategories[]
+  initialHistoryCategories: HistoryCategory[]
   initialVideos: VideoWithCategories[]
   initialCategories: Category[]
   counties: string[]
@@ -95,7 +96,7 @@ type ActiveTab = 'houses' | 'colleges' | 'headquarters' | 'gallery' | 'hero' | '
 
 export default function AdminDashboard({
   initialHouses, initialColleges, initialGalleryImages, initialHeroImages,
-  initialHeadquarters, initialHistory, initialVideos, initialCategories, counties
+  initialHeadquarters, initialHistory, initialHistoryCategories, initialVideos, initialCategories, counties
 }: Props) {
   const [activeTab, setActiveTab] = useState<ActiveTab>('houses')
 
@@ -106,6 +107,7 @@ export default function AdminDashboard({
   const [galleryImages, setGalleryImages] = useState(initialGalleryImages)
   const [heroImages, setHeroImages] = useState(initialHeroImages)
   const [historyItems, setHistoryItems] = useState(initialHistory)
+  const [historyCategories, setHistoryCategories] = useState(initialHistoryCategories)
   const [videoItems, setVideoItems] = useState(initialVideos)
   const [categories, setCategories] = useState(initialCategories)
 
@@ -195,7 +197,13 @@ export default function AdminDashboard({
         <HeroTab heroImages={heroImages} setHeroImages={setHeroImages} {...tabCommonProps} />
       )}
       {activeTab === 'history' && (
-        <HistoryTab historyItems={historyItems} setHistoryItems={setHistoryItems} {...tabCommonProps} />
+        <HistoryTab
+          historyItems={historyItems}
+          setHistoryItems={setHistoryItems}
+          categories={historyCategories}
+          setCategories={setHistoryCategories}
+          {...tabCommonProps}
+        />
       )}
       {activeTab === 'videos' && (
         <VideosTab

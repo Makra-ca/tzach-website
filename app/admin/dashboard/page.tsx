@@ -34,8 +34,11 @@ async function getData() {
   })
 
   const history = await prisma.historyItem.findMany({
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' },
+    include: { categories: true },
   })
+
+  const historyCategories = await prisma.historyCategory.findMany({ orderBy: { order: 'asc' } })
 
   const videos = await prisma.video.findMany({
     orderBy: { createdAt: 'desc' },
@@ -52,6 +55,7 @@ async function getData() {
     galleryImages,
     heroImages,
     history,
+    historyCategories,
     videos,
     categories,
   }
@@ -64,7 +68,7 @@ export default async function DashboardPage() {
     redirect('/admin')
   }
 
-  const { houses, colleges, headquarters, counties, galleryImages, heroImages, history, videos, categories } = await getData()
+  const { houses, colleges, headquarters, counties, galleryImages, heroImages, history, historyCategories, videos, categories } = await getData()
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -84,6 +88,7 @@ export default async function DashboardPage() {
           initialGalleryImages={galleryImages}
           initialHeroImages={heroImages}
           initialHistory={history}
+          initialHistoryCategories={historyCategories}
           initialVideos={videos}
           initialCategories={categories}
           counties={counties}

@@ -1,7 +1,8 @@
 import type { Dispatch, SetStateAction } from 'react'
-import type { Video, Category } from '@prisma/client'
+import type { Video, Category, HistoryItem, HistoryCategory } from '@prisma/client'
 
 export type VideoWithCategories = Video & { categories: Category[] }
+export type HistoryItemWithCategories = HistoryItem & { categories: HistoryCategory[] }
 
 export interface ConfirmState {
   isOpen: boolean
