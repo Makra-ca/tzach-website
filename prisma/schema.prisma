@@ -112,11 +112,23 @@ model HeadquartersProgram {
 }
 
 model HistoryItem {
-  id        String   @id @default(cuid())
-  title     String
-  fileUrl   String   // Vercel Blob URL
-  fileType  String   // "image" or "pdf"
-  createdAt DateTime @default(now())
+  id         String            @id @default(cuid())
+  title      String
+  fileUrl    String            // Vercel Blob URL
+  fileType   String            // "image" or "pdf"
+  categories HistoryCategory[]
+  createdAt  DateTime          @default(now())
+}
+
+model HistoryCategory {
+  id        String        @id @default(cuid())
+  name      String
+  order     Int           @default(0)
+  items     HistoryItem[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([order])
 }
 
 model Video {
