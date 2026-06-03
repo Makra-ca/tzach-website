@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { revalidatePath } from 'next/cache'
 import { del } from '@vercel/blob'
+import type { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/db'
 import { verifySession } from '@/lib/auth'
 
@@ -48,13 +49,14 @@ export async function PUT(
 
   try {
     const { id } = await params
-    const { title, fileUrl, fileType } = await request.json()
+    const body = await request.json()
+    const { title, fileUrl, fileType } = body
 
     if (!title?.trim()) {
       return NextResponse.json({ error: 'Title is required' }, { status: 400 })
     }
 
-    const updateData: Record<string, string> = { title: title.trim() }
+    const updateData: Prisma.HistoryItemUpdateInput = { title: title.trim() }
 
     if (fileUrl && fileType) {
       // Delete old blob before replacing
@@ -66,9 +68,17 @@ export async function PUT(
       updateData.fileType = fileType
     }
 
+    if (Array.isArray(body.categoryIds)) {
+      const validIds = body.categoryIds.length
+        ? (await prisma.historyCategory.findMany({ where: { id: { in: body.categoryIds } }, select: { id: true } })).map((c) => c.id)
+        : []
+      updateData.categories = { set: validIds.map((id) => ({ id })) }
+    }
+
     const item = await prisma.historyItem.update({
       where: { id },
-      data: updateData
+      data: updateData,
+      include: { categories: true }
     })
 
     revalidatePath('/', 'layout')
