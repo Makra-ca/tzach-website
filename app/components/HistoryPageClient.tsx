@@ -8,10 +8,12 @@ interface HistoryItem {
   fileUrl: string
   fileType: string
   createdAt: Date | string
+  categories: { id: string; name: string }[]
 }
 
 interface Props {
   items: HistoryItem[]
+  categories: { id: string; name: string }[]
 }
 
 function PdfThumbnail({ url }: { url: string }) {
@@ -41,8 +43,22 @@ function PdfThumbnail({ url }: { url: string }) {
   )
 }
 
-export default function HistoryPageClient({ items }: Props) {
+export default function HistoryPageClient({ items, categories }: Props) {
   const [activeItem, setActiveItem] = useState<HistoryItem | null>(null)
+  const [activeCategory, setActiveCategory] = useState<string>('all')
+
+  const countFor = (id: string) => items.filter((it) => it.categories.some((c) => c.id === id)).length
+
+  // Server already sorted `categories` by admin order; keep only those with ≥1 item.
+  const visibleCategories = categories.filter((c) => countFor(c.id) > 0)
+
+  // Guard: if the active category disappeared after a revalidation, fall back to All.
+  const activeExists = activeCategory === 'all' || visibleCategories.some((c) => c.id === activeCategory)
+  const effectiveActive = activeExists ? activeCategory : 'all'
+
+  const visible = effectiveActive === 'all'
+    ? items
+    : items.filter((it) => it.categories.some((c) => c.id === effectiveActive))
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -70,6 +86,25 @@ export default function HistoryPageClient({ items }: Props) {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-16">
+        {visibleCategories.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-2 mb-12">
+            {[{ id: 'all', name: 'All', count: items.length }, ...visibleCategories.map((c) => ({ ...c, count: countFor(c.id) }))].map((c) => (
+              <button
+                key={c.id}
+                onClick={() => setActiveCategory(c.id)}
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-colors ${
+                  effectiveActive === c.id
+                    ? 'bg-[#0f172a] text-white'
+                    : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
+                }`}
+              >
+                {c.name}
+                <span className={`ml-1.5 ${effectiveActive === c.id ? 'text-[#d4a853]' : 'text-gray-400'}`}>{c.count}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         {items.length === 0 ? (
           <div className="text-center py-32">
             <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -81,7 +116,7 @@ export default function HistoryPageClient({ items }: Props) {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {items.map((item) => (
+            {visible.map((item) => (
               <button
                 key={item.id}
                 onClick={() => setActiveItem(item)}
