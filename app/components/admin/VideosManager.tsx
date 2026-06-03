@@ -344,12 +344,12 @@ export default function VideosManager({ videoItems, setVideoItems, categories, s
       {/* Form Modal */}
       {showVideoForm && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full overflow-hidden">
-            <div className="p-6 border-b">
+          <div className="bg-white rounded-xl shadow-xl max-w-lg w-full max-h-[90vh] flex flex-col overflow-hidden">
+            <div className="p-6 border-b shrink-0">
               <h2 className="text-xl font-bold text-[#1e3a5f]">{editingVideoId ? 'Edit' : 'Add Media'}</h2>
             </div>
-            <form onSubmit={handleSubmitVideo}>
-              <div className="p-6 space-y-4">
+            <form onSubmit={handleSubmitVideo} className="flex flex-col overflow-hidden flex-1">
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
                 {/* Media Type Selector — only when adding */}
                 {!editingVideoId && (
                   <div>
@@ -479,7 +479,7 @@ export default function VideosManager({ videoItems, setVideoItems, categories, s
 
                 {error && <p className="text-sm text-red-600">{error}</p>}
               </div>
-              <div className="flex gap-3 px-6 py-4 bg-gray-50">
+              <div className="flex gap-3 px-6 py-4 bg-gray-50 shrink-0">
                 <button type="button" onClick={handleCancelVideo} disabled={loading}
                   className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-100 transition-colors disabled:opacity-50">
                   Cancel
