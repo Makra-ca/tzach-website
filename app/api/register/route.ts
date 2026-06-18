@@ -77,27 +77,88 @@ export async function POST(request: NextRequest) {
     ['Dinner', dinner ? 'Yes' : 'No'],
   ]
 
+  // Contact details (meals are rendered separately as badges below)
+  const infoRows: Array<[string, string]> = [
+    ['Name', name],
+    ['Makom haShlichus', makomHaShlichus],
+    ['Email', email],
+    ['WhatsApp #', whatsapp],
+  ]
+
+  const detailRow = (label: string, value: string, isLast: boolean) => `
+    <tr>
+      <td style="padding: 14px 0; ${isLast ? '' : 'border-bottom: 1px solid #eeeeee;'} font-family: Arial, Helvetica, sans-serif; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #9a8f7a; width: 165px; vertical-align: top;">
+        ${escapeHtml(label)}
+      </td>
+      <td style="padding: 14px 0; ${isLast ? '' : 'border-bottom: 1px solid #eeeeee;'} font-family: Arial, Helvetica, sans-serif; font-size: 16px; color: #0f172a; font-weight: 600;">
+        ${escapeHtml(value)}
+      </td>
+    </tr>`
+
+  const mealBadge = (label: string, on: boolean) => `
+    <span style="display: inline-block; padding: 7px 16px; margin: 0 8px 8px 0; border-radius: 999px; font-family: Arial, Helvetica, sans-serif; font-size: 14px; font-weight: bold; ${
+      on ? 'background: #d4a853; color: #0f172a;' : 'background: #f0efec; color: #b4b0a8;'
+    }">${escapeHtml(label)}</span>`
+
+  const mealsHtml =
+    !lunch && !dinner
+      ? `<span style="font-family: Arial, Helvetica, sans-serif; font-size: 15px; color: #9a8f7a; font-style: italic;">Not attending meals</span>`
+      : `${mealBadge('Lunch', lunch)}${mealBadge('Dinner', dinner)}`
+
   const html = `
-    <div style="font-family: Arial, Helvetica, sans-serif; color: #1a1a1a; max-width: 560px; margin: 0 auto;">
-      <h2 style="color: #0f172a; border-bottom: 3px solid #d4a853; padding-bottom: 8px;">
-        Tzach Shluchos Recharge — New Registration
-      </h2>
-      <table style="width: 100%; border-collapse: collapse; margin-top: 16px;">
-        ${rows
-          .map(
-            ([label, value]) => `
-          <tr>
-            <td style="padding: 8px 12px; background: #f7f7f7; font-weight: bold; width: 180px; vertical-align: top; border: 1px solid #e5e5e5;">
-              ${escapeHtml(label)}
-            </td>
-            <td style="padding: 8px 12px; border: 1px solid #e5e5e5;">
-              ${escapeHtml(value)}
-            </td>
-          </tr>`
-          )
-          .join('')}
-      </table>
-    </div>
+  <div style="background: #f7f6f3; margin: 0; padding: 28px 12px;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto;">
+      <tr>
+        <td>
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background: #ffffff; border-radius: 14px; overflow: hidden;">
+            <!-- Gold top accent -->
+            <tr><td style="height: 6px; line-height: 6px; font-size: 0; background: #d4a853;">&nbsp;</td></tr>
+
+            <!-- Navy header -->
+            <tr>
+              <td style="background: #0f172a; padding: 36px 32px 30px; text-align: center;">
+                <div style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #d4a853; font-weight: bold;">
+                  New Registration
+                </div>
+                <div style="font-family: Georgia, 'Times New Roman', serif; font-size: 28px; line-height: 1.2; color: #ffffff; font-weight: bold; margin-top: 10px;">
+                  Tzach Shluchos Recharge
+                </div>
+                <div style="width: 44px; height: 2px; background: #d4a853; margin: 18px auto 0; line-height: 2px; font-size: 0;">&nbsp;</div>
+              </td>
+            </tr>
+
+            <!-- Details -->
+            <tr>
+              <td style="padding: 30px 32px 6px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                  ${infoRows.map(([l, v], i) => detailRow(l, v, i === infoRows.length - 1)).join('')}
+                </table>
+              </td>
+            </tr>
+
+            <!-- Meals -->
+            <tr>
+              <td style="padding: 18px 32px 34px;">
+                <div style="font-family: Arial, Helvetica, sans-serif; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: #9a8f7a; margin-bottom: 12px;">
+                  Joining For
+                </div>
+                ${mealsHtml}
+              </td>
+            </tr>
+          </table>
+
+          <!-- Footer -->
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              <td style="text-align: center; padding: 22px 16px 4px; font-family: Arial, Helvetica, sans-serif; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase; color: #b0a89a;">
+                Lubavitch Youth Organization &middot; Celebrating 70 Years
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
   `
 
   const text = [
