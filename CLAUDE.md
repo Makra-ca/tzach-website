@@ -98,6 +98,9 @@ BLOB_READ_WRITE_TOKEN=...         # Vercel Blob (set automatically on Vercel)
 MUX_TOKEN_ID=...                  # Mux API token ID
 MUX_TOKEN_SECRET=...              # Mux API token secret
 MUX_WEBHOOK_SECRET=...            # Mux webhook signing secret (for /api/mux/webhook)
+RESEND_API_KEY=...                # Resend API key (registration form emails)
+REGISTRATION_TO=...               # Recipient inbox for registration signups (comma-separated allowed)
+REGISTRATION_FROM=...             # Verified sender, e.g. "Tzach <noreply@domain.org>"; falls back to onboarding@resend.dev
 ```
 
 ## Key Patterns
@@ -109,6 +112,13 @@ MUX_WEBHOOK_SECRET=...            # Mux webhook signing secret (for /api/mux/web
 - `revalidatePath` is called after every admin mutation to keep public pages fresh without force-dynamic
 
 ## Recent Changes
+
+### 2026-06-18: Registration form (Tzach Shluchos Recharge)
+- **Files**: `app/register/page.tsx`, `app/components/RegisterForm.tsx`, `app/api/register/route.ts`
+- Standalone `/register` page (not in nav). Fields: Name, Makom haShlichus, Email, WhatsApp #, Lunch/Dinner checkboxes (independent — can pick both)
+- Email-only via Resend (`await`-ed send, `replyTo` = registrant email). No DB storage, no admin list.
+- Server-side re-validates required fields + email format. Recipient/sender from env (`REGISTRATION_TO`, `REGISTRATION_FROM`); returns 500 if `RESEND_API_KEY`/`REGISTRATION_TO` unset.
+- **TODO before launch**: fill `RESEND_API_KEY`, `REGISTRATION_TO`, `REGISTRATION_FROM` in `.env.local` (and Vercel). Sender domain must be verified in Resend or it falls back to `onboarding@resend.dev`.
 
 ### 2026-05-20: Mux video + audio upload (in progress)
 - **Plan**: `docs/superpowers/plans/2026-05-20-mux-video-audio-upload.md`
