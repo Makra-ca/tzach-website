@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import RegisterForm from '../components/RegisterForm'
 
 export const metadata: Metadata = {
@@ -17,17 +16,6 @@ export default function RegisterPage() {
         <div className="pointer-events-none absolute -bottom-32 -left-20 w-72 h-72 rounded-full bg-[#d4a853]/5 blur-3xl" />
 
         <div className="relative max-w-xl mx-auto px-4 pt-14 pb-28 text-center">
-          <div className="flex justify-center mb-6">
-            <Image
-              src="/tzach logo.bmp"
-              alt="Lubavitch Youth Organization"
-              width={72}
-              height={72}
-              className="rounded invert"
-              priority
-            />
-          </div>
-
           <p className="text-[#d4a853] font-semibold tracking-[0.22em] uppercase text-xs sm:text-sm mb-3">
             Registration
           </p>
