@@ -46,8 +46,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: `
               try {
-                // Skip preloader on admin routes or if already shown this session
-                if (window.location.pathname.startsWith('/admin') || sessionStorage.getItem('lyo-preloader-shown')) {
+                // Skip preloader on admin routes or if already shown on this device
+                if (window.location.pathname.startsWith('/admin') || localStorage.getItem('lyo-preloader-shown')) {
                   document.documentElement.classList.add('preloader-skip');
                 }
               } catch (e) {}

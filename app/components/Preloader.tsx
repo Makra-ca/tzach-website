@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import Image from 'next/image'
 
-const PRELOADER_SESSION_KEY = 'lyo-preloader-shown'
+const PRELOADER_SEEN_KEY = 'lyo-preloader-shown'
 
 export default function Preloader() {
   const router = useRouter()
@@ -25,9 +25,9 @@ export default function Preloader() {
 
     // Check if preloader should be skipped:
     // - Class added by inline script on hard page load, OR
-    // - SessionStorage set from previous navigation (client-side nav doesn't re-run inline script)
+    // - localStorage set from a previous visit (persists across sessions on this device)
     const shouldSkip = document.documentElement.classList.contains('preloader-skip') ||
-      sessionStorage.getItem(PRELOADER_SESSION_KEY) === 'true'
+      localStorage.getItem(PRELOADER_SEEN_KEY) === 'true'
 
     if (shouldSkip) {
       // Add class here (after navigation completes) to trigger site content visibility
@@ -63,17 +63,39 @@ export default function Preloader() {
     if (isNavigating) return // Prevent double clicks
 
     setIsNavigating(true)
-    // Mark as shown for this session (so destination page knows to skip preloader)
-    sessionStorage.setItem(PRELOADER_SESSION_KEY, 'true')
+    // Mark as seen on this device (so destination page knows to skip preloader)
+    localStorage.setItem(PRELOADER_SEEN_KEY, 'true')
     // Don't add preloader-skip class here - let the useEffect add it after navigation
     // This keeps the preloader visible until the new page loads
     router.push(path)
+  }
+
+  // Dismiss the splash and reveal whatever page the visitor is already on.
+  // Needed so shared deep-links (e.g. /register) aren't trapped behind the splash.
+  const handleEnterSite = () => {
+    localStorage.setItem(PRELOADER_SEEN_KEY, 'true')
+    document.documentElement.classList.add('preloader-skip')
+    setShow(false)
   }
 
   if (!show) return null
 
   return (
     <div className="preloader-container fixed inset-0 z-[9999] bg-[#0f172a] flex flex-col">
+      {/* Enter Site / dismiss — lets shared deep-links escape the splash to the page they requested */}
+      <button
+        onClick={handleEnterSite}
+        className="group absolute top-3 right-3 sm:top-4 sm:right-4 z-30 inline-flex items-center gap-1.5 sm:gap-2 pl-3 pr-2 sm:pl-4 sm:pr-2.5 py-1.5 sm:py-2 rounded-full bg-black/25 hover:bg-black/40 text-white text-xs sm:text-sm font-medium backdrop-blur-sm border border-white/15 transition-colors"
+        aria-label="Enter site"
+      >
+        <span>Enter Site</span>
+        <span className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/15 transition-transform group-hover:translate-x-0.5">
+          <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+          </svg>
+        </span>
+      </button>
+
       {/* Celebration Banner */}
       <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] py-2 px-4 shrink-0">
         <div className="max-w-6xl mx-auto relative flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-0">
