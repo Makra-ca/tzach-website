@@ -82,20 +82,6 @@ export default function Preloader() {
 
   return (
     <div className="preloader-container fixed inset-0 z-[9999] bg-[#0f172a] flex flex-col">
-      {/* Enter Site / dismiss — lets shared deep-links escape the splash to the page they requested */}
-      <button
-        onClick={handleEnterSite}
-        className="group absolute top-3 right-3 sm:top-4 sm:right-4 z-30 inline-flex items-center gap-1.5 sm:gap-2 pl-3 pr-2 sm:pl-4 sm:pr-2.5 py-1.5 sm:py-2 rounded-full bg-black/25 hover:bg-black/40 text-white text-xs sm:text-sm font-medium backdrop-blur-sm border border-white/15 transition-colors"
-        aria-label="Enter site"
-      >
-        <span>Enter Site</span>
-        <span className="flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-white/15 transition-transform group-hover:translate-x-0.5">
-          <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-          </svg>
-        </span>
-      </button>
-
       {/* Celebration Banner */}
       <div className="bg-gradient-to-r from-[#d4a853] via-[#e5c778] to-[#d4a853] text-[#0f172a] py-2 px-4 shrink-0">
         <div className="max-w-6xl mx-auto relative flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-0">
@@ -203,6 +189,17 @@ export default function Preloader() {
                 </span>
               </button>
             </div>
+
+            {/* Skip intro — dismisses the splash to the current page (key for shared deep-links like /register) */}
+            <button
+              onClick={handleEnterSite}
+              className="group mt-4 sm:mt-5 inline-flex items-center gap-1.5 text-xs sm:text-sm text-gray-400 hover:text-[#d4a853] transition-colors"
+            >
+              <span>Skip intro</span>
+              <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
 
         </div>
