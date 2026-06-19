@@ -16,8 +16,8 @@ export default function Preloader() {
   const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    // Skip preloader on admin routes
-    if (pathname?.startsWith('/admin')) {
+    // Skip preloader on admin and register routes
+    if (pathname?.startsWith('/admin') || pathname?.startsWith('/register')) {
       document.documentElement.classList.add('preloader-skip')
       setShow(false)
       return
