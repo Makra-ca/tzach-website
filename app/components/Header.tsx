@@ -25,7 +25,7 @@ export default function Header() {
 
   const closeMenu = () => setMobileMenuOpen(false)
 
-  const navLink = 'relative px-2 py-2 text-gray-300 hover:text-white transition-colors duration-300 group whitespace-nowrap'
+  const navLink = 'relative px-2.5 py-2 text-gray-300 hover:text-white transition-colors duration-300 group'
   const underline = 'absolute inset-x-1 bottom-1 h-0.5 bg-[#d4a853] scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left rounded-full'
 
   return (
@@ -70,10 +70,6 @@ export default function Header() {
           </Link>
           <Link href="/videos" className={navLink}>
             <span className="relative z-10">Videos</span>
-            <span className={underline} />
-          </Link>
-          <Link href="/register" className={navLink}>
-            <span className="relative z-10">Register</span>
             <span className={underline} />
           </Link>
 
@@ -158,7 +154,6 @@ export default function Header() {
             { href: '/headquarters#team', label: 'Who We Are', delay: '310ms' },
             { href: '/history', label: 'History', delay: '350ms' },
             { href: '/videos', label: 'Videos', delay: '390ms' },
-            { href: '/register', label: 'Register', delay: '430ms' },
           ].map(({ href, label, delay }) => (
             <Link
               key={href + label}
